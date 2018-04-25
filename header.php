@@ -4,6 +4,7 @@ session_start();
 require_once 'includes/database.php';
 require_once 'includes/employer.php';
 require_once 'includes/user.php';
+require_once 'includes/blogpost.php';
 
 $userstr = ' (Guest)';
 

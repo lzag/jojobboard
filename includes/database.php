@@ -12,7 +12,6 @@ protected $conn;
 
     public function __construct(){
     $this->conn = new mysqli($this->db_hostname,$this->db_username,$this->db_password,$this->db_database);
-    parent::__construct(this->conn);
     if ($this->conn->connect_error) die("Couldn't connect to the database");
     }
 
