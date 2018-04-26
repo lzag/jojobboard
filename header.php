@@ -41,6 +41,7 @@ if (isset($_COOKIE['visit']))
 if ($loggedinasuser) {
 
 echo <<<_END
+<!DOCTYPE html>
 <html>
 <div align="center">
 <head>
@@ -54,6 +55,8 @@ Main Menu:<br>
 <br>
 ===================================
 <br>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 </div>
 <body>
@@ -62,6 +65,7 @@ _END;
     } elseif ($loggedinasemployer) {
 
     echo <<<_END
+<!DOCTYPE html>
 <html>
 <div align="center">
 <head>
@@ -74,6 +78,8 @@ Main Menu:<br>
 <br>
 ===================================
 <br>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 </div>
 <body>
@@ -82,6 +88,7 @@ _END;
 
 } else {
     echo <<<_END
+<!DOCTYPE html>
 <html>
 <div align="center">
 <head>
@@ -94,6 +101,8 @@ Main Menu:<br>
 <br>
 ===================================
 <br>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 </div>
 <body>

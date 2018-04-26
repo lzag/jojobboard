@@ -19,5 +19,15 @@ class BlogPost {
         }
         }
     }
-}
+
+        public static function getPostsArray() {
+
+        $conn = new Database();
+        $sql = "SELECT * FROM jjb_blog_posts";
+        $result = $conn->execute_query($sql);
+        $array = $result->fetch_all(MYSQLI_ASSOC);
+            return $array;
+        }
+    }
+
 ?>
