@@ -26,13 +26,17 @@ if (isset($_POST['email']) &&
     }
 }
 ?>
-<div align="center">
+<div class="row">
+<div class="col-xl-6 bg-success">
 <h3>Please input your login data: </h3><br>
 <form method="post" action='login.php'>
 Email: <input type="email" name="email"><br><br>
 Password: <input type="password" name="pass"><br><br>
-<input type='submit' value="Log in">
+<input type='submit' value="Log in" class="btn btn-primary">
 </form>
+</div>
+<div class="col-xl-6 bg-warning">
+</div>
 </div>
 
 
