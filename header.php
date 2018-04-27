@@ -43,23 +43,35 @@ if ($loggedinasuser) {
 echo <<<_END
 <!DOCTYPE html>
 <html>
-<div align="center">
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>JoJobboard - $sitename</title>
-Main Menu:<br>
-<a href="index.php">Main Page</a> |
-<a href="uploadcv.php">Upload CV</a> |
-<a href="jobpostings.php">Job postings<a> |
-<a href="userprofile.php">Your profile<a> |
-<a href="logout.php">Log out<a>
-<br>
-===================================
-<br>
 <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
-</div>
 <body>
+<div class="container">
+    <div class="row">
+       <div class="col-sm-12 bg-primary text-white text-center">Main Menu</div>
+    </div>
+    <div class="row">
+        <div class="col bg-primary"></div>
+       <div class="col-sm-2 ml-auto text-primary border border-primary"><a href="index.php">Main Page</a></div>
+       <div class="col-sm-2 text-primary border border-primary"><a href="uploadcv.php">Upload CV</a></div>
+       <div class="col-sm-2 text-primary border border-primary"><a href="jobpostings.php">Job postings</a></div>
+       <div class="col-sm-2 text-primary border border-primary"><a href="userprofile.php">Your profile</a></div>
+       <div class="col-sm-2 mr-auto text-primary border border-primary"><a href="logout.php">Log out</a></div>
+       <div class="col bg-primary"></div>
+        <br>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+        <p class="text-center text-secondary">===================================</p>
+        <br>
+    </div>
+        </div>
+</div>
 _END;
 
     } elseif ($loggedinasemployer) {
@@ -67,22 +79,34 @@ _END;
     echo <<<_END
 <!DOCTYPE html>
 <html>
-<div align="center">
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>JoJobboard - $sitename</title>
-Main Menu:<br>
-<a href="index.php">Main Page</a> |
-<a href="postjob.php">Post a job<a> |
-<a href="employerprofile.php">See your profile<a>
-<a href="logout.php">Log out<a>
-<br>
-===================================
-<br>
 <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
-</div>
 <body>
+<div class="container">
+    <div class="row">
+       <div class="col-sm-12 bg-primary text-white text-center">Main Menu</div>
+    </div>
+    <div class="row">
+        <div class="col bg-primary"></div>
+       <div class="col-sm-2 ml-auto text-primary border border-primary"><a href="index.php">Main Page</a></div>
+       <div class="col-sm-2 text-primary border border-primary"><a href="postjob.php">Post a job</a> </div>
+       <div class="col-sm-2 text-primary border border-primary"><a href="employerprofile.php">See your profile</a></div>
+       <div class="col-sm-2 mr-auto text-primary border border-primary"><a href="logout.php">Log out</a></div>
+       <div class="col bg-primary"></div>
+        <br>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+        <p class="text-center text-secondary">===================================</p>
+        <br>
+    </div>
+        </div>
+</div>
 _END;
 
 
@@ -90,22 +114,34 @@ _END;
     echo <<<_END
 <!DOCTYPE html>
 <html>
-<div align="center">
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>JoJobboard - $sitename</title>
-Main Menu:<br>
-<a href="index.php">Main Page</a> |
-<a href="registeruser.php">Register User</a> |
-<a href="registeremployer.php">Register Employer</a> |
-<a href="login.php">Log In</a>
-<br>
-===================================
-<br>
 <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
-</div>
 <body>
+<div class="container">
+    <div class="row">
+       <div class="col-sm-12 bg-primary text-white text-center">Main Menu</div>
+    </div>
+    <div class="row">
+        <div class="col bg-primary"></div>
+       <div class="col-sm-2 ml-auto text-primary border border-primary"><a href="index.php">Main Page</a></div>
+       <div class="col-sm-2 text-primary border border-primary"><a href="registeruser.php">Register User</a> </div>
+       <div class="col-sm-2 text-primary border border-primary"><a href="registeremployer.php">Register Employer</a></div>
+       <div class="col-sm-2 mr-auto text-primary border border-primary"><a href="login.php">Log In</a></div>
+       <div class="col bg-primary"></div>
+        <br>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+        <p class="text-center text-secondary">===================================</p>
+        <br>
+    </div>
+        </div>
+</div>
 _END;
 }
 ?>

@@ -30,7 +30,7 @@ INNER JOIN jjb_employers b ON a.employer_id=b.employer_id WHERE a.posting_id=".$
     echo <<<_END
     <form action="application.php" method="GET">
     <input type="hidden" name="posting_id" value="{$_GET['posting_id']}">
-    <input type="submit" value="Apply">
+    <input type="submit" value="Apply" class="btn btn-primary">
     </form>
 _END;
     }
@@ -107,7 +107,7 @@ for ($j=$post_begin - 1; $j < $post_end ; ++$j)
     echo<<<_END
     <form action="jobpostings.php" method="get">
     <input type="hidden" name="posting_id" value="{$row['Posting ID']}">
-    <input type="submit" value="See Details">
+    <input type="submit" value="See Details" class="btn btn-primary">
     </form>
 _END;
     }

@@ -26,19 +26,26 @@ if (isset($_POST['email']) &&
     }
 }
 ?>
+<div class="container">
 <div class="row">
-<div class="col-xl-6 bg-success">
-<h3>Please input your login data: </h3><br>
+<div class="col-sm-6 m-auto">
+<h2>Please input your login data: </h2>
 <form method="post" action='login.php'>
-Email: <input type="email" name="email"><br><br>
-Password: <input type="password" name="pass"><br><br>
+<form-group>
+    <label for="email">Email</label>
+    <input type="email" name="email" placeholder="Your email address" class="form-control">
+</form-group>
+<br>
+<form-group>
+    <label for="password">Password</label>
+    <input type="password" name="pass" placeholder="Your password" class="form-control">
+</form-group>
+<br>
 <input type='submit' value="Log in" class="btn btn-primary">
 </form>
 </div>
-<div class="col-xl-6 bg-warning">
 </div>
 </div>
-
 
 <?php
 require_once 'footer.php';

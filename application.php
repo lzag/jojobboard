@@ -31,13 +31,13 @@ if (isset($_GET['posting_id']) && $_GET['posting_id'] != "") {
         echo "Second name: ". $user_data['second_name'] . "<br>";
         echo "Email: ". $user_data['email'] . "<br>";
             if (!$user_data['cv_file']){
-                echo "Please upload your CV <a href='uploadcv.php'> here</a>";
+                echo "<span class='text-danger'>Your CV is not uploaded. Please upload it <a href='uploadcv.php'> here</a></span>";
             } else  echo "CV file: ". $user_data['cv_file'];
             echo <<<_END
     <form action="applied.php" method="POST">
     <input type="hidden" name="user_id" value="$user_id">
     <input type="hidden" name="posting_id" value="{$_GET['posting_id']}">
-    <input type="submit" value="Finalize application">
+    <input type="submit" value="Finalize application" class="btn btn-primary">
 _END;
             require_once 'footer.php';
             die();
@@ -49,7 +49,7 @@ _END;
     echo <<<_END
     <form action="application.php" method="GET">
     <input type="hidden" name="posting_id" value="{$_GET['posting_id']}">
-    <input type="submit" value="Apply">
+    <input type="submit" value="Apply" class="btn btn-primary">
     </form>
 _END;
 
