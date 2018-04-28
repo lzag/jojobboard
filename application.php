@@ -54,9 +54,6 @@ _END;
 _END;
 
 
-    echo "application, attachCV, direct link, authentication, Pull in the Job description, pull in the candidate data, ";
-
-
 
 
 require_once 'footer.php';
