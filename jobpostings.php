@@ -47,26 +47,6 @@ $query = "SELECT a.posting_id as 'Posting ID', a.title as 'Job Title',b.company_
 INNER JOIN jjb_employers b ON a.employer_id=b.employer_id";
     }
 $result = $conn->execute_query($query);
-# if(!$result) die($conn->connect_error);
-
-/*print_r($result); echo "<br><br>";
-echo gettype($result); */
-/* print_r($result->data_seek(1)); echo "<br><br>";
-print_r($result->data_seek(3)); echo "<br><br>";
-var_dump($result->fetch_assoc()); echo "<br><br>"; */
-
-/*for ($j=0; $j < $rows ; ++$j)
-{
-    $result->data_seek($j);
-    echo 'User_ID: ' . $result->fetch_assoc()['user_id'] . '<br>';
-    $result->data_seek($j);
-    echo 'First Name: ' . $result->fetch_assoc()['first_name'] . '<br>';
-    $result->data_seek($j);
-    echo 'Second Name: ' . $result->fetch_assoc()['second_name'] . '<br>';
-    $result->data_seek($j);
-    echo 'Email: ' . $result->fetch_assoc()['email'] . '<br>';
-    echo "<br>=====================<br>";
-}*/
 
 $rows = $result->num_rows;
 $pagesnr = ceil($rows / 5);
@@ -88,35 +68,40 @@ for ($i=1; $i <= $pagesnr ; $i++){
     echo "<div align='center'>Showing all results</div>";
 }
 
-for ($j=$post_begin - 1; $j < $post_end ; ++$j)
-{
+for ($j=$post_begin - 1; $j < $post_end ; ++$j) :
+
     $result->data_seek($j);
     $row = $result->fetch_assoc();
-    /*print_r($row); echo gettype($row);  */
-    echo "<div align='center'>";
-    echo '<h2>' . $row['Job Title'] . '</h2><br>';
-    echo 'Posting ID: ' . $row['Posting ID'] . '<br>';
-    echo 'Job description:<br> ' . $row['Job Description'] . '<br>';
-    echo 'Posting company: <br> '. $row['Company'] .  '<br>';
-    echo 'Posted on: ' . date("D d F Y",strtotime($row['Posted on:'])) . '<br>';
     $status = $user->getAppStatus($row['Posting ID']);
-     if (isset($_SESSION['user']) && ($status)) {
-            echo "Status: $status<br><br>";
-        }
-    else {
-    echo<<<_END
-    <form action="jobpostings.php" method="get">
-    <input type="hidden" name="posting_id" value="{$row['Posting ID']}">
-    <input type="submit" value="See Details" class="btn btn-primary">
-    </form>
-_END;
-    }
-     echo "<br>=====================<br></div>";
-}
+    ?>
 
+    <div class="card w-75 m-auto">
+  <div class="card-body">
+    <h3 class="card-title"><?php echo $row['Job Title']; ?></h3>
+    <h6 class="card-subtitle mb-2 text-muted">Posted by: <?php echo $row['Company']; ?></h6>
+    <p class="card-text"><?php echo $row['Job Description']; ?></p>
+       <?php if (isset($_SESSION['user']) && ($status)) :
+                 echo "<h5>Status: $status</h5>";
+            else : ?>
+                <form action="jobpostings.php" method="get">
+                <input type="hidden" name="posting_id" value="<?php echo "{$row['Posting ID']}"; ?>">
+                <input type="submit" value="See Details" class="btn btn-primary">
+                </form>
+        <?php endif; ?>
+  </div>
+  <div class="card-footer">
+    <h6 class="text-secondary">Posting ID: <?php echo $row['Posting ID']; ?>
+     </h6>
+     <h6 class="text-secondary">Posted on: <?php echo date("D d F Y",strtotime($row['Posted on:'])); ?>
+     </h6>
 
+  </div>
+</div>
+
+<?php
+    endfor;
 $result->close();
-$conn->close();
+    $conn->close();
 
 }
 
@@ -126,3 +111,7 @@ require_once 'footer.php';
 
 
 ?>
+
+
+
+
