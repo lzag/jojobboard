@@ -1,4 +1,4 @@
-<?php
+ <?php
 $sitename = "User profile";
 require_once 'header.php';
 $user = new User();
@@ -8,33 +8,41 @@ $second_name = $user->getSecondName($email);
 $email = $user->getEmail($email);
 $cvfile = $user->getCV($email);
 
+?>
+<div class="container">
+    <div class="col w-75 m-auto">
+        <p class="text-dark">Name: <?php echo $first_name; ?></p>
+        <p class="text-dark">Last Name: <?php echo $second_name; ?></p>
+        <p class="text-dark">Email address: <?php echo $email; ?></p>
+        <p class="text-dark">CV file:<a href="<?php echo $cvfile; ?>"> Link </a></p>
+        <p ><a href='removeaccount.php' class="text-danger"> Remove Account </a></p>
+    </div>
+</div>
+<div class="container">
+    <div class="col w-75 m-auto">
 
-
-echo <<<_END
-Name: $first_name <br>
-Surname: $second_name <br>
-Email address: $email <br>
-CV file: <a href='$cvfile'> Link </a> <br>
-<a href='removeaccount.php' style='color:red'> Remove Account </a>
-<br>
-<br>
-Applications: <br><br>
-_END;
-
+    <h3>Applications:</h3>
+<?php
 $result = $user->fetchApplications($email);
-for ($i = 0 ; $i < $result->num_rows ; $i++) {
+for ($i = 0 ; $i < $result->num_rows ; $i++) :
     $result->data_seek($i);
     $array = $result->fetch_assoc();
-    foreach ($array as $key => $value) {
-        echo "$key : $value <br>";
+    foreach ($array as $key => $value) :
+    ?>
 
-    }
+    <h6 class="text-dark"><?php echo $key. " : " . $value ; ?> </h6>
+
+    <?php endforeach; ?>
+
+    <?php
     echo "<a href='jobpostings.php?posting_id={$array['ID']}'>See posting details</a><br>";
     echo "<a href='withdraw.php?posting={$array['ID']}'>Withdraw application</a>";
     echo "<br><br>";
-}
 
-    ?>
+endfor; ?>
+
+    </div>
+</div>
 <?php
 require_once 'footer.php';
 ?>

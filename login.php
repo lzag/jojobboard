@@ -30,6 +30,7 @@ if (isset($_POST['email']) &&
 <div class="row">
 <div class="col-sm-6 m-auto">
 <h2>Please input your login data: </h2>
+
 <form method="post" action='login.php'>
 <form-group>
     <label for="email">Email</label>
