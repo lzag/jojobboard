@@ -65,7 +65,7 @@ $rows = $result->num_rows;
                 <?php echo $row['Job Description']; ?>
             </p>
             <?php if (isset($_SESSION['user']) && ($status)) :
-             echo "<h5 class='text-info'>Status: $status</h5>";
+             echo "<h5 class='text-info'>Status: <span class='badge badge-info'>$status</span></h5>";
         else : ?>
             <form action="<?php echo $filtered ? "application.php" : "jobpostings.php"; ?>" method="get">
                 <input type="hidden" name="posting_id" value="<?php echo $row['Posting ID']; ?>">
