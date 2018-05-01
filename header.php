@@ -37,129 +37,83 @@ if (isset($_COOKIE['visit']))
         setcookie('visit_time',time(),time()+1000000,"/");
         $welcome = "Welcome to our site";
     }
-
-if ($loggedinasuser) {
-
-echo <<<_END
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>JoJobboard - $sitename</title>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-</head>
-<body>
-<div class="container">
-    <div class="row">
-       <div class="col-sm-12 bg-primary text-white text-center">Main Menu</div>
-    </div>
-    <div class="row">
-        <div class="col bg-primary"></div>
-       <div class="col-sm-2 ml-auto text-primary border border-primary"><a href="index.php">Main Page</a></div>
-       <div class="col-sm-2 text-primary border border-primary"><a href="uploadcv.php">Upload CV</a></div>
-       <div class="col-sm-2 text-primary border border-primary"><a href="jobpostings.php">Job postings</a></div>
-       <div class="col-sm-2 text-primary border border-primary"><a href="userprofile.php">Your profile</a></div>
-       <div class="col-sm-2 mr-auto text-primary border border-primary"><a href="logout.php">Log out</a></div>
-       <div class="col bg-primary"></div>
-        <br>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-        <p class="text-center text-secondary">===================================</p>
-        <br>
-    </div>
-        </div>
-</div>
-_END;
-
-    } elseif ($loggedinasemployer) {
-
-    echo <<<_END
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>JoJobboard - $sitename</title>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-</head>
-<body>
-<div class="container">
-    <div class="row">
-       <div class="col-sm-12 bg-primary text-white text-center">Main Menu</div>
-    </div>
-    <div class="row">
-        <div class="col bg-primary"></div>
-       <div class="col-sm-2 ml-auto text-primary border border-primary"><a href="index.php">Main Page</a></div>
-       <div class="col-sm-2 text-primary border border-primary"><a href="postjob.php">Post a job</a> </div>
-       <div class="col-sm-2 text-primary border border-primary"><a href="employerprofile.php">See your profile</a></div>
-       <div class="col-sm-2 mr-auto text-primary border border-primary"><a href="logout.php">Log out</a></div>
-       <div class="col bg-primary"></div>
-        <br>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-        <p class="text-center text-secondary">===================================</p>
-        <br>
-    </div>
-        </div>
-</div>
-_END;
-
-
-} else {
-    echo <<<_END
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>JoJobboard - $sitename</title>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-</head>
-<body>
-<div class="container">
-    <div class="row">
-       <div class="col-sm-12 bg-primary text-white text-center">Main Menu</div>
-    </div>
-    <div class="row">
-        <div class="col bg-primary"></div>
-       <div class="col-sm-2 ml-auto text-primary border border-primary"><a href="index.php">Main Page</a></div>
-       <div class="col-sm-2 text-primary border border-primary"><a href="registeruser.php">Register User</a> </div>
-       <div class="col-sm-2 text-primary border border-primary"><a href="registeremployer.php">Register Employer</a></div>
-       <div class="col-sm-2 mr-auto text-primary border border-primary"><a href="login.php">Log In</a></div>
-       <div class="col bg-primary"></div>
-        <br>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-        <p class="text-center text-secondary">===================================</p>
-        <br>
-    </div>
-        </div>
-</div>
-_END;
-}
 ?>
 
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>JoJobboard - $sitename</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+
+<?php if ($loggedinasuser) : ?>
+
+<body>
+  <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
     <a class="navbar-brand" href="#">JoJobBoard</a>
     <ul class="navbar-nav">
         <li class="nav-item">
-            <a class="nav-link" href="#">Home</a>
+            <a class="nav-link" href="index.php">Main Page</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Features</a>
+            <a class="nav-link" href="uploadcv.php">Upload CV</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Pricing</a>
+            <a class="nav-link" href="jobpostings.php">Job postings</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Disabled</a>
+            <a class="nav-link" href="userprofile.php">Your profile</a>
+        </li>
+           <li class="nav-item">
+            <a class="nav-link" href="logout.php">Log out</a>
         </li>
     </ul>
 </nav>
+
+
+<?php elseif ($loggedinasemployer) : ?>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">JoJobBoard</a>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="index.php">Main Page</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="postjob.php">Post a job</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="employerprofile.php">See your profile</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="logout.php">Log out</a>
+        </li>
+    </ul>
+</nav>
+
+<?php else : ?>
+
+<body>
+ <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">JoJobBoard</a>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="index.php">Main Page</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="registeruser.php">Register User</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="registeremployer.php">Register Employer</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="login.php">Log In</a>
+        </li>
+    </ul>
+</nav>
+
+<?php endif; ?>
