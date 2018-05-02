@@ -1,19 +1,41 @@
 <?php
 
 class User {
+    private $user_id;
     private $first_name;
     private $second_name;
     public $email;
-    private $photo;
+    private $password;
+    private $ip_address;
+    // Not yet ready
+    // private $photo;
     private $cv;
     private $dbase;
-    public $user_id;
 
 
     function __construct() {
         $this->dbase = new Database();
         $this->email = $_SESSION['user'];
         $this->user_id = $this->getUserID($this->email);
+
+    }
+
+    public function getUserDetails($email) {
+        global $db;
+        $email = $db->sanitize($email);
+        $sql = "SELECT user_id, first_name, second_name, email, password, ip_address, cv_file ";
+        $sql .= " FROM jjb_users ";
+        $sql .= " WHERE email='$email'";
+        $user_details = $this->do_query($sql);
+        return $user_details;
+
+    }
+
+    public function do_query($sql) {
+        global $db;
+        $result = $db->execute_query($sql);
+        $result = $result->fetch_assoc();
+        return $result;
 
     }
 
@@ -79,7 +101,7 @@ class User {
 
     function deleteCV() {
         $cv = $this->getCV($this->email);
-        unlink($cv);
+        $cv ? unlink($cv) : "" ;
     }
 
 
