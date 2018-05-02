@@ -31,9 +31,7 @@ protected $conn;
 
 
     public function execute_query($sql) {
-    echo $sql;
-   //$sql = $this->escape($sql);
-    echo $sql;
+
     $result = $this->conn->query($sql);
 
     if ($this->conn->error) die("error".$this->conn->error);
@@ -43,10 +41,10 @@ protected $conn;
 
     }
 
-    private function escape($sql) {
-
-        $sql = $this->conn->real_escape_string($sql);
-        return $sql;
+    public function sanitize($string) {
+        if (get_magic_quotes_gpc()) $string = stripslashes($string);
+        $string = $this->conn->real_escape_string($string);
+        return $string;
 
     }
 

@@ -9,11 +9,14 @@ $msg = "Please input your login data:";
 if (isset($_POST['email']) &&
         isset($_POST['pass'])){
 
-    $user = $_POST['email'];
-    $pass = $_POST['pass'];
+    // Sanitize the user input //
+    $user = $db->sanitize($_POST['email']);
+    $pass = $db->sanitize($_POST['pass']);
+
     $query_login = "SELECT email, password FROM jjb_users WHERE email='$user' AND password='$pass'";
-    $result_check = $db->execute_query($query_login);
-    if ($result_check->num_rows == 1) {
+    echo $query_login;
+    $result = $db->execute_query($query_login);
+    if ($result->num_rows == 1) {
         $_SESSION['user'] = $user;
         $_SESSION['pass'] = $pass;
         header('Location: index.php');
@@ -21,8 +24,8 @@ if (isset($_POST['email']) &&
     } else {
 
         $query_login = "SELECT contact_email, password FROM jjb_employers WHERE contact_email='$user' AND password='$pass'";
-        $result_check = $db->execute_query($query_login);
-            if ($result_check->num_rows == 1) {
+        $result = $db->execute_query($query_login);
+            if ($result->num_rows == 1) {
                 $_SESSION['employer'] = $user;
                 $_SESSION['pass'] = $pass;
                 header('Location: index.php');
@@ -42,7 +45,7 @@ if (isset($_POST['email']) &&
 <form method="post" action='login.php'>
 <form-group>
     <label for="email">Email</label>
-    <input type="email" name="email" placeholder="Your email address" class="form-control">
+    <input type="text" name="email" placeholder="Your email address" class="form-control">
 </form-group>
 <br>
 <form-group>
