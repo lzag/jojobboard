@@ -2,15 +2,12 @@
 
 require_once 'dbconfig.php';
 
-class Database extends mysqli {
+class Database {
 
-//protected $db_hostname = 'localhost';
-//protected $db_username = 'johannes';
-//protected $db_password = 'L1pk0vsk1';
-//protected $db_database = 'jojobboard';
-protected $conn;
+private $conn;
 
     public function __construct(){
+
         // Enable the connection to the database. Throw and exception in case of an error
         try {
             $this->open_con(); }
@@ -29,12 +26,11 @@ protected $conn;
 
     }
 
-
     public function execute_query($sql) {
 
     $result = $this->conn->query($sql);
 
-    if ($this->conn->error) die("error".$this->conn->error);
+    if ($this->conn->error) die("Error:".$this->conn->error);
     else {
         return $result;
         }
