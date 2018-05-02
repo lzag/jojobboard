@@ -11,8 +11,17 @@ if(!$result) echo "Sth is wrong";
 print_r($result->fetch_array()['first_name']);
 */
 
-$user = new User();
+/*$user = new User();
 echo $user->getFirstName('12');
 echo $user->getSecondName('12');
-echo $user->getEmail('12');
+echo $user->getEmail('12');*/
+/*
+$dir = `cd uploads & mkdir userfiles2`;
+
+echo "$dir";*/
+$user = new User;
+$result = $user->getUserDetails('a@b');
+
+print_r($result);
+
 ?>
