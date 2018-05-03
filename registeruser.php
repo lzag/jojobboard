@@ -9,37 +9,49 @@ if (isset($_POST['first_name']) &&
     isset($_POST['email']) &&
     $_POST['first_name'] != "" &&
     $_POST['second_name'] != "" &&
-    $_POST['email'] != "")
-{
-echo "<div align='center'>Data OK <br>";
+    $_POST['email'] != "") :
+
+
     $fn = $_POST['first_name'];
     $sn = $_POST['second_name'];
     $email = $_POST['email'];
     $pass = $_POST['pass'];
-    $conn = new Database;
-    # if ($conn->connect_error) die("Couldn't connect to the database");
-    $query_add_user = "INSERT INTO jjb_users(first_name,second_name,email,password) VALUES('$fn','$sn','$email','pass')";
-    $result_add = $conn->execute_query($query_add_user);
-    # if ($conn->error) die("error".$conn->error);
-    echo "User created, please <a href='login.php'>log in</a><br></div>";
-    $conn->close();
-} else {
-    echo<<<_END
-<div align="center">
-<h3>Please provide us with your data to register a new user: </h3><br> <br>
-<form method="post" action='registeruser.php'>
-Name:   <input type="text" name="first_name"><br><br>
-Surname: <input type="text" name="second_name"><br><br>
-Email: <input type="email" name="email"><br><br>
-Password: <input type="password" name="pass"><br><br>
-<input type='submit' value="Create User">
-</form>
-</div>
-_END;
-}
-?>
+    $query_add_user = "INSERT INTO jjb_users(first_name,second_name,email,password) VALUES('$fn','$sn','$email','$pass')";
+    $result_add = $db->execute_query($query_add_user);
+    echo "<div class='col w-50 m-auto'>
+            User created, please <a href='login.php'>log in</a><br>
+            </div>";
+    $db->close();
 
-<?php
-require_once 'footer.php';
+ else : ?>
+
+    <div class="container">
+        <div class="col w-50 m-auto">
+            <form method="post" action='registeruser.php'>
+            <h3>Please provide us with your data to register a new user: </h3>
+                <div class="form-group">
+                    <label for="first_name">Name:</label>
+                    <input type="text" name="first_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="second_name">Surname:</label>
+                    <input type="text" name="second_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" name="email" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="text" name="pass" class="form-control">
+                </div>
+                <input type='submit' value="Create User" class="btn btn-primary form-control">
+            </form>
+        </div>
+    </div>
+
+    <?php
+    endif;
+    require_once 'footer.php';
 
 ?>

@@ -115,5 +115,10 @@ if (isset($_COOKIE['visit']))
         </li>
     </ul>
 </nav>
+<div class="container">
+    <h2 class="m-5 text-center">You are not logged in</h2>
+</div>
 
-<?php endif; ?>
+<?php
+
+    endif; ?>
