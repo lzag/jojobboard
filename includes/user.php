@@ -4,105 +4,111 @@ class User {
     private $user_id;
     private $first_name;
     private $second_name;
-    public $email;
+    private $email;
     private $password;
     private $ip_address;
     // Not yet ready
     // private $photo;
-    private $cv;
-    private $dbase;
+    private $cv_file;
 
 
     function __construct() {
-        $this->dbase = new Database();
-        $this->email = $_SESSION['user'];
-        $this->user_id = $this->getUserID($this->email);
+
+        global $db;
+        $this->email = $db->sanitize($_SESSION['user']);
+        $this->getUserDetails();
 
     }
 
-    public function getUserDetails($email) {
-        global $db;
-        $email = $db->sanitize($email);
+    private function getUserDetails() {
+
         $sql = "SELECT user_id, first_name, second_name, email, password, ip_address, cv_file ";
         $sql .= " FROM jjb_users ";
-        $sql .= " WHERE email='$email'";
+        $sql .= " WHERE email='$this->email'";
         $user_details = $this->do_query($sql);
-        return $user_details;
+        if ($user_details->num_rows == 1) {
+            $user_details = $user_details->fetch_assoc();
+            foreach ($user_details as $k => $p) {
+                if (property_exists('User',$k)) {
+                    $this->$k = $p;
+                }
+            }
+        }
 
     }
 
-    public function do_query($sql) {
+    private function do_query($sql) {
+
         global $db;
         $result = $db->execute_query($sql);
-        $result = $result->fetch_assoc();
         return $result;
 
     }
 
-    public function getFirstName($email) {
-        $query = "SELECT first_name FROM jjb_users WHERE email='$email'";
-        $result = $this->dbase->execute_query($query);
-        $first_name = $result->fetch_array();
-        return $first_name['first_name'];
-    }
-
-    public function getSecondName($email) {
-        $query = "SELECT second_name FROM jjb_users WHERE email='$email'";
-        $result = $this->dbase->execute_query($query);
-        $first_name = $result->fetch_array();
-        return $first_name['second_name'];
-    }
-
-    public function getEmail($email) {
-        $query = "SELECT email FROM jjb_users WHERE  email='$email'";
-        $result = $this->dbase->execute_query($query);
-        $first_name = $result->fetch_array();
-        return $first_name['email'];
-    }
-
-    public function getCV($email) {
-        $query = "SELECT cv_file FROM jjb_users WHERE  email='$email'";
-        $result = $this->dbase->execute_query($query);
-        $first_name = $result->fetch_array();
-        if ($first_name['cv_file']) return $first_name['cv_file'];
-        else return "";
+    public function getProperty($prop) {
+      if ($prop && $this->$prop) {
+          return $this->$prop;
+      } else {
+          return "Empty";
+      }
 
     }
 
-      public function getUserID($email) {
-        $query = "SELECT user_id FROM jjb_users WHERE  email='$email'";
-        $result = $this->dbase->execute_query($query);
-        $array = $result->fetch_array();
-        return $array['user_id'];
-    }
 
     public function removeUser() {
+
         $this->deleteCV();
         $query = "DELETE FROM jjb_users WHERE email='$this->email'";
-        $result = $this->dbase->execute_query($query);
+        $result = $this->do_query($query);
         if ($result) echo "User removed";
+
     }
 
     function fetchApplications() {
-    $query = "SELECT p.posting_id as 'ID',p.title as 'Job Title', e.company_name as 'Company Name', a.application_time as 'Time applied', a.status as 'Status' FROM jjb_applications a
+
+    $query = "SELECT p.posting_id, p.title, e.company_name, a.application_time, a.status FROM jjb_applications a
  				INNER JOIN jjb_postings p ON p.posting_id  = a.posting_id
                 INNER JOIN jjb_users u ON u.user_id = a.user_id
                 INNER JOIN jjb_employers e on e.employer_id = p.employer_id
                 WHERE u.email='$this->email'";
-    $result = $this->dbase->execute_query($query);
+    $result = $this->do_query($query);
     return $result;
-}
+
+    }
+
     function getAppStatus($posting_id) {
-        $query = "SELECT status FROM jjb_applications WHERE user_id='$this->user_id' and posting_id='$posting_id'";
-        $result = $this->dbase->execute_query($query);
-        $status = $result->fetch_assoc();
+
+        $sql = "SELECT status FROM jjb_applications WHERE user_id='$this->user_id' and posting_id='$posting_id'";
+        $status = $this->do_query($sql);
+        $status = $status->fetch_assoc();
         return $status['status'];
+
     }
 
     function deleteCV() {
-        $cv = $this->getCV($this->email);
+
+        $cv = $this->getProperty('cv_file');
         $cv ? unlink($cv) : "" ;
+
     }
 
-
 }
+
+//    public function getFirstName($email) {
+//      return $this->first_name;
+//    }
+//
+//    public function getSecondName($email) {
+//       return this->second_name;
+//    }
+//
+//    public function getEmail($email) {
+//        return $this->email;
+//    }
+
+//      public function getUserID($email) {
+//        $query = "SELECT user_id FROM jjb_users WHERE  email='$email'";
+//        $result = $this->dbase->execute_query($query);
+//        $array = $result->fetch_array();
+//        return $array['user_id'];
+//    }
