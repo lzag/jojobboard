@@ -1,15 +1,16 @@
 <?php
 
 class User {
+
     private $user_id;
     private $first_name;
     private $second_name;
     private $email;
     private $password;
     private $ip_address;
+    private $cv_file;
     // Not yet ready
     // private $photo;
-    private $cv_file;
 
 
     function __construct() {
@@ -49,7 +50,7 @@ class User {
       if ($prop && $this->$prop) {
           return $this->$prop;
       } else {
-          return "Empty";
+          return false;
       }
 
     }
@@ -66,7 +67,7 @@ class User {
 
     function fetchApplications() {
 
-    $query = "SELECT p.posting_id, p.title, e.company_name, a.application_time, a.status FROM jjb_applications a
+    $query = "SELECT p.posting_id, p.title, e.company_name, a.application_time, a.status, a.application_id FROM jjb_applications a
  				INNER JOIN jjb_postings p ON p.posting_id  = a.posting_id
                 INNER JOIN jjb_users u ON u.user_id = a.user_id
                 INNER JOIN jjb_employers e on e.employer_id = p.employer_id
@@ -93,22 +94,3 @@ class User {
     }
 
 }
-
-//    public function getFirstName($email) {
-//      return $this->first_name;
-//    }
-//
-//    public function getSecondName($email) {
-//       return this->second_name;
-//    }
-//
-//    public function getEmail($email) {
-//        return $this->email;
-//    }
-
-//      public function getUserID($email) {
-//        $query = "SELECT user_id FROM jjb_users WHERE  email='$email'";
-//        $result = $this->dbase->execute_query($query);
-//        $array = $result->fetch_array();
-//        return $array['user_id'];
-//    }
