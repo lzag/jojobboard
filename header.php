@@ -1,28 +1,28 @@
 <?php
 session_start();
-# require_once 'includes/dblogin.php';
 require_once 'includes/database.php';
 require_once 'includes/employer.php';
 require_once 'includes/user.php';
 require_once 'includes/blogpost.php';
 
-$userstr = ' (Guest)';
 
-if (isset($_SESSION['user']))
-{
-    $user = $_SESSION['user'];
+if (isset($_SESSION['user'])) {
+
     $loggedinasuser = TRUE;
-    $userstr = " ($user)";
+    $loggedinasemployer = FALSE;
+    $user = new User;
 
-} elseif (isset($_SESSION['employer']))
-    {
+} elseif (isset($_SESSION['employer'])) {
+
     $user = $_SESSION['employer'];
     $loggedinasuser = FALSE;
     $loggedinasemployer = TRUE;
-    $userstr = " ($user)";
+
     } else {
+
     $loggedinasuser = FALSE;
     $loggedinasemployer = FALSE;
+
     }
 
 if (isset($_COOKIE['visit']))
@@ -52,7 +52,7 @@ if (isset($_COOKIE['visit']))
 <?php if ($loggedinasuser) : ?>
 
 <body>
-  <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-sm navbar-dark bg-dark ">
     <a class="navbar-brand" href="#">JoJobBoard</a>
     <ul class="navbar-nav">
         <li class="nav-item">
@@ -77,7 +77,7 @@ if (isset($_COOKIE['visit']))
 <?php elseif ($loggedinasemployer) : ?>
 
 <body>
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark ">
     <a class="navbar-brand" href="#">JoJobBoard</a>
     <ul class="navbar-nav">
         <li class="nav-item">
@@ -98,7 +98,7 @@ if (isset($_COOKIE['visit']))
 <?php else : ?>
 
 <body>
- <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+ <nav class="navbar navbar-expand-sm navbar-dark bg-dark ">
     <a class="navbar-brand" href="#">JoJobBoard</a>
     <ul class="navbar-nav">
         <li class="nav-item">
