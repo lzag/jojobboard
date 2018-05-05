@@ -15,12 +15,10 @@ if (isset($_POST['first_name']) &&
     $fn = $_POST['first_name'];
     $sn = $_POST['second_name'];
     $email = $_POST['email'];
-    $pass = $_POST['pass'];
+    $pass = password_hash($_POST['pass'], PASSWORD_BCRYPT);
     $query_add_user = "INSERT INTO jjb_users(first_name,second_name,email,password) VALUES('$fn','$sn','$email','$pass')";
-    $result_add = $db->execute_query($query_add_user);
-    echo "<div class='col w-50 m-auto'>
-            User created, please <a href='login.php'>log in</a><br>
-            </div>";
+    $db->execute_query($query_add_user);
+    echo "User successfully registered. Please log in.";
     $db->close();
 
  else : ?>
@@ -28,7 +26,7 @@ if (isset($_POST['first_name']) &&
     <div class="container">
         <div class="col w-50 m-auto">
             <form method="post" action='registeruser.php'>
-            <h3>Please provide us with your data to register a new user: </h3>
+            <h3 class="form-header">Please provide us with your data to register a new user: </h3>
                 <div class="form-group">
                     <label for="first_name">Name:</label>
                     <input type="text" name="first_name" class="form-control">
@@ -43,7 +41,7 @@ if (isset($_POST['first_name']) &&
                 </div>
                 <div class="form-group">
                     <label for="password">Password:</label>
-                    <input type="text" name="pass" class="form-control">
+                    <input type="password" name="pass" class="form-control">
                 </div>
                 <input type='submit' value="Create User" class="btn btn-primary form-control">
             </form>

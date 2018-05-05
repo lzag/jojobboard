@@ -13,27 +13,41 @@ if (isset($_POST['email']) &&
     $user = $db->sanitize($_POST['email']);
     $pass = $db->sanitize($_POST['pass']);
 
-    $query_login = "SELECT email, password FROM jjb_users WHERE email='$user' AND password='$pass'";
-    echo $query_login;
+    $query_login = "SELECT email, password FROM jjb_users WHERE email='$user'";
     $result = $db->execute_query($query_login);
     if ($result->num_rows == 1) {
+        $passdb = $result->fetch_assoc()['password'];
+
+        if (password_verify($pass, $passdb)){
+
         $_SESSION['user'] = $user;
-        $_SESSION['pass'] = $pass;
         header('Location: index.php');
+
+        } else {
+
+            $msg = "<span class='text-danger'>Password invalid.<br> Please try again:</span>";
+
+        }
+
 
     } else {
 
-        $query_login = "SELECT contact_email, password FROM jjb_employers WHERE contact_email='$user' AND password='$pass'";
+        $query_login = "SELECT contact_email, password FROM jjb_employers WHERE contact_email='$user'";
         $result = $db->execute_query($query_login);
             if ($result->num_rows == 1) {
+                $passdb = $result->fetch_assoc()['password'];
+
+                if (password_verify($pass, $passdb)){
+
                 $_SESSION['employer'] = $user;
-                $_SESSION['pass'] = $pass;
                 header('Location: index.php');
 
             } else {
+
                 $msg = "<span class='text-danger'>Username/password invalid.<br> Please try again:</span>";
             }
-    }
+        }
+}
 }
 ?>
 
