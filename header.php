@@ -49,12 +49,15 @@ if (isset($_COOKIE['visit']))
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 
-<?php if ($loggedinasuser) : ?>
+
 
 <body>
   <nav class="navbar navbar-expand-sm navbar-dark bg-dark ">
     <a class="navbar-brand" href="#">JoJobBoard</a>
     <ul class="navbar-nav">
+
+       <?php if ($loggedinasuser) : ?>
+
         <li class="nav-item">
             <a class="nav-link" href="index.php">Main Page</a>
         </li>
@@ -70,16 +73,9 @@ if (isset($_COOKIE['visit']))
            <li class="nav-item">
             <a class="nav-link" href="logout.php">Log out</a>
         </li>
-    </ul>
-</nav>
 
+        <?php elseif ($loggedinasemployer) : ?>
 
-<?php elseif ($loggedinasemployer) : ?>
-
-<body>
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark ">
-    <a class="navbar-brand" href="#">JoJobBoard</a>
-    <ul class="navbar-nav">
         <li class="nav-item">
             <a class="nav-link" href="index.php">Main Page</a>
         </li>
@@ -92,16 +88,10 @@ if (isset($_COOKIE['visit']))
         <li class="nav-item">
             <a class="nav-link" href="logout.php">Log out</a>
         </li>
-    </ul>
-</nav>
 
-<?php else : ?>
+         <?php else : ?>
 
-<body>
- <nav class="navbar navbar-expand-sm navbar-dark bg-dark ">
-    <a class="navbar-brand" href="#">JoJobBoard</a>
-    <ul class="navbar-nav">
-        <li class="nav-item">
+          <li class="nav-item">
             <a class="nav-link" href="index.php">Main Page</a>
         </li>
         <li class="nav-item">
@@ -113,12 +103,15 @@ if (isset($_COOKIE['visit']))
         <li class="nav-item">
             <a class="nav-link" href="login.php">Log In</a>
         </li>
+
+        <?php  endif; ?>
+
     </ul>
 </nav>
+
+<!--
 <div class="container">
     <h2 class="m-5 text-center">You are not logged in</h2>
 </div>
+-->
 
-<?php
-
-    endif; ?>
