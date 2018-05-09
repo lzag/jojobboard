@@ -1,4 +1,7 @@
-AddHandler application/x-httpd-php .xml
-
+# AddHandler application/x-httpd-php .xml
+RewriteEngine on
+RewriteRule trovitfeed.xml trovitfeed.php [NC,L]
+RewriteRule indeedfeed.xml indeedfeed.php [NC,L]
+#Rewrite Rule ^[index|index.php]$ http://localhost/jojobboard [NC,L]
 
 
