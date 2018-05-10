@@ -69,6 +69,12 @@ function randKey($email) {
 
 }
 
+function generate_token() {
+
+    return sha1(mt_rand(10000,99999).time());
+
+}
+
 function login() {
 
     global $db;
