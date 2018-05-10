@@ -93,4 +93,62 @@ class User {
 
     }
 
+    function uploadCV() {
+
+        global $db;
+        if (isset($_SESSION['user'])) {
+        if (isset($_FILES['CV'])) {
+        $query = "SELECT user_id FROM jjb_users WHERE email='".$_SESSION['user']."'" ;
+        $result = $db->execute_query($query);
+
+        if ($result->num_rows){
+
+            $user_row = $result->fetch_assoc();
+            $user_id = $user_row['user_id'];
+            $filename = $_FILES['CV']['name'];
+
+            if (!move_uploaded_file($_FILES['CV']['tmp_name'], "./uploads/$user_id"."_"."$filename")) {
+
+                echo "<span class='text-danger'>Couldn't upload the file</span>";
+
+            } else {
+
+                $filepath = "./uploads/$user_id"."_"."$filename";
+                $query_CV = "UPDATE jjb_users SET cv_file='$filepath' WHERE email='".$_SESSION['user']."'";
+                $result_upl = $db->execute_query($query_CV);
+                if ($result_upl) echo "<span class='text-success'>File <a href='$filepath'>". $filename ."</a> uploaded successfully</span>";
+                require_once 'footer.php';
+                die;
+
+                }
+            }
+        }
+
+        } else die("You are not logged in");
+
+
+
+    }
+
+    function register_user() {
+
+    global $db;
+    if (isset($_POST['first_name']) &&
+    isset($_POST['second_name']) &&
+    isset($_POST['email']) &&
+    $_POST['first_name'] != "" &&
+    $_POST['second_name'] != "" &&
+    $_POST['email'] != "") {
+
+    $fn = $_POST['first_name'];
+    $sn = $_POST['second_name'];
+    $email = $_POST['email'];
+    $pass = password_hash($_POST['pass'], PASSWORD_BCRYPT);
+    $query_add_user = "INSERT INTO jjb_users(first_name,second_name,email,password) VALUES('$fn','$sn','$email','$pass')";
+    $db->execute_query($query_add_user);
+    echo "User successfully registered. Please log in.";
+
+    }
+    }
+
 }
