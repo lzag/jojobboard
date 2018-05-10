@@ -140,15 +140,27 @@ class User {
     $_POST['second_name'] != "" &&
     $_POST['email'] != "") {
 
-    $fn = $_POST['first_name'];
-    $sn = $_POST['second_name'];
-    $email = $_POST['email'];
+    $fn = $db->sanitize($_POST['first_name']);
+    $sn = $db->sanitize($_POST['second_name']);
+    $email = $db->sanitize($_POST['email']);
     $pass = password_hash($_POST['pass'], PASSWORD_BCRYPT);
-    $query_add_user = "INSERT INTO jjb_users(first_name,second_name,email,password) VALUES('$fn','$sn','$email','$pass')";
+    $ip = $_POST['IP'];
+    $query_add_user = "INSERT INTO jjb_users(first_name,second_name,email,password,ip_address) VALUES('$fn','$sn','$email','$pass','$ip')";
     $db->execute_query($query_add_user);
-    echo "User successfully registered. Please log in.";
+
+    if($db->errno() == 1062) {
+
+        $msg = "The email you're trying to use is already in our database";
+        show_alert($msg,"danger");
+
+    } else {
+
+    $msg = "An email with the activation link has been sent to your email. Please check your inbox and click on the link to activate your account";
+    show_alert($msg,"success");
+
+        }
+    }
 
     }
-    }
-
 }
+

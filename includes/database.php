@@ -28,12 +28,7 @@ private $conn;
 
     public function execute_query($sql) {
 
-    $result = $this->conn->query($sql);
-
-    if ($this->conn->error) die("Error:".$this->conn->error);
-    else {
-        return $result;
-        }
+    return $result = $this->conn->query($sql);
 
     }
 
@@ -46,6 +41,12 @@ private $conn;
 
    public function close() {
         $this->conn->close();
+    }
+
+    public function errno() {
+
+        return $this->conn->errno;
+
     }
 
 }
