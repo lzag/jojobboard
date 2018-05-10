@@ -6,55 +6,14 @@ require_once 'header.php';
 
 $msg = "Please input your login data:";
 
-if (isset($_POST['email']) &&
-        isset($_POST['pass'])){
 
-    // Sanitize the user input //
-    $user = $db->sanitize($_POST['email']);
-    $pass = $db->sanitize($_POST['pass']);
-
-    $query_login = "SELECT email, password FROM jjb_users WHERE email='$user'";
-    $result = $db->execute_query($query_login);
-    if ($result->num_rows == 1) {
-        $passdb = $result->fetch_assoc()['password'];
-
-        if (password_verify($pass, $passdb)){
-
-        $_SESSION['user'] = $user;
-        header('Location: index.php');
-
-        } else {
-
-            $msg = "<span class='text-danger'>Password invalid.<br> Please try again:</span>";
-
-        }
-
-
-    } else {
-
-        $query_login = "SELECT contact_email, password FROM jjb_employers WHERE contact_email='$user'";
-        $result = $db->execute_query($query_login);
-            if ($result->num_rows == 1) {
-                $passdb = $result->fetch_assoc()['password'];
-
-                if (password_verify($pass, $passdb)){
-
-                $_SESSION['employer'] = $user;
-                header('Location: index.php');
-
-            } else {
-
-                $msg = "<span class='text-danger'>Username/password invalid.<br> Please try again:</span>";
-            }
-        }
-}
-}
 ?>
 
 <div class="container">
 <div class="row">
 <div class="col-sm-6 m-auto">
-<h4><?php echo $msg; ?></h4>
+<?php User::activate_user(); ?>
+<h4><?php login(); ?></h4>
 
 <form method="post" action='login.php'>
 <form-group>
