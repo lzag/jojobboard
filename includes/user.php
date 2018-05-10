@@ -130,7 +130,7 @@ class User {
 
     }
 
-    function register_user() {
+    static function register_user() {
 
     global $db;
     if (isset($_POST['first_name']) &&
@@ -145,9 +145,9 @@ class User {
     $email = $db->sanitize($_POST['email']);
     $pass = password_hash($_POST['pass'], PASSWORD_BCRYPT);
     $ip = $_POST['IP'];
-    $query_add_user = "INSERT INTO jjb_users(first_name,second_name,email,password,ip_address) VALUES('$fn','$sn','$email','$pass','$ip')";
+    $code = randKey($email);
+    $query_add_user = "INSERT INTO jjb_users(first_name,second_name,email,password,ip_address,valid_code) VALUES('$fn','$sn','$email','$pass','$ip', '$code')";
     $db->execute_query($query_add_user);
-
     if($db->errno() == 1062) {
 
         $msg = "The email you're trying to use is already in our database";
@@ -155,10 +155,54 @@ class User {
 
     } else {
 
+    $body = "Please click the following link to activate the account: <a href=\"".DEV_URL."login.php?valid_code=$code&email=$email\">Activate</a>";
+    send_email($email,"Activate your JoJobBoard account",$body,"");
     $msg = "An email with the activation link has been sent to your email. Please check your inbox and click on the link to activate your account";
     show_alert($msg,"success");
 
         }
+    }
+
+    }
+
+    public static function activate_user() {
+
+        global $db;
+        if(isset($_GET['email']) && isset($_GET['valid_code'])) {
+        $email = $db->sanitize($_GET['email']);
+        $code = $db->sanitize($_GET['valid_code']);
+        $query = "SELECT valid_code FROM jjb_users WHERE email='$email'";
+        $result = $db->execute_query($query);
+        if ($result->num_rows == 1) {
+
+            $dbcode = $result->fetch_assoc()['valid_code'];
+
+            if ($code === $dbcode) {
+
+                $query = "UPDATE jjb_users SET active = 1 WHERE email='$email'";
+                $result = $db->execute_query($query);
+
+                if ($result) {
+
+                $msg = "Your account has been activated, please log in";
+                show_alert($msg,"success");
+
+                    }
+
+            } else {
+
+                $msg = "Sorry, wrong validation code";
+                show_alert($msg,"danger");
+
+            }
+
+        } else {
+
+            $msg = "Your email has not been registered yet";
+            show_alert($msg,"danger");
+
+        }
+
     }
 
     }

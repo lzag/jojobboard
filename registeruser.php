@@ -4,12 +4,14 @@ $sitename = "Register a new user";
 
 require_once 'header.php';
 
-User::register_user();
+
 
 ?>
 
     <div class="container">
         <div class="col w-50 m-auto">
+           <?php User::register_user(); ?>
+           <?php User::activate_user(); ?>
             <form method="post" action='registeruser.php'>
             <h3 class="form-header">Please provide us with your data to register a new user: </h3>
                 <div class="form-group">
