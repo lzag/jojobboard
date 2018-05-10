@@ -179,7 +179,7 @@ class User {
 
             if ($code === $dbcode) {
 
-                $query = "UPDATE jjb_users SET active = 1 WHERE email='$email'";
+                $query = "UPDATE jjb_users SET active = 1, valid_code = 0 WHERE email='$email'";
                 $result = $db->execute_query($query);
 
                 if ($result) {
@@ -206,5 +206,98 @@ class User {
     }
 
     }
+
+    public static function recover_password() {
+
+            global $db;
+            if(isset($_POST['reset'])) {
+
+            $email = $db->sanitize($_POST['email']);
+            $token = $_POST['token'];
+            $code = randKey($email);
+            $query = "SELECT email FROM jjb_users WHERE email='$email'";
+            $result = $db->execute_query($query);
+            if ($result->num_rows == 1) {
+            setcookie("token","$token",time()+60*5);
+            $query = "UPDATE jjb_users SET valid_code = '$code', token = '$token' WHERE email='$email'";
+            $result = $db->execute_query($query);
+
+            if($result) {
+
+                $body = "Please follow this link to reset your password: <a href=\"".DEV_URL."reset.php?code=$code&email=$email\">Reset password</a>";
+                send_email($email, "Your password recovery link", $body,"");
+                $msg = "We've just sent you an email with the reset link";
+                show_alert($msg,"success");
+
+                    } else {
+
+                    $msg = "There has been a database problem, please try again later";
+                    show_alert($msg,"danger");
+
+                }
+        }
+
+    }
+    }
+
+    public static function reset_password() {
+
+    global $db;
+    if(isset($_GET['code']) && isset($_GET['email'])) {
+
+    $email = $_GET['email'];
+    $query = "SELECT valid_code, token FROM jjb_users WHERE email='$email'";
+    $result = $db->execute_query($query);
+
+    if ($result) {
+
+
+    $row = $result->fetch_array();
+
+        if(isset($_COOKIE['token'])) {
+
+            if($_COOKIE['token'] == $row['token']) {
+
+                if($row['valid_code'] == $_GET['code']) {
+
+                    $msg = "Please introduce your new password";
+                    show_alert($msg,"success");
+                    return true;
+
+                } else {
+
+                    $msg = "Your validation code is incorrect";
+                    show_alert($msg,"danger");
+                    return false;
+
+                }
+
+            } else {
+
+                $msg = "Can't verify the reset, please reset again";
+                show_alert($msg,"danger");
+                return false;
+
+            }
+
+        } else {
+
+                $msg = "Your token has expired, please reset the password again";
+                show_alert($msg,"danger");
+                return false;
+
+            }
+
+    } else {
+
+        $msg = "Your email was not found in the database";
+        show_alert($msg,"danger");
+        return false;
+
+    }
+
+    }
+
 }
 
+}
