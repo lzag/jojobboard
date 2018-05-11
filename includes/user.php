@@ -243,6 +243,9 @@ class User {
     public static function reset_password() {
 
     global $db;
+
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+
     if(isset($_GET['code']) && isset($_GET['email'])) {
 
     $email = $_GET['email'];
@@ -294,10 +297,55 @@ class User {
         show_alert($msg,"danger");
         return false;
 
-    }
+        }
 
     }
 
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        if(isset($_POST['reset']) && isset($_POST['email'])) {
+
+            $email = $_POST['email'];
+
+            if ($_POST['password'] === $_POST['confirm_password']) {
+
+
+            $password = password_hash($_POST['password'],PASSWORD_BCRYPT);
+            $query = "UPDATE jjb_users SET password = '$password', token = 0, valid_code = 0 WHERE email='$email'";
+            $result = $db->execute_query($query);
+
+            if($result && !($db->errno())) {
+
+                $msg = "Your password has been updated, you can now log in";
+                show_alert($msg,"success");
+
+                } else {
+
+                $msg = "Your password could not be updated, please try again later";
+                show_alert($msg,"danger");
+
+            }
+
+            } else {
+
+                $msg = "Your passwords don't match, please introduce them again";
+                show_alert($msg,"danger");
+                return true;
+
+            }
+
+        } else {
+
+            $msg = "Error while sending form, please try to reset the password again";
+            show_alert($msg,"success");
+
+        }
+
+    } else {
+
+        $msg = "Site error, please try again later";
+        show_alert($msg,"danger");
+
+    }
 }
-
 }
