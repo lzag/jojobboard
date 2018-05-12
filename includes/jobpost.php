@@ -36,7 +36,7 @@ $filters = array("location" => "",
 $filter_rules = array("location" => " location LIKE '%%%s%%' ",
                 "salary_min" => " a.salary >=%d",
                 "salary_max" => " a.salary <=%d",
-                "keyword" => " (title OR description LIKE '%%%s%%') ",
+                "keyword" => " CONCAT(title, description) LIKE '%%%s%%' ",
                 "id" => " a.posting_id=%d",
                 "order" => " ORDER BY %s "
                 );
