@@ -5,19 +5,9 @@ $sitename = "Index of Jobs";
 
 require_once 'header.php';
 
-$user = new User();
-$conn = new Database();
-$filtered = isset($_GET['posting_id']);
-
-# if ($conn->connect_error) die("The connection failed".$conn->connect_error);
-
-$query_post = "SELECT a.posting_id as 'Posting ID', a.title as 'Job Title',b.company_name as 'Company', a.description as 'Job Description',       a.time_posted as 'Posted on:'";
-$query_post .= " FROM jjb_postings a INNER JOIN jjb_employers b ON a.employer_id=b.employer_id";
-$filtered ? $query_post .= " WHERE a.posting_id=".$_GET['posting_id'] : "" ;
-(isset($_GET['order'])) ? $query_post .= " ORDER BY ". $_GET['order'] . " desc" : "" ;
-$result = $conn->execute_query($query_post);
 # if(!$result_post) die($conn->connect_error);
-$rows = $result->num_rows;
+
+
 
 
         /****** PAGINATION CODE THAT DOESN'T WORK
@@ -40,58 +30,92 @@ $rows = $result->num_rows;
 
 <div class="container">
 <div class="col w-75 m-auto">
-<p>Order by: <a href='jobpostings.php?order=time_posted'>Date</a> | <a href='jobpostings.php?order=posting_id'>Relevance</a></p>
+<p>Order by:
+<a href='<?php JobPost::add_url_filter("time_posted"); ?>'>Date</a>
+<a href='<?php JobPost::add_url_filter("salary"); ?>'>Salary</a>
+</p>
 </div>
 </div>
 <div class="container">
 
-<?php
-    for ($j=0; $j < $rows ; ++$j) :
+<form action="jobpostings.php" method="get">
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="keyword">Keywords: </label>
+            <input type="text" class="form-control" id="keyword" name="keyword">
+        </div>
+        <div class="form-group col-md-3">
+            <label for="location">Location: </label>
+            <input type="text" class="form-control" id="location" name="location">
+        </div>
+        <div class="form-group col-md-1">
+            <label for="salary_min">Salary min:</label>
+            <input type="text" class="form-control" id="salary_min" name="salary_min">
+        </div>
+        <div class="form-group col-md-1">
+            <label for="salary_max">Salary max:</label>
+            <input type="text" class="form-control" id="salary_max" name="salary_max">
+        </div>
+        <div class="form-group col-md-3">
+            <label for="order">Order by</label>
+            <input type="text" class="form-control" id="order" name="order">
+        </div>
+    </div>
+    <div class="form-row">
+        <input type="submit" name="submit" value="Search for jobs" class="btn btn-primary">
+    </div>
+</form>
 
-    $result->data_seek($j);
-    $row = $result->fetch_assoc();
-    $status = $user->getAppStatus($row['Posting ID']);
+
+<?php
+
+    $result = JobPost::get_posts();
+    if($result) :
+    while($row = $result->fetch_assoc()) :
+
+    $status = $user->getAppStatus($row['posting_id']);
+
     ?>
 
     <div class="card w-75 mx-auto my-2">
         <div class="card-body">
             <h3 class="card-title">
-                <?php echo $row['Job Title']; ?>
+                <?php echo $row['title']; ?>
             </h3>
             <h6 class="card-subtitle mb-2 text-muted">Posted by:
-                <?php echo $row['Company']; ?>
+                <?php echo $row['company_name']; ?>
             </h6>
             <p class="card-text">
-                <?php echo $row['Job Description']; ?>
+                <?php echo $row['description']; ?>
             </p>
             <?php if (isset($_SESSION['user']) && ($status)) :
              echo "<h5 class='text-info'>Status: <span class='badge badge-info'>$status</span></h5>";
         else : ?>
-            <form action="<?php echo $filtered ? "application.php" : "jobpostings.php"; ?>" method="get">
-                <input type="hidden" name="posting_id" value="<?php echo $row['Posting ID']; ?>">
-                <input type="submit" value="<?php echo $filtered ? "Apply" : "See Details"; ?>" class="btn btn-primary">
+            <form action="<?php echo isset($_GET["id"]) ? "application.php" : "jobpostings.php"; ?>" method="get">
+                <input type="hidden" name="posting_id" value="<?php echo $row['posting_id']; ?>">
+                <input type="submit" value="<?php echo isset($_GET["id"]) ? "Apply" : "See Details"; ?>" class="btn btn-primary">
             </form>
             <?php endif; ?>
         </div>
         <div class="card-footer">
             <h6 class="text-secondary">Posting ID:
-                <?php echo $row['Posting ID']; ?>
+                <?php echo $row['posting_id']; ?>
             </h6>
             <h6 class="text-secondary">Posted on:
-                <?php echo date("D d F Y",strtotime($row['Posted on:'])); ?>
+                <?php echo date("D d F Y",strtotime($row['time_posted'])); ?>
             </h6>
 
         </div>
     </div>
 
     <?php
-    endfor;
-    $conn->close();
+    endwhile;
+    endif;
     ?>
 
     <div class="col w-75 m-auto">
     <?php
-    echo $filtered ? '<a href="jobpostings.php">Go back to all</a><br>' : "";
+    echo isset($_GET["id"]) ? '<a href="jobpostings.php">Go back to all</a><br>' : "";
     ?>
     </div>
 
