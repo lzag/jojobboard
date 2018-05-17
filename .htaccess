@@ -3,5 +3,5 @@ RewriteEngine on
 RewriteRule trovitfeed.xml trovitfeed.php [NC,L]
 RewriteRule indeedfeed.xml indeedfeed.php [NC,L]
 #Rewrite Rule ^[index|index.php]$ http://localhost/jojobboard [NC,L]
-
+ErrorDocument 404 /jojobboard/error/404.php 
 
