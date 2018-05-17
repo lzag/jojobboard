@@ -113,6 +113,43 @@ require_once 'header.php';
     endif;
     ?>
 
+
+<!--    GET THE BACKFILL OFFERS -->
+    <?php
+
+    $result = JobPost::get_backfill();
+    if($result) :
+    foreach($result as $value) :
+    ?>
+
+    <div class="card w-75 mx-auto my-2">
+        <div class="card-body">
+            <h3 class="card-title">
+                <?php echo $value->title; ?>
+            </h3>
+            <h6 class="card-subtitle mb-2 text-muted">Posted by:
+                <?php echo $value->company; ?>
+            </h6>
+            <p class="card-text">
+                <?php echo $value->description; ?>
+            </p>
+            <a href="<?php echo $value->url; ?>" class="btn btn-primary">See Details</a>
+        </div>
+        <div class="card-footer">
+            <h6 class="text-secondary">Site: <?php echo $value->site; ?>
+            </h6>
+            <h6 class="text-secondary">Posted on:
+                <?php echo date("D d F Y",strtotime($value->date)); ?>
+            </h6>
+
+        </div>
+    </div>
+
+    <?php
+    endforeach;
+    endif;
+    ?>
+
     <div class="col w-75 m-auto">
     <?php
     echo isset($_GET["id"]) ? '<a href="jobpostings.php">Go back to all</a><br>' : "";
