@@ -70,7 +70,7 @@ if(isset($filter_rules['order'])) {
 
 }
 
-$query = "SELECT a.posting_id, a.title,b.company_name, a.description, a.time_posted, a.location, a.salary";
+$query = "SELECT a.posting_id, a.title,b.company_name, a.description, a.time_posted, a.location, a.salary, a.local";
 $query .= " FROM jjb_postings a INNER JOIN jjb_employers b ON a.employer_id=b.employer_id  ";
 
 // check if it's the single post page
@@ -121,9 +121,28 @@ public static function add_url_filter($filter) {
 
 }
 
-public static function get_backfill($filters) {
+private static function get_backfill_filters($num = 10) {
+
+    $keywords = isset($_GET['keyword']) ? $_GET['keyword'] : "";
+    $location = isset($_GET['location']) ? $_GET['location'] : "";
+    $sort = isset($_GET['order']) ? $_GET['order'] : null;
+
+    $filters = array( 'keywords' => $keywords,
+                   'location' => $location,
+                    'pagesize' => $num,
+                    'affid'      => '0afaf0173305e4b9');
+
+    return $filters;
+}
+
+public static function get_backfill() {
+
+    $backfill = new Careerjet_API('en_US');
+    $filters = self::get_backfill_filters();
+    $result = $backfill->search($filters);
 
 
+    return $result->jobs;
 
 }
 
