@@ -33,10 +33,19 @@ private $conn;
     }
 
     public function sanitize($string) {
+
+        if (is_array($string)) {
+
+            if (get_magic_quotes_gpc()) $string = array_map("stripslashes",$string);
+            $string = array_map(array($this->conn,"real_escape_string"), $string);
+
+        } else {
+
         if (get_magic_quotes_gpc()) $string = stripslashes($string);
         $string = $this->conn->real_escape_string($string);
         return $string;
 
+        }
     }
 
    public function close() {
