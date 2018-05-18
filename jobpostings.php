@@ -71,6 +71,7 @@ require_once 'header.php';
 
     $result = JobPost::get_posts();
     if($result) :
+    $num = $result->num_rows;
     while($row = $result->fetch_assoc()) :
 
     $status = $user->getAppStatus($row['posting_id']);
@@ -110,6 +111,8 @@ require_once 'header.php';
 
     <?php
     endwhile;
+    else :
+    $num = 0;
     endif;
     ?>
 
@@ -117,7 +120,7 @@ require_once 'header.php';
 <!--    GET THE BACKFILL OFFERS -->
     <?php
 
-    $result = JobPost::get_backfill();
+    $result = JobPost::get_backfill(100 - $num);
     if($result) :
     foreach($result as $value) :
     ?>
