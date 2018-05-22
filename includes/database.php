@@ -38,6 +38,7 @@ private $conn;
 
             if (get_magic_quotes_gpc()) $string = array_map("stripslashes",$string);
             $string = array_map(array($this->conn,"real_escape_string"), $string);
+            return $string;
 
         } else {
 

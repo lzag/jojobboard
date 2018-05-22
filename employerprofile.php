@@ -10,8 +10,6 @@ $result = $conn->execute_query($query);*/
 print_r($result->fetch_array());
 */
 
-$employer = new Employer();
-$contact_email = $_SESSION['employer'];
 $employer_id = $employer->getEmployerID($contact_email);
 $city = $employer->getCity($contact_email);
 $contact_first_name = $employer->getContactFirstName($contact_email);

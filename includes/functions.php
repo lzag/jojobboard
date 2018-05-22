@@ -152,4 +152,80 @@ function login() {
 }
 
     }
+
+function pagination($total_results = 100, $per_page = 10) {
+
+        $total_pages = ceil($total_results / $per_page);
+        $page = isset($_GET['page']) ? $_GET['page'] : 1;
+        $url = $_SERVER['REQUEST_URI'];
+        $curr = isset($_GET['page']) ? $_GET['page'] : 1;
+        $prev = ($curr > 1) ? $curr - 1 : false;
+        $next = ($curr < $total_pages) ? $curr + 1 : false;
+
+// PREVIOUS PART OF PAGINATION
+if ($prev) {
+
+$link = preg_replace("/(\?page=)(\d+)/","?page=$prev",$url);
+echo <<<HTML
+<nav aria-label="...">
+  <ul class="pagination">
+    <li class="page-item">
+      <a class="page-link" href="$link" tabindex="-1">Previous</a>
+    </li>
+HTML;
+
+} else {
+
+echo <<<HTML
+<nav aria-label="...">
+  <ul class="pagination">
+    <li class="page-item disabled">
+      <a class="page-link" href="#" tabindex="-1">Previous</a>
+    </li>
+HTML;
+
+}
+
+// MIDDLE PART OF THE PAGINATION
+    for($i = 1; $i <= $total_pages; $i++){
+
+        $link = preg_replace("/(\?page=)(\d+)/","?page=$i",$url);
+
+        if ($i === $curr) {
+
+            echo <<<HTML
+            <li class="page-item active"><a class="page-link" href="$link">{$i}<span class="sr-only">(current)</span></a></li>
+HTML;
+
+        } else {
+
+        echo <<<HTML
+            <li class="page-item"><a class="page-link" href="$link">{$i}</a></li>
+HTML;
+        }
+    }
+
+// END PART OF PAGINATION
+if ($next) {
+
+$link = preg_replace("/(\?page=)(\d+)/","?page=$next",$url);
+echo <<<HTML
+    <li class="page-item">
+      <a class="page-link" href="$link">Next</a>
+    </li>
+  </ul>
+</nav>
+HTML;
+} else {
+
+echo <<<HTML
+    <li class="page-item disabled">
+      <a class="page-link" href="#">Next</a>
+    </li>
+  </ul>
+</nav>
+HTML;
+
+}
+}
 ?>
