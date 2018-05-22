@@ -1,9 +1,13 @@
 <?php
 session_start();
+
 require_once 'includes/database.php';
+require_once 'includes/functions.php';
 require_once 'includes/employer.php';
 require_once 'includes/user.php';
 require_once 'includes/blogpost.php';
+require_once 'includes/jobpost.php';
+require_once 'includes/Careerjet_API.php';
 
 
 if (isset($_SESSION['user'])) {
@@ -14,9 +18,10 @@ if (isset($_SESSION['user'])) {
 
 } elseif (isset($_SESSION['employer'])) {
 
-    $user = $_SESSION['employer'];
     $loggedinasuser = FALSE;
     $loggedinasemployer = TRUE;
+    $employer = new Employer();
+    $contact_email = $_SESSION['employer'];
 
     } else {
 

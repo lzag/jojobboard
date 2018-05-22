@@ -2,6 +2,7 @@
 session_start();
 if (isset($_SESSION['user']) || isset($_SESSION['employer'])) {
     (session_destroy());
+
 $sitename = "Logged out";
 require_once 'header.php';
 

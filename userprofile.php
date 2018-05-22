@@ -44,26 +44,24 @@ require_once 'header.php';
 
             <?php
     $result = $user->fetchApplications();
-    for ($i = 0 ; $i < $result->num_rows ; $i++) :
-    $result->data_seek($i);
-    $array = $result->fetch_assoc();
+    while($row = $result->fetch_assoc()) : ;
 ?>
             <div class="d-block my-5 ">
                 <h5>Title:
-                    <span class="text-secondary"><?php echo $array['title']; ?></span></h5>
+                    <span class="text-secondary"><?php echo $row['title']; ?></span></h5>
                 <h5>Company:
-                    <span class="text-secondary"><?php echo $array['company_name']; ?></span></h5>
+                    <span class="text-secondary"><?php echo $row['company_name']; ?></span></h5>
 
                 Applied on:
-                <?php echo $array['application_time']; ?> <br> Status:
-                <?php echo $array['status']; ?><br>
+                <?php echo $row['application_time']; ?> <br> Status:
+                <?php echo $row['status']; ?><br>
 
-                <div class="btn btn-outline-primary my-1"><a href='jobpostings.php?posting_id=<?php echo $array[' application_id ']; ?>'>See posting details</a></div><br>
-                <div class="btn btn-outline-danger my-1"><a class="text-danger" href='withdraw.php?posting=<?php echo $array[' application_id ']; ?>'>Withdraw Application</a></div>
+                <div class="btn btn-outline-primary my-1"><a href='jobpostings.php?posting_id=<?php echo $row[' application_id ']; ?>'>See posting details</a></div><br>
+                <div class="btn btn-outline-danger my-1"><a class="text-danger" href='withdraw.php?posting=<?php echo $row[' application_id ']; ?>'>Withdraw Application</a></div>
 
             </div>
 
-            <?php endfor; ?>
+            <?php endwhile; ?>
 
         </div>
     </div>

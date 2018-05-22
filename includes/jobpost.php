@@ -107,13 +107,13 @@ $query = "SELECT a.posting_id, a.title,b.company_name, a.description, a.time_pos
 $query .= " FROM jjb_postings a INNER JOIN jjb_employers b ON a.employer_id=b.employer_id  ";
 
 // check if it's the single post page
-if(!empty($filter_rules) || $keyword) {
+if(!empty($filter_rules) || isset($keyword)) {
 
    $query .= " WHERE ";
 
     if (array_key_exists("id", $filter_rules)) {
 
-        $query .= $filter_rules["id"];
+        $query .= sprintf($filter_rules['id'],$filters['id']);
 
     } else {
 
@@ -180,7 +180,13 @@ public static function get_backfill($num) {
     $filters = self::get_backfill_filters($num);
     $result = $backfill->search($filters);
 
-    return $result->hits ? $result->jobs : false;
+    return $result->hits ? $result : false;
+
+}
+
+public static function get_paginated_results() {
+
+
 
 }
 

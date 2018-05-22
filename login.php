@@ -24,10 +24,13 @@ $msg = "Please input your login data:";
 <form-group>
     <label for="password">Password</label>
     <input type="password" name="pass" placeholder="Your password" class="form-control">
+    <span class="text-info"><a href="recover.php">Forgot your password? </a></span>
 </form-group>
 <br>
-<input type='submit' value="Log in" class="btn btn-primary">
+<br>
+<input type="submit" name="login" value="Log in" class="btn btn-primary">
 </form>
+
 </div>
 </div>
 </div>

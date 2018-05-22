@@ -7,25 +7,6 @@ require_once 'header.php';
 
 # if(!$result_post) die($conn->connect_error);
 
-
-
-
-        /****** PAGINATION CODE THAT DOESN'T WORK
-        $pagesnr = ceil($rows / 5);
-        if (isset($_GET['page'])) {
-            echo "<div align='center'>Pages: ";
-                for ($i=1; $i <= $pagesnr ; $i++){
-                echo "<a href='jobpostings.php?page=$i'>$i</a> | ";
-            }
-
-            $post_begin = 1 + 5 * ($_GET['page'] - 1) ;
-                    (($post_begin + 4) > $rows ) ? $post_end = $rows : $post_end = $post_begin + 4 ;
-                echo "<div align='center'>Results from $post_begin until $post_end out of $rows</div>";
-            } else {
-                $post_begin = 1;
-                $post_end = $rows;
-                echo "<div align='center'>Showing all results</div>";
-            }*/
 ?>
 
 <div class="container">
@@ -66,16 +47,27 @@ require_once 'header.php';
     </div>
 </form>
 
+<?php
+
+// GET THE RESULTS
+$results_local = JobPost::get_posts();
+
+if(!isset($_GET['id'])) {
+$local_hits = $results_local ? $results_local->num_rows : 0;
+$results_backfill = JobPost::get_backfill(100 - $local_hits);
+$backfill_hits = $results_backfill ? $results_backfill->hits: 0;
+
+echo "We've found $local_hits local and $backfill_hits external results for your query";
+}
+    ?>
 
 <?php
 
-    $result = JobPost::get_posts();
-    if($result) :
-    $num = $result->num_rows;
-    while($row = $result->fetch_assoc()) :
+
+    if($results_local) :
+    while($row = $results_local->fetch_assoc()) :
 
     $status = $user->getAppStatus($row['posting_id']);
-
     ?>
 
     <div class="card w-75 mx-auto my-2">
@@ -93,7 +85,7 @@ require_once 'header.php';
              echo "<h5 class='text-info'>Status: <span class='badge badge-info'>$status</span></h5>";
         else : ?>
             <form action="<?php echo isset($_GET["id"]) ? "application.php" : "jobpostings.php"; ?>" method="get">
-                <input type="hidden" name="posting_id" value="<?php echo $row['posting_id']; ?>">
+                <input type="hidden" name="id" value="<?php echo $row['posting_id']; ?>">
                 <input type="submit" value="<?php echo isset($_GET["id"]) ? "Apply" : "See Details"; ?>" class="btn btn-primary">
             </form>
             <?php endif; ?>
@@ -111,8 +103,6 @@ require_once 'header.php';
 
     <?php
     endwhile;
-    else :
-    $num = 0;
     endif;
     ?>
 
@@ -120,9 +110,9 @@ require_once 'header.php';
 <!--    GET THE BACKFILL OFFERS -->
     <?php
 
-    $result = JobPost::get_backfill(100 - $num);
-    if($result) :
-    foreach($result as $value) :
+
+    if(isset($results_backfill->hits)) :
+    foreach($results_backfill->jobs as $value) :
     ?>
 
     <div class="card w-75 mx-auto my-2">
@@ -154,8 +144,11 @@ require_once 'header.php';
     ?>
 
     <div class="col w-75 m-auto">
+
+
     <?php
-    echo isset($_GET["id"]) ? '<a href="jobpostings.php">Go back to all</a><br>' : "";
+    //echo isset($_GET["id"]) ? '<a href="jobpostings.php">Go back to all</a><br>' : "";
+    pagination(100,10);
     ?>
     </div>
 
