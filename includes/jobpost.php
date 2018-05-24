@@ -154,11 +154,6 @@ if($result->num_rows >= 1) {
 
 }
 
-public static function add_url_filter($filter) {
-
-(isset($_GET['order'])) ? $query_post .= " ORDER BY ". $_GET['order'] . " desc" : "" ;
-
-}
 
 private static function get_backfill_filters($num = 10) {
 
