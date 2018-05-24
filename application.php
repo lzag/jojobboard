@@ -17,7 +17,6 @@ if (isset($_GET['id']) && $_GET['id'] != "") {
     if (isset($_SESSION['user'])){
         $get_user_data = "SELECT user_id,first_name,second_name,email,cv_file FROM jjb_users WHERE email='".$_SESSION['user']."'";
         $result_user_data = $db->execute_query($get_user_data);
-        # if ($conn->error) die("Error: ".$conn->error);
         if ($result_user_data->num_rows) {
         $user_data = $result_user_data->fetch_array(MYSQLI_ASSOC);
         $user_id = $user_data['user_id'];
@@ -37,7 +36,7 @@ _END;
             require_once 'footer.php';
             die();
             }
-        } else echo "fuck you";
+        } else echo "Error";
     }
 
 
