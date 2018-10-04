@@ -3,9 +3,17 @@ $sitename = "Index";
 
 require_once 'header.php';
 
-echo "<h1>$welcome</h1>";
+?>
+<div class="container mt-3">
 
-echo "this is new";
+    <div class="col-10 m-auto text-center">
 
+   <h1><?=$welcome?></h1>
+
+    </div>
+
+    </div>
+
+<?php
 require_once 'footer.php';
 ?>
