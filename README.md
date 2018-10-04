@@ -9,4 +9,4 @@ Functions:
 - registation/login system
 - account email confirmation
 - possibility to create employer and employee profile
-- uses CareerJet Api to generate the backfill of job offers
+- uses CareerJet API to generate the backfill of job offers
