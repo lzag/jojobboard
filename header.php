@@ -40,7 +40,7 @@ if (isset($_COOKIE['visit']))
      else {
         setcookie('visit','ok',time()+1000000,"/");
         setcookie('visit_time',time(),time()+1000000,"/");
-        $welcome = "Welcome to our site";
+        $welcome = "Welcome to JoJobBoard";
     }
 ?>
 
