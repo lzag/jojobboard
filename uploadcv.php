@@ -1,5 +1,5 @@
 <?php
-$sitename = "Upload CV";
+
 require_once 'header.php';
 ?>
 

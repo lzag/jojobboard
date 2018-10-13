@@ -1,5 +1,4 @@
 <?php
-$sitename = "User List";
 
 /** Files that are required to setting the website **/
 

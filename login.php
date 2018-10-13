@@ -1,7 +1,5 @@
 <?php
 
-$sitename = "Log In";
-
 require_once 'header.php';
 
 $msg = "Please input your login data:";

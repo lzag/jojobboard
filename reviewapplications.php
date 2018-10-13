@@ -1,5 +1,5 @@
 <?php
-$sitename = 'Application Review';
+
 require_once 'header.php';
 
 $employer = new Employer();

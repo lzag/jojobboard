@@ -1,5 +1,4 @@
 <?php
-$sitename = "Register a new employer account";
 require_once 'header.php';
 
 if (isset($_POST['tax_id']) &&

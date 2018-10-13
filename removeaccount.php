@@ -1,7 +1,5 @@
 <?php
 
-$sitename = 'Account Removal';
-
 require_once 'header.php';
 if (isset($_SESSION['user'])){
     $user = new User();

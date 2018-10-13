@@ -1,6 +1,5 @@
 <?php
 
-$sitename = "User profile";
 require_once 'header.php';
 
 ?>

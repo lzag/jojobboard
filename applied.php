@@ -1,7 +1,5 @@
 <?php
 
-$sitename = 'Thanks for the application';
-
 require_once 'header.php';
 
 if (isset($_POST['user_id']) && isset($_POST['posting_id'])) {
