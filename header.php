@@ -9,6 +9,9 @@ require_once 'includes/blogpost.php';
 require_once 'includes/jobpost.php';
 require_once 'includes/Careerjet_API.php';
 
+spl_autoload_register( function ($class) {
+    include $class.'php';
+});
 
 if (isset($_SESSION['user'])) {
 
