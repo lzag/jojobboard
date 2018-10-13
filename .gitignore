@@ -13,4 +13,5 @@ includes/space.html
 includes/data.txt
 includes/customers.json
 js/main.js
+vendor/
 
