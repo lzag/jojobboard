@@ -1,5 +1,4 @@
 <?php
-$sitename = "Index of Jobs";
 
 /** Files that are required to setting the website **/
 

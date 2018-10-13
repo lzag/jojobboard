@@ -1,5 +1,4 @@
 <?php
-$sitename = "Post CV";
 
 /** Files that are required to setting the website **/
 require_once 'header.php';

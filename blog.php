@@ -1,5 +1,4 @@
 <?php
-$sitename = "Blog";
 
 require_once 'header.php';
 

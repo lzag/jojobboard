@@ -1,5 +1,5 @@
 <?php
-$sitename = "Your employer profile";
+
 require_once 'header.php';
 /*$user = $_SESSION['employer'];*/
 /*print_r($_SESSION);*/

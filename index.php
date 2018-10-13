@@ -1,5 +1,4 @@
 <?php
-$sitename = "Index";
 
 require_once 'header.php';
 

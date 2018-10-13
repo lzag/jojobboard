@@ -1,6 +1,5 @@
 <?php
 
-$sitename = "Register a new user";
 
 require_once 'header.php';
 

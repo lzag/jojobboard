@@ -1,5 +1,4 @@
 <?php
-$sitename = "testing";
 require_once 'header.php';
 
 //

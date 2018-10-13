@@ -1,5 +1,4 @@
 <?php
-$sitename = "Recover password";
 
 require_once 'header.php';
 

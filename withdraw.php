@@ -1,7 +1,5 @@
 <?php
 
-$sitename = "Application Withdrawn";
-
 require_once 'header.php';
 
 $email = $_SESSION['user'];
