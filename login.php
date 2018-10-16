@@ -3,17 +3,15 @@
 require_once 'header.php';
 
 $msg = "Please input your login data:";
-
-
+User::activate_user();
+login();
 ?>
 
 <div class="container">
 <div class="row">
 <div class="col-sm-6 m-auto">
-<?php User::activate_user(); ?>
-<h4><?php login(); ?></h4>
 
-<form method="post" action='login.php'>
+<form method="POST" action='login.php'>
 <form-group>
     <label for="email">Email</label>
     <input type="text" name="email" placeholder="Your email address" class="form-control">
@@ -33,6 +31,4 @@ $msg = "Please input your login data:";
 </div>
 </div>
 
-<?php
-require_once 'footer.php';
-?>
+<?php require_once 'footer.php'; ?>
