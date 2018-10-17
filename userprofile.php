@@ -45,7 +45,7 @@
             <h2>Applications</h2>
 
             <?php if ($user->getProperty('applications')) : ?>
-            <?php print_r ($user->getProperty('applications'))  ?>
+
             <?php foreach ($user->getProperty('applications') as $application) : ?>
 
             Position:
@@ -58,8 +58,8 @@
             <?= $application['status'] ?> <br>
             See details Withdraw <br>
 
-            <div class="btn btn-outline-primary my-1"><a href='jobpostings.php?posting_id=<?= $application[' application_id']; ?>'>See posting details</a></div><br>
-            <div class="btn btn-outline-danger my-1"><a class="text-danger" href='withdraw.php?posting=<?= $application[' application_id']; ?>'>Withdraw Application</a></div>
+            <a class="btn btn-outline-primary my-1" href='jobpostings.php?posting_id=<?= $application['application_id']; ?>'>See posting details</a><br>
+            <a class="text-danger btn btn-outline-danger my-1" href='withdraw.php?posting=<?= $application['application_id']; ?>'>Withdraw Application</a><br>
 
             <?php endforeach ?>
 
