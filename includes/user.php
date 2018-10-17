@@ -9,6 +9,7 @@ class User {
     private $password;
     private $ip_address;
     private $cv_file;
+    private $applications = [];
     // Not yet ready
     // private $photo;
 
@@ -18,7 +19,12 @@ class User {
         global $db;
         $this->email = $db->sanitize($_SESSION['user']);
         $this->getUserDetails();
+        $this->fetchApplications();
 
+    }
+
+    public function __get($prop) {
+        return "Empty";
     }
 
     private function getUserDetails() {
@@ -73,7 +79,7 @@ class User {
                 INNER JOIN jjb_employers e on e.employer_id = p.employer_id
                 WHERE u.email='$this->email'";
     $result = $this->do_query($query);
-    return $result;
+    return $this->applications = $result->fetch_all(MYSQLI_ASSOC);
 
     }
 

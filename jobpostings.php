@@ -11,8 +11,10 @@ require_once 'header.php';
 <div class="container">
 <div class="col w-75 m-auto">
 <p>Order by:
-<a href='<?php JobPost::add_url_filter("time_posted"); ?>'>Date</a>
-<a href='<?php JobPost::add_url_filter("salary"); ?>'>Salary</a>
+
+<a href='<?php /*JobPost::add_url_filter("time_posted");*/ ?>'>Date</a>
+<a href='<?php /*JobPost::add_url_filter("salary");*/ ?>'>Salary</a>
+
 </p>
 </div>
 </div>
