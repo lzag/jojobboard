@@ -5,7 +5,6 @@ require_once 'header.php';
 ?>
 <?php if (isset($_SESSION['user'])) : ?>
 
-Here is your profile:
 <?php include 'userprofile.php'; ?>
 
 <?php else : ?>
