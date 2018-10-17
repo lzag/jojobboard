@@ -12,13 +12,13 @@
                 <a href=""><small>Edit Profile</small></a>
             </p>
             <img src="https://via.placeholder.com/140x140">
-            <p>
-                <h5>
-                    <?= $user->getProperty('first_name') ?>
-                    <?= $user->getProperty('second_name') ?>
-                </h5>
-            </p>
-            <p>
+
+                    <h5 class="mt-3 mb-0">
+                        <?= $user->getProperty('first_name') ?>
+                        <?= $user->getProperty('second_name') ?>
+                    </h5>
+
+            <p class="text-secondary">
                 <?= $user->getProperty('summary') ?>
             </p>
             <p>CV link:
@@ -29,7 +29,7 @@
 
                 <?php else : ?>
 
-                <a class="text-danger" href="uploadcv.php">Please upload your CV</a>
+                <a class="text-danger" href="uploadcv.php">Upload your CV</a>
 
                 <?php endif; ?>
 
@@ -37,29 +37,40 @@
             <p>Email:
                 <?= $user->getProperty('email') ?>
             </p>
-            <p>Bio:</p>
+            <h6>Bio:</h6>
+            <p> <?= $user->getProperty('bio') ?></p>
         </div>
 
         <!-- APPLICATION COLUMN -->
-        <div class="col-4">
+        <div class="col-8">
             <h2>Applications</h2>
 
-            <?php if ($user->getProperty('applications')) : ?>
+            <div class="mb-4">
+                <?php if ($user->getProperty('applications')) : ?>
 
-            <?php foreach ($user->getProperty('applications') as $application) : ?>
+                <small>Total:
+                    <?= count($user->getProperty('applications')) ?></small>
 
-            Position:
-            <?= $application['title'] ?> <br>
-            Company:
-            <?= $application['company_name'] ?> <br>
-            Applied on:
-            <?= $application['application_time'] ?> <br>
-            Status:
-            <?= $application['status'] ?> <br>
-            See details Withdraw <br>
+                <?php foreach ($user->getProperty('applications') as $application) : ?>
 
-            <a class="btn btn-outline-primary my-1" href='jobpostings.php?posting_id=<?= $application['application_id']; ?>'>See posting details</a><br>
-            <a class="text-danger btn btn-outline-danger my-1" href='withdraw.php?posting=<?= $application['application_id']; ?>'>Withdraw Application</a><br>
+                <h4>
+                    Position:
+                    <?= $application['title'] ?>
+                </h4>
+                <h6>
+                    Company:
+                    <?= $application['company_name'] ?>
+                </h6>
+                <p class="mt-0 pt-0 text-secondary">
+                    <small>Applied on:
+                        <?= $application['application_time'] ?></small>
+                </p>
+                Status:
+                <strong><?= $application['status'] ?></strong> <br>
+
+                <a class="btn btn-outline-primary my-1 py-1" href='jobpostings.php?posting_id=<?= $application[' application_id']; ?>'>See details</a>
+                <a class="text-danger btn btn-outline-danger my-1 py-1" href='withdraw.php?posting=<?= $application[' application_id']; ?>'>Withdraw</a><br>
+            </div>
 
             <?php endforeach ?>
 
