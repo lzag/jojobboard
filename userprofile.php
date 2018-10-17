@@ -1,68 +1,80 @@
-<?php
+<?php require_once 'header.php'; ?>
 
-require_once 'header.php';
 
-?>
 
-    <div class="container" id="userdata">
-        <div class="col w-75 m-auto">
-            <p class="text-dark">Name:
-                <?php echo $user->getProperty('first_name'); ?>
+<div class="container">
+    <div class="row justify-content-center mt-3">
+
+        <!-- PROFILE COLUMN -->
+        <div class="col-4 border">
+            <h2 class="mb-0">Your Profile</h2>
+            <p class="mt-0">
+                <a href=""><small>Edit Profile</small></a>
             </p>
-            <p class="text-dark">Last Name:
-                <?php echo $user->getProperty('second_name'); ?>
+            <img src="https://via.placeholder.com/140x140">
+            <p>
+                <h5>
+                    <?= $user->getProperty('first_name') ?>
+                    <?= $user->getProperty('second_name') ?>
+                </h5>
             </p>
-            <p class="text-dark">Email address:
-                <?php echo $user->getProperty('email'); ?>
+            <p>
+                <?= $user->getProperty('summary') ?>
             </p>
-            <p class="text-dark">CV file:
+            <p>CV link:
 
-            <?php
-        if ($user->getProperty('cv_file')) {
+                <?php if ($user->getProperty('cv_file')) : ?> {
 
-            echo "<a href='{$user->getProperty('cv_file')}'>Link</a>";
+                <a href="<?= $user->getProperty('cv_file') ?>">Link</a>
 
-        } else {
+                <?php else : ?>
 
-            echo "<a class='text-danger' href='uploadcv.php'>Please upload your CV</a>";
+                <a class="text-danger" href="uploadcv.php">Please upload your CV</a>
 
-        }
-        ?>
+                <?php endif; ?>
 
             </p>
-            <p><a id="remove-user-btn" href='removeaccount.php' class="text-danger"> Remove Account </a></p>
-            <br>
+            <p>Email:
+                <?= $user->getProperty('email') ?>
+            </p>
+            <p>Bio:</p>
+        </div>
+
+        <!-- APPLICATION COLUMN -->
+        <div class="col-4">
+            <h2>Applications</h2>
+
+            <?php if ($user->getProperty('applications')) : ?>
+            <?php print_r ($user->getProperty('applications'))  ?>
+            <?php foreach ($user->getProperty('applications') as $application) : ?>
+
+            Position:
+            <?= $application['title'] ?> <br>
+            Company:
+            <?= $application['company_name'] ?> <br>
+            Applied on:
+            <?= $application['application_time'] ?> <br>
+            Status:
+            <?= $application['status'] ?> <br>
+            See details Withdraw <br>
+
+            <div class="btn btn-outline-primary my-1"><a href='jobpostings.php?posting_id=<?= $application[' application_id']; ?>'>See posting details</a></div><br>
+            <div class="btn btn-outline-danger my-1"><a class="text-danger" href='withdraw.php?posting=<?= $application[' application_id']; ?>'>Withdraw Application</a></div>
+
+            <?php endforeach ?>
+
+            <?php else : ?>
+
+            You have not applied to any jobs so far! <br>
+
+            Check the latest offers now!
+
+            <?php endif; ?>
+
         </div>
     </div>
+</div>
 
 
 
-    <div class="container">
-        <div class="col w-75 m-auto">
-            <h3>Applications:</h3>
-
-            <?php
-    $result = $user->fetchApplications();
-    while($row = $result->fetch_assoc()) : ;
-?>
-            <div class="d-block my-5 ">
-                <h5>Title:
-                    <span class="text-secondary"><?php echo $row['title']; ?></span></h5>
-                <h5>Company:
-                    <span class="text-secondary"><?php echo $row['company_name']; ?></span></h5>
-
-                Applied on:
-                <?php echo $row['application_time']; ?> <br> Status:
-                <?php echo $row['status']; ?><br>
-
-                <div class="btn btn-outline-primary my-1"><a href='jobpostings.php?posting_id=<?php echo $row[' application_id ']; ?>'>See posting details</a></div><br>
-                <div class="btn btn-outline-danger my-1"><a class="text-danger" href='withdraw.php?posting=<?php echo $row[' application_id ']; ?>'>Withdraw Application</a></div>
-
-            </div>
-
-            <?php endwhile; ?>
-
-        </div>
-    </div>
-
-    <?php require_once 'footer.php'; ?>
+<?php require_once 'footer.php'; ?>
