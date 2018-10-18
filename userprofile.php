@@ -9,7 +9,7 @@
         <div class="col-4 border">
             <h2 class="mb-0">Your Profile</h2>
             <p class="mt-0">
-                <a href=""><small>Edit Profile</small></a>
+                <a href="editprofile.php"><small>Edit Profile</small></a>
             </p>
             <img src="https://via.placeholder.com/140x140">
 
