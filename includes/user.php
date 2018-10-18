@@ -144,36 +144,45 @@ class User {
 
     }
 
-    static function register_user() {
+    static function register_user()
+    {
 
-    global $db;
-    if (isset($_POST['first_name'], $_POST['second_name'], $_POST['email']) &&
-    $_POST['first_name'] != "" &&
-    $_POST['second_name'] != "" &&
-    $_POST['email'] != "") {
+        global $db;
+        if (isset($_POST['first_name'], $_POST['second_name'], $_POST['email']) &&
+        $_POST['first_name'] != "" &&
+        $_POST['second_name'] != "" &&
+        $_POST['email'] != "") {
 
-    $fn = $db->sanitize($_POST['first_name']);
-    $sn = $db->sanitize($_POST['second_name']);
-    $email = $db->sanitize($_POST['email']);
-    $pass = password_hash($_POST['pass'], PASSWORD_BCRYPT);
-    $ip = $_POST['IP'];
-    $code = randKey($email);
-    $query_add_user = "INSERT INTO users(first_name,second_name,email,password,ip_address,valid_code) VALUES('$fn','$sn','$email','$pass','$ip', '$code')";
-    $db->execute_query($query_add_user);
-    if($db->errno() == 1062) {
+            $fn = $db->sanitize($_POST['first_name']);
+            $sn = $db->sanitize($_POST['second_name']);
+            $email = $db->sanitize($_POST['email']);
+            $pass = password_hash($_POST['pass'], PASSWORD_BCRYPT);
+            $ip = $_POST['IP'];
+            $code = randKey($email);
+            $query = "INSERT INTO users(first_name, second_name, email, password, ip_address, valid_code)";
+            $query .= " VALUES(?, ?, ?, ?, ?, ?)";
+            $stmt = $db->con->prepare($query);
+            $stmt->execute(array($fn, $sn, $email, $pass, $ip, $code));
 
-        $msg = "The email you're trying to use is already in our database";
-        show_alert($msg,"danger");
+            if($stmt->errorInfo()[1] == 1062) {
 
-    } else {
+                $msg = "The email you're trying to use is already in our database";
+                show_alert($msg,"danger");
 
-    $body = "Please click the following link to activate the account: <a href=\"".DEV_URL."login.php?valid_code=$code&email=$email\">Activate</a>";
-    send_email($email,"Activate your JoJobBoard account",$body,"");
-    $msg = "An email with the activation link has been sent to your email. Please check your inbox and click on the link to activate your account";
-    show_alert($msg,"success");
+            } elseif ($stmt->errorCode() != 0) {
 
+                $msg = "There has been an error in the registration, pleae try again";
+                show_alert($msg,"danger");
+
+            } else {
+
+                $body = "Please click the following link to activate the account: <a href=\"".DEV_URL."login.php?valid_code=$code&email=$email\">Activate</a>";
+                send_email($email,"Activate your JoJobBoard account",$body,"");
+                $msg = "An email with the activation link has been sent to your email. Please check your inbox and click on the link to activate your account";
+                show_alert($msg,"success");
+
+            }
         }
-    }
 
     }
 
