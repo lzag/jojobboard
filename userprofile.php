@@ -11,12 +11,11 @@
             <p class="mt-0">
                 <a href="editprofile.php"><small>Edit Profile</small></a>
             </p>
-            <img src="https://via.placeholder.com/140x140">
-
-                    <h5 class="mt-3 mb-0">
-                        <?= $user->getProperty('first_name') ?>
-                        <?= $user->getProperty('second_name') ?>
-                    </h5>
+            <img class="img-responsive" width="140px" src="users/images/photo_<?= $user->getProperty('user_id') ?>">
+            <h5 class="mt-3 mb-0">
+                <?= $user->getProperty('first_name') ?>
+                <?= $user->getProperty('second_name') ?>
+            </h5>
 
             <p class="text-secondary">
                 <?= $user->getProperty('summary') ?>
@@ -38,7 +37,9 @@
                 <?= $user->getProperty('email') ?>
             </p>
             <h6>Bio:</h6>
-            <p> <?= $user->getProperty('bio') ?></p>
+            <p>
+                <?= $user->getProperty('bio') ?>
+            </p>
         </div>
 
         <!-- APPLICATION COLUMN -->
@@ -66,10 +67,11 @@
                         <?= $application['application_time'] ?></small>
                 </p>
                 Status:
-                <strong><?= $application['status'] ?></strong> <br>
+                <strong>
+                    <?= $application['status'] ?></strong> <br>
 
-                <a class="btn btn-outline-primary my-1 py-1" href='jobpostings.php?posting_id=<?= $application['application_id']; ?>'>See details</a>
-                <a class="text-danger btn btn-outline-danger my-1 py-1" href='withdraw.php?posting_id=<?= $application['application_id']; ?>'>Withdraw</a><br>
+                <a class="btn btn-outline-primary my-1 py-1" href='jobpostings.php?posting_id=<?= $application[' application_id']; ?>'>See details</a>
+                <a class="text-danger btn btn-outline-danger my-1 py-1" href='withdraw.php?posting_id=<?= $application[' application_id']; ?>'>Withdraw</a><br>
             </div>
 
             <?php endforeach ?>

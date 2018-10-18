@@ -1,7 +1,14 @@
 <?php require_once 'header.php'; ?>
 
 <?php
-
+if (isset($_FILES['photo'])) {
+    if (getimagesize($_FILES['photo']['tmp_name'])) {
+        $final_path = "users/images/photo_" . $user->getProperty('user_id');
+        move_uploaded_file($_FILES['photo']['tmp_name'], $final_path );
+    } else {
+        echo "The uploaded file is not an image, please upload a jpg/gif/png file.";
+    }
+}
 if (isset($_POST['first_name'],$_POST['last_name'],$_POST['email'],$_POST['password'])) {
     $query = "UPDATE users SET first_name= ?, second_name= ?, email= ?, password= ?";
     $query .= " WHERE user_id = ?";
@@ -37,6 +44,12 @@ if (isset($_POST['first_name'],$_POST['last_name'],$_POST['email'],$_POST['passw
         <div class="form-group">
             <label for="CV">CV</label>
             <!--            <input type="file" class="form-control" id="CV" placeholder="<?= $user->getProperty('cv_file') ?>">-->
+        </div>
+        Current photo:
+        <img class="img-fluid" width="140px" src="users/images/photo_<?= $user->getProperty('user_id') ?>">
+        <div class="form-group">
+            <label for="photo">Upload new Photo</label>
+            <input name="photo" type="file" class="form-control" id="photo">
         </div>
         <input name="user_id" type="hidden" value="<?= $user->getProperty('user_id') ?>">
         <button type="submit" class="btn btn-primary">Update</button>
