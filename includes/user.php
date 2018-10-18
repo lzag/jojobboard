@@ -20,7 +20,6 @@ class User {
         $this->email = $db->sanitize($_SESSION['user']);
         $this->getUserDetails();
         $this->fetchApplications();
-
     }
 
     public function __get($prop) {
@@ -29,12 +28,16 @@ class User {
 
     private function getUserDetails() {
 
+        global $db;
         $sql = "SELECT user_id, first_name, second_name, email, password, ip_address, cv_file ";
-        $sql .= " FROM jjb_users ";
-        $sql .= " WHERE email='$this->email'";
-        $user_details = $this->do_query($sql);
-        if ($user_details->num_rows == 1) {
-            $user_details = $user_details->fetch_assoc();
+        $sql .= " FROM users ";
+        $sql .= " WHERE email= ?";
+
+        $stmt = $db->con->prepare($sql);
+        $stmt->execute(array($this->email));
+
+        if ($user_details = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
             foreach ($user_details as $k => $p) {
                 if (property_exists('User',$k)) {
                     $this->$k = $p;
@@ -65,7 +68,7 @@ class User {
     public function removeUser() {
 
         $this->deleteCV();
-        $query = "DELETE FROM jjb_users WHERE email='$this->email'";
+        $query = "DELETE FROM users WHERE email='$this->email'";
         $result = $this->do_query($query);
         if ($result) echo "User removed";
 
@@ -73,21 +76,26 @@ class User {
 
     function fetchApplications() {
 
-    $query = "SELECT p.posting_id, p.title, e.company_name, a.application_time, a.status, a.application_id FROM jjb_applications a
- 				INNER JOIN jjb_postings p ON p.posting_id  = a.posting_id
-                INNER JOIN jjb_users u ON u.user_id = a.user_id
-                INNER JOIN jjb_employers e on e.employer_id = p.employer_id
-                WHERE u.email='$this->email'";
-    $result = $this->do_query($query);
-    return $this->applications = $result->fetch_all(MYSQLI_ASSOC);
+    global $db;
+    $sql = "SELECT p.posting_id, p.title, e.company_name, a.application_time, a.status, a.application_id FROM applications a
+ 				INNER JOIN postings p ON p.posting_id  = a.posting_id
+                INNER JOIN users u ON u.user_id = a.user_id
+                INNER JOIN employers e on e.employer_id = p.employer_id
+                WHERE u.email= ?";
+    $stmt = $db->con->prepare($sql);
+    $stmt->execute(array($this->email));
+
+    return $this->applications = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     }
 
     function getAppStatus($posting_id) {
 
-        $sql = "SELECT status FROM jjb_applications WHERE user_id='$this->user_id' and posting_id='$posting_id'";
-        $status = $this->do_query($sql);
-        $status = $status->fetch_assoc();
+        global $db;
+        $sql = "SELECT status FROM applications WHERE user_id='$this->user_id' and posting_id='$posting_id'";
+        $stmt = $db->con->prepare($sql);
+        $stmt->execute(array($this->user_id, $posting_id));
+        $status = $stmt->fetch(PDO::FETCH_ASSOC);
         return $status['status'];
 
     }
@@ -104,7 +112,7 @@ class User {
         global $db;
         if (isset($_SESSION['user'])) {
         if (isset($_FILES['CV'])) {
-        $query = "SELECT user_id FROM jjb_users WHERE email='".$_SESSION['user']."'" ;
+        $query = "SELECT user_id FROM users WHERE email='".$_SESSION['user']."'" ;
         $result = $db->execute_query($query);
 
         if ($result->num_rows){
@@ -120,7 +128,7 @@ class User {
             } else {
 
                 $filepath = "./uploads/$user_id"."_"."$filename";
-                $query_CV = "UPDATE jjb_users SET cv_file='$filepath' WHERE email='".$_SESSION['user']."'";
+                $query_CV = "UPDATE users SET cv_file='$filepath' WHERE email='".$_SESSION['user']."'";
                 $result_upl = $db->execute_query($query_CV);
                 if ($result_upl) echo "<span class='text-success'>File <a href='$filepath'>". $filename ."</a> uploaded successfully</span>";
                 require_once 'footer.php';
@@ -152,7 +160,7 @@ class User {
     $pass = password_hash($_POST['pass'], PASSWORD_BCRYPT);
     $ip = $_POST['IP'];
     $code = randKey($email);
-    $query_add_user = "INSERT INTO jjb_users(first_name,second_name,email,password,ip_address,valid_code) VALUES('$fn','$sn','$email','$pass','$ip', '$code')";
+    $query_add_user = "INSERT INTO users(first_name,second_name,email,password,ip_address,valid_code) VALUES('$fn','$sn','$email','$pass','$ip', '$code')";
     $db->execute_query($query_add_user);
     if($db->errno() == 1062) {
 
@@ -177,7 +185,7 @@ class User {
         if(isset($_GET['email']) && isset($_GET['valid_code'])) {
         $email = $db->sanitize($_GET['email']);
         $code = $db->sanitize($_GET['valid_code']);
-        $query = "SELECT valid_code FROM jjb_users WHERE email='$email'";
+        $query = "SELECT valid_code FROM users WHERE email='$email'";
         $result = $db->execute_query($query);
         if ($result->num_rows == 1) {
 
@@ -185,7 +193,7 @@ class User {
 
             if ($code === $dbcode) {
 
-                $query = "UPDATE jjb_users SET active = 1, valid_code = 0 WHERE email='$email'";
+                $query = "UPDATE users SET active = 1, valid_code = 0 WHERE email='$email'";
                 $result = $db->execute_query($query);
 
                 if ($result) {
@@ -221,11 +229,11 @@ class User {
             $email = $db->sanitize($_POST['email']);
             $token = $_POST['token'];
             $code = randKey($email);
-            $query = "SELECT email FROM jjb_users WHERE email='$email'";
+            $query = "SELECT email FROM users WHERE email='$email'";
             $result = $db->execute_query($query);
             if ($result->num_rows == 1) {
             setcookie("token","$token",time()+60*5);
-            $query = "UPDATE jjb_users SET valid_code = '$code', token = '$token' WHERE email='$email'";
+            $query = "UPDATE users SET valid_code = '$code', token = '$token' WHERE email='$email'";
             $result = $db->execute_query($query);
 
             if($result) {
@@ -255,7 +263,7 @@ class User {
     if(isset($_GET['code']) && isset($_GET['email'])) {
 
     $email = $_GET['email'];
-    $query = "SELECT valid_code, token FROM jjb_users WHERE email='$email'";
+    $query = "SELECT valid_code, token FROM users WHERE email='$email'";
     $result = $db->execute_query($query);
 
     if ($result) {
@@ -317,7 +325,7 @@ class User {
 
 
             $password = password_hash($_POST['password'],PASSWORD_BCRYPT);
-            $query = "UPDATE jjb_users SET password = '$password', token = 0, valid_code = 0 WHERE email='$email'";
+            $query = "UPDATE users SET password = '$password', token = 0, valid_code = 0 WHERE email='$email'";
             $result = $db->execute_query($query);
 
             if($result && !($db->errno())) {

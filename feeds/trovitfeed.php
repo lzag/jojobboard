@@ -7,7 +7,7 @@ $xml = <<<_END
 
 _END;
 
-$sql = "SELECT posting_id, title, description from jjb_postings";
+$sql = "SELECT posting_id, title, description from postings";
 $result = $db->execute_query($sql);
 while($row = $result->fetch_assoc()) {
 $xml .= <<<_END

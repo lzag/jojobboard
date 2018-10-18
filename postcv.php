@@ -49,15 +49,19 @@ Please provide your personal data and upload your CV.<br> An email confirmation 
                         echo ", but the upload failed";
                             } else {
                         echo " and file uploaded successfully";
-                        $conn = new Database();
-                            #if($conn->connect_error) die("Can't connect");
-                        $first_name = $conn->real_escape_string($_POST['first_name']);
-                        $second_name = $conn->real_escape_string($_POST['second_name']);
-                        $ip_address = $conn->real_escape_string($_POST['ip_address']);
-                        $email = $conn->real_escape_string($_POST['email']);
-                        $query = "INSERT INTO jjb_users (first_name,second_name,email,ip_address) VALUES ". "('$first_name','$second_name','$email','$ip_address')";
-                        $result = $conn->execute_query($query);
-                            if (!$result) die("<br>Database update failed :".$conn->error);
+
+
+                        $first_name = $_POST['first_name'];
+                        $second_name = $_POST['second_name'];
+                        $email = $_POST['email'];
+                        $ip_address = $_POST['ip_address'];
+
+                        $query = "INSERT INTO users (first_name, second_name, email, ip_address) VALUES (?, ?, ?, ?)";
+                        $stmt = $db->con->prepare($query);
+                        $stmt->execute(array($first_name, $second_name, $email, $ip_address));
+
+                        if (!$stmt->rowCount()) die("<br>Database update failed :".$conn->error);
+
                         $to = $_POST['email'];
                         $subject = "You've registered to our service";
                         $msg = "Thank you for registering to JoJobBoard";
@@ -68,7 +72,6 @@ Please provide your personal data and upload your CV.<br> An email confirmation 
 
                         }
                     break;
-
 
             }
         } else {

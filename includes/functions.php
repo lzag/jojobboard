@@ -1,6 +1,6 @@
 <?php
-const DEV_URL = "http://localhost/jojobboard/";
-const PROD_URL = "";
+const DEV_URL = "http://jobboard.test";
+const PROD_URL = "http://jobboard.lukaszzagroba.com";
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -78,18 +78,20 @@ function generate_token() {
 function login() {
 
     global $db;
-    if (isset($_POST['email']) &&
-    isset($_POST['pass'])){
+    if (isset($_POST['email']) && isset($_POST['pass'])) {
 
     // Sanitize the user input //
-    $user = $db->sanitize($_POST['email']);
+    $email = $db->sanitize($_POST['email']);
     $pass = $db->sanitize($_POST['pass']);
 
-    $query_login = "SELECT email, password, active FROM jjb_users WHERE email='$user'";
-    $result = $db->execute_query($query_login);
-    if ($result->num_rows == 1) {
+    $sql = "SELECT email, password, active FROM users WHERE email= ?";
+    $stmt = $db->con->prepare($sql);
 
-        $row = $result->fetch_assoc();
+    if ($stmt->execute(array($email))) {
+
+        $row = $stmt->fetch();
+
+        print_r($row);
 
         if($row['active'] == 1) {
 
@@ -97,8 +99,10 @@ function login() {
 
         if (password_verify($pass, $passdb)){
 
-        $_SESSION['user'] = $user;
-        show_alert("You have been logged in","success");
+        $_SESSION['user'] = $email;
+
+        $_SESSION['msg'] = array("You have been logged in", "success");
+
         header('Location: index.php');
 
         } else {
@@ -118,7 +122,7 @@ function login() {
 
     } else {
 
-        $query_login = "SELECT contact_email, password, active FROM jjb_employers WHERE contact_email='$user'";
+        $query_login = "SELECT contact_email, password, active FROM employers WHERE contact_email='$user'";
         $result = $db->execute_query($query_login);
         $row = $result->fetch_assoc();
 
