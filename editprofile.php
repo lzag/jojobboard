@@ -3,10 +3,11 @@
 <?php
 
 if (isset($_POST['first_name'],$_POST['last_name'],$_POST['email'],$_POST['password'])) {
-    $query = "UPDATE users SET first_name= ?, second_name= ?, email= ?";
+    $query = "UPDATE users SET first_name= ?, second_name= ?, email= ?, password= ?";
     $query .= " WHERE user_id = ?";
     $stmt = $db->con->prepare($query);
-    $stmt->execute(array($_POST['first_name'], $_POST['last_name'], $_POST['email'],$_POST['user_id']));
+    $pass = password_hash($_POST['password'], PASSWORD_BCRYPT);
+    $stmt->execute(array($_POST['first_name'], $_POST['last_name'], $_POST['email'], $pass, $_POST['user_id']));
     if ($stmt->rowCount()) {
         echo "Details updated";
         $user = new User;

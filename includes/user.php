@@ -147,9 +147,7 @@ class User {
     static function register_user() {
 
     global $db;
-    if (isset($_POST['first_name']) &&
-    isset($_POST['second_name']) &&
-    isset($_POST['email']) &&
+    if (isset($_POST['first_name'], $_POST['second_name'], $_POST['email']) &&
     $_POST['first_name'] != "" &&
     $_POST['second_name'] != "" &&
     $_POST['email'] != "") {
