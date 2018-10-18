@@ -26,7 +26,7 @@ echo "<div align='center'>Data OK <br>";
     $pass = password_hash($_POST['pass'], PASSWORD_BCRYPT);
     $city = $_POST['city'];
     $connect = new Database;
-    $query_add_user = "INSERT INTO jjb_employers(tax_id,company_name,contact_first_name,contact_second_name,contact_email,password, city) VALUES('$tid','$cn','$cfn','$csn','$email','$pass','$city')";
+    $query_add_user = "INSERT INTO employers(tax_id,company_name,contact_first_name,contact_second_name,contact_email,password, city) VALUES('$tid','$cn','$cfn','$csn','$email','$pass','$city')";
     $result_add = $connect->execute_query($query_add_user);
     if ($result_add) echo "Employer account created, please <a href='login.php'>log in</a><br></div>";
     $connect->close();

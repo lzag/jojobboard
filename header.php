@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+require_once 'includes/dbconfig.php';
 require_once 'includes/database.php';
 require_once 'includes/functions.php';
 require_once 'includes/employer.php';
@@ -9,8 +10,10 @@ require_once 'includes/blogpost.php';
 require_once 'includes/jobpost.php';
 require_once 'includes/Careerjet_API.php';
 
+$db = new App\Database;
+
 spl_autoload_register( function ($class) {
-    include $class.'php';
+    include 'includes/' . strtolower($class) . '.php';
 });
 
 if (isset($_SESSION['user'])) {

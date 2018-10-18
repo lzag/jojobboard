@@ -9,7 +9,7 @@ $xml = <<<_END
 <lastBuildDate>{$lastbuild}</lastBuildDate>
 _END;
 
-$sql = "SELECT posting_id, title, description, time_posted from jjb_postings";
+$sql = "SELECT posting_id, title, description, time_posted from postings";
 $result = $db->execute_query($sql);
 while($row = $result->fetch_assoc()) {
 $date = date("D, d M Y H:i:s T",strtotime($row['time_posted']));

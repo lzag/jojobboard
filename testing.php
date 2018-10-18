@@ -5,7 +5,7 @@ require_once 'header.php';
 ///
 //$database = new Database();
 //
-//$result = $database->execute_query("SELECT  FROM jjb_users WHERE user_id=12");
+//$result = $database->execute_query("SELECT  FROM users WHERE user_id=12");
 //
 //if(!$result) echo "Sth is wrong";
 //print_r($result->fetch_array()['first_name']);
@@ -26,7 +26,7 @@ require_once 'header.php';
 //
 //echo $user->getProperty('first_name');
 
-//$sql = "SELECT posting_id, title, description, time_posted from jjb_postings";
+//$sql = "SELECT posting_id, title, description, time_posted from postings";
 //$result = $db->execute_query($sql);
 //while($row = $result->fetch_assoc()) {
 //    echo $row['time_posted'];

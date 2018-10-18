@@ -4,7 +4,7 @@ require_once 'header.php';
 /*$user = $_SESSION['employer'];*/
 /*print_r($_SESSION);*/
 /*$conn = new Database();
-$query = "SELECT * FROM jjb_employers WHERE contact_email='$user'";
+$query = "SELECT * FROM employers WHERE contact_email='$user'";
 $result = $conn->execute_query($query);*/
 /*
 print_r($result->fetch_array());

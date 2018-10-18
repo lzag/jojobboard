@@ -21,56 +21,56 @@ class Employer {
    }
 
     public function getEmployerID($contact_email) {
-        $query = "SELECT employer_id FROM jjb_employers WHERE contact_email='$contact_email'";
+        $query = "SELECT employer_id FROM employers WHERE contact_email='$contact_email'";
         $result = $this->db->execute_query($query);
         $row = $result->fetch_array();
         return $row['employer_id'];
     }
 
      public function getTaxID($contact_email) {
-        $query = "SELECT tax_id FROM jjb_employers WHERE contact_email='$contact_email'";
+        $query = "SELECT tax_id FROM employers WHERE contact_email='$contact_email'";
         $result = $this->db->execute_query($query);
         $row = $result->fetch_array();
         return $row['tax_id'];
     }
 
      public function getContactEmail($contact_email) {
-        $query = "SELECT contact_email FROM jjb_employers WHERE contact_email='$contact_email'";
+        $query = "SELECT contact_email FROM employers WHERE contact_email='$contact_email'";
         $result = $this->db->execute_query($query);
         $row = $result->fetch_array();
         return $row['contact_email'];
     }
 
      public function getContactFirstName($contact_email) {
-        $query = "SELECT contact_first_name FROM jjb_employers WHERE contact_email='$contact_email'";
+        $query = "SELECT contact_first_name FROM employers WHERE contact_email='$contact_email'";
         $result = $this->db->execute_query($query);
         $row = $result->fetch_array();
         return $row['contact_first_name'];
     }
 
      public function getContactSecondName($contact_email) {
-        $query = "SELECT contact_second_name FROM jjb_employers WHERE contact_email='$contact_email'";
+        $query = "SELECT contact_second_name FROM employers WHERE contact_email='$contact_email'";
         $result = $this->db->execute_query($query);
         $row = $result->fetch_array();
         return $row['contact_second_name'];
     }
 
      public function getCity($contact_email) {
-        $query = "SELECT city FROM jjb_employers WHERE contact_email='$contact_email'";
+        $query = "SELECT city FROM employers WHERE contact_email='$contact_email'";
         $result = $this->db->execute_query($query);
         $row = $result->fetch_array();
         return $row['city'];
 }
       function getApplications($pid) {
-    $query = "SELECT a.application_id as 'Application ID',a.posting_id as 'Posting ID', concat(b.first_name, ' ', b.second_name) as 'Candidate', b.email as 'Contact email', b.cv_file as 'Download CV' FROM jjb_applications a LEFT OUTER JOIN jjb_users b ON a.user_id=b.user_id WHERE a.posting_id=$pid";
+    $query = "SELECT a.application_id as 'Application ID',a.posting_id as 'Posting ID', concat(b.first_name, ' ', b.second_name) as 'Candidate', b.email as 'Contact email', b.cv_file as 'Download CV' FROM applications a LEFT OUTER JOIN users b ON a.user_id=b.user_id WHERE a.posting_id=$pid";
     $result = $this->db->execute_query($query);
     return $result;
 }
 
     function getPostings() {
-            $query = "SELECT p.posting_id as 'ID', p.title as 'Job Title', count(a.user_id) as 'Applications' FROM jjb_postings p
- 				LEFT OUTER JOIN jjb_applications a ON p.posting_id  = a.posting_id
-               	INNER JOIN jjb_employers e on e.employer_id = p.employer_id
+            $query = "SELECT p.posting_id as 'ID', p.title as 'Job Title', count(a.user_id) as 'Applications' FROM postings p
+ 				LEFT OUTER JOIN applications a ON p.posting_id  = a.posting_id
+               	INNER JOIN employers e on e.employer_id = p.employer_id
                 WHERE e.contact_email='$this->contact_email'
                 group by ID";
     $result = $this->db->execute_query($query);
@@ -78,13 +78,13 @@ class Employer {
     }
 
     function reviewApp($pid,$status,$appid) {
-        $query = "UPDATE jjb_applications SET status='$status' WHERE application_id='$appid'";
+        $query = "UPDATE applications SET status='$status' WHERE application_id='$appid'";
         $result = $this->db->execute_query($query);
         return $result;
     }
 
      public function removeEmployer() {
-        $query = "DELETE FROM jjb_employers WHERE contact_email='$this->contact_email'";
+        $query = "DELETE FROM employers WHERE contact_email='$this->contact_email'";
         $result = $this->db->execute_query($query);
         if ($result) echo "Employer account removed";
     }

@@ -104,7 +104,7 @@ if(isset($filters['keyword'])) {
 }
 
 $query = "SELECT a.posting_id, a.title,b.company_name, a.description, a.time_posted, a.location, a.salary, a.local";
-$query .= " FROM jjb_postings a INNER JOIN jjb_employers b ON a.employer_id=b.employer_id  ";
+$query .= " FROM postings a INNER JOIN employers b ON a.employer_id=b.employer_id  ";
 
 // check if it's the single post page
 if(!empty($filter_rules) || isset($keyword)) {
@@ -140,9 +140,10 @@ if(!empty($filter_rules) || isset($keyword)) {
 
 }
 
-$result = $db->execute_query($query);
+$stmt = $db->con->query($query);
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-if($result->num_rows >= 1) {
+if(count($result) > 0)  {
 
     return $result;
 

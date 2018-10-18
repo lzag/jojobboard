@@ -14,18 +14,18 @@ else :
 endif;
 
 if (isset($_POST['delete_all'])){
-$query_del_all="TRUNCATE jjb_users";
+$query_del_all="TRUNCATE users";
 if ($result_del = $conn->query($query_del_all)) echo "Deleted all users"."<br>=============<br>";
     }
 
 if (isset($_POST['delete_user']))
 {
-    $query_del="DELETE from jjb_users WHERE user_id=".$_POST['del_user_id'];
+    $query_del="DELETE from users WHERE user_id=".$_POST['del_user_id'];
     if ($result_del = $conn->query($query_del)) echo "Deleted USER ID".$_POST['del_user_id']."<br>=============<br>";
 }
 
 echo "</div>";
-$query = "SELECT * FROM jjb_users";
+$query = "SELECT * FROM users";
 $result = $conn->query($query);
 if(!$result) die($conn->connect_error);
 /*print_r($result); echo "<br><br>";

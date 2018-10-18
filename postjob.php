@@ -33,7 +33,7 @@ Please provide the details of the job posting.<br><br><br>
                         $description = $_POST['description'];
                         $employer = new Employer();
                         $employerid = $employer->employer_id;
-                        $query = "INSERT INTO jjb_postings (title,description,employer_id) VALUES ('$title','$description','$employerid')";
+                        $query = "INSERT INTO postings (title,description,employer_id) VALUES ('$title','$description','$employerid')";
                         $result = $conn->execute_query($query);
                         print_r(get_object_vars($conn));
                             if (!$result) die("<br>Database update failed :".$conn->error);

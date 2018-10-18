@@ -54,7 +54,7 @@ require_once 'header.php';
 $results_local = JobPost::get_posts();
 
 if(!isset($_GET['id'])) {
-$local_hits = $results_local ? $results_local->num_rows : 0;
+$local_hits = $results_local ? count($results_local) : 0;
 $results_backfill = JobPost::get_backfill(100 - $local_hits);
 $backfill_hits = $results_backfill ? $results_backfill->hits: 0;
 
@@ -66,7 +66,7 @@ echo "We've found $local_hits local and $backfill_hits external results for your
 
 
     if($results_local) :
-    while($row = $results_local->fetch_assoc()) :
+    foreach($results_local as $row) :
 
     $status = $user->getAppStatus($row['posting_id']);
     ?>
@@ -103,7 +103,7 @@ echo "We've found $local_hits local and $backfill_hits external results for your
     </div>
 
     <?php
-    endwhile;
+    endforeach;
     endif;
     ?>
 
