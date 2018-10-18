@@ -1,11 +1,4 @@
-<?php
-
-
-require_once 'header.php';
-
-
-
-?>
+<?php require_once 'header.php'; ?>
 
     <div class="container">
         <div class="col w-50 m-auto">
