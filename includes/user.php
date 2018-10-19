@@ -120,24 +120,22 @@ class User {
                 $stmt = $db->con->prepare($query);
                 $stmt->execute(array($_SESSION['user']));
 
-                if (count($stmt->fetchAll())){
+                if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
-                    $user_row = $stmt->fetch(PDO::FETCH_ASSOC);
-                    $user_id = $user_row['user_id'];
+                    $user_id = $row['user_id'];
 
                     $allowed = [
-                        'application/msword',
-                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                        'application/pdf'
+                        'application/msword' => 'doc',
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
+                        'application/pdf' => 'pdf'
                                ];
                     $finfo = new finfo();
                     $mime = $finfo->file($_FILES['CV']['tmp_name'], FILEINFO_MIME_TYPE);
 
-                    if (in_array($mime,$allowed)) {
-                        $name = explode(".", $_FILES['CV']['name']);
-                        $ext = end($name);
+                    if (key_exists($mime, $allowed)) {
+                        $ext = $allowed[$mime];
                         $filename = $user->getProperty('first_name') . "_" . $user->getProperty('second_name') . "_CV." . $ext;
-                        $filepath = "./uploads/$user_id"."_"."$filename";
+                        $filepath = "./uploads/" . "$filename";
                         if (!move_uploaded_file($_FILES['CV']['tmp_name'], $filepath)) {
 
                             show_alert("Couldn't upload the file", "danger");
