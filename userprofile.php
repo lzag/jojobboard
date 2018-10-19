@@ -11,7 +11,7 @@
             <p class="mt-0">
                 <a href="editprofile.php"><small>Edit Profile</small></a>
             </p>
-            <img class="img-thumbnail" src="users/images/photo_<?= $user->getProperty('user_id') ?>">
+            <img class="img-fluid" width="140px" src="users/images/photo_<?= $user->getProperty('user_id') ?>">
             <h5 class="mt-3 mb-0">
                 <?= $user->getProperty('first_name') ?>
                 <?= $user->getProperty('second_name') ?>
