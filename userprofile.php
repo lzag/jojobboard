@@ -22,7 +22,7 @@
             </p>
             <p>CV link:
 
-                <?php if ($user->getProperty('cv_file')) : ?> {
+                <?php if ($user->getProperty('cv_file') != "Empty") : ?>
 
                 <a href="<?= $user->getProperty('cv_file') ?>">Link</a>
 
@@ -47,7 +47,7 @@
             <h2>Applications</h2>
 
             <div class="mb-4">
-                <?php if ($user->getProperty('applications')) : ?>
+                <?php if ($user->getProperty('applications') != "Empty") : ?>
 
                 <small>Total:
                     <?= count($user->getProperty('applications')) ?></small>
