@@ -61,7 +61,7 @@ class User {
       if ($prop && $this->$prop) {
           return $this->$prop;
       } else {
-          return false;
+          return "Empty";
       }
 
     }
@@ -109,41 +109,57 @@ class User {
 
     }
 
-    function uploadCV() {
+    function uploadCV()
+    {
 
         global $db;
         if (isset($_SESSION['user'])) {
-        if (isset($_FILES['CV'])) {
-        $query = "SELECT user_id FROM users WHERE email='".$_SESSION['user']."'" ;
-        $result = $db->execute_query($query);
+            $user = new User;
+            if (isset($_FILES['CV'])) {
+                $query = "SELECT user_id FROM users WHERE email= ?" ;
+                $stmt = $db->con->prepare($query);
+                $stmt->execute(array($_SESSION['user']));
 
-        if ($result->num_rows){
+                if (count($stmt->fetchAll())){
 
-            $user_row = $result->fetch_assoc();
-            $user_id = $user_row['user_id'];
-            $filename = $_FILES['CV']['name'];
+                    $user_row = $stmt->fetch(PDO::FETCH_ASSOC);
+                    $user_id = $user_row['user_id'];
 
-            if (!move_uploaded_file($_FILES['CV']['tmp_name'], "./uploads/$user_id"."_"."$filename")) {
+                    $allowed = [
+                        'application/msword',
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        'application/pdf'
+                               ];
+                    $finfo = new finfo();
+                    $mime = $finfo->file($_FILES['CV']['tmp_name'], FILEINFO_MIME_TYPE);
 
-                echo "<span class='text-danger'>Couldn't upload the file</span>";
+                    if (in_array($mime,$allowed)) {
+                        $name = explode(".", $_FILES['CV']['name']);
+                        $ext = end($name);
+                        $filename = $user->getProperty('first_name') . "_" . $user->getProperty('second_name') . "_CV." . $ext;
+                        $filepath = "./uploads/$user_id"."_"."$filename";
+                        if (!move_uploaded_file($_FILES['CV']['tmp_name'], $filepath)) {
 
-            } else {
+                            show_alert("Couldn't upload the file", "danger");
 
-                $filepath = "./uploads/$user_id"."_"."$filename";
-                $query_CV = "UPDATE users SET cv_file='$filepath' WHERE email='".$_SESSION['user']."'";
-                $result_upl = $db->execute_query($query_CV);
-                if ($result_upl) echo "<span class='text-success'>File <a href='$filepath'>". $filename ."</a> uploaded successfully</span>";
-                require_once 'footer.php';
-                die;
+                        } else {
 
+                            $query = "UPDATE users SET cv_file= ? WHERE email= ?";
+                            $stmt = $db->con->prepare($query);
+                            $stmt->execute(array($filepath, $_SESSION['user']));
+                            if ($stmt) {
+                                show_alert("File <a href='$filepath'>". $filename ."</a> uploaded successfully", "success");
+                            }
+                        }
+                    } else {
+                        show_alert("Document type not allowed", "danger");
+                    }
                 }
             }
+        } else {
+            show_alert("You are not logged in.", "danger");
+            die();
         }
-
-        } else die("You are not logged in");
-
-
-
     }
 
     static function register_user()
