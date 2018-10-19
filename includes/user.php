@@ -144,8 +144,8 @@ class User {
 
                             $query = "UPDATE users SET cv_file= ? WHERE email= ?";
                             $stmt = $db->con->prepare($query);
-                            $stmt->execute(array($filepath, $_SESSION['user']));
-                            if ($stmt) {
+
+                            if ($stmt->execute(array($filepath, $_SESSION['user']))) {
                                 show_alert("File <a href='$filepath'>". $filename ."</a> uploaded successfully", "success");
                             }
                         }
