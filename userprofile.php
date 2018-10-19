@@ -18,7 +18,7 @@
             </h5>
 
             <p class="text-secondary">
-                <?= $user->getProperty('summary') ?>
+                <?= $user->getProperty('title') ?>
             </p>
             <p>CV link:
 

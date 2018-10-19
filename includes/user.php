@@ -5,6 +5,8 @@ class User {
     private $user_id;
     private $first_name;
     private $second_name;
+    private $title;
+    private $bio;
     private $email;
     private $password;
     private $ip_address;
@@ -29,7 +31,7 @@ class User {
     private function getUserDetails() {
 
         global $db;
-        $sql = "SELECT user_id, first_name, second_name, email, password, ip_address, cv_file ";
+        $sql = "SELECT user_id, first_name, second_name, title, bio, email, password, ip_address, cv_file ";
         $sql .= " FROM users ";
         $sql .= " WHERE email= ?";
 
