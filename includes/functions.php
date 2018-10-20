@@ -199,24 +199,30 @@ function showResults() {
 }
 
 
-function pagination($total_results = 100, $per_page = 5) {
+function pagination($total_results = 100) {
 
-        $total_pages = ceil($total_results / $per_page);
-        $page = isset($_GET['page']) ? $_GET['page'] : 1;
-        $url = $_SERVER['REQUEST_URI'];
-        $curr = isset($_GET['page']) ? $_GET['page'] : 1;
-        $prev = ($curr > 1) ? $curr - 1 : false;
-        $next = ($curr < $total_pages) ? $curr + 1 : false;
+    $per_page = isset($_GET['per_page']) ? $_GET['per_page'] : 5;
+    $total_pages = ceil($total_results / $per_page);
+    $page = isset($_GET['page']) ? $_GET['page'] : 1;
+    $url = $_SERVER['REQUEST_URI'];
+    $curr = isset($_GET['page']) ? $_GET['page'] : 1;
+    $prev = ($curr > 1) ? $curr - 1 : false;
+    $next = ($curr < $total_pages) ? $curr + 1 : false;
 
     if ($total_pages > 1) {
         // PREVIOUS PART OF PAGINATION
         if ($prev) {
 
-            if (isset($_GET['page'])) {
-                $link = preg_replace('/(\&page=)(\d+)/', "&page=$prev", $url);
+            if (!empty($_GET)) {
+                if (isset($_GET['page'])) {
+                    $link = preg_replace('/([?&])(page=)(\d+)/', '${1}page='.$prev, $url);
+                } else {
+                    $link = $url . "&page=$prev";
+                }
             } else {
-                $link = $url . "&page=$prev";
+                $link = $url . "?page=$prev";
             }
+
             echo <<<HTML
             <nav aria-label="...">
               <ul class="pagination">
@@ -253,10 +259,14 @@ HTML;
 
         for($i = $start; $i <= $end; $i++) {
 
-            if (isset($_GET['page'])) {
-                $link = preg_replace("/(\&page=)(\d+)/","&page=$i",$url);
+            if (!empty($_GET)) {
+                if (isset($_GET['page'])) {
+                    $link = preg_replace('/([?&])(page=)(\d+)/', '${1}page='.$i, $url);
+                } else {
+                    $link = $url . "&page=$i";
+                }
             } else {
-                $link = $url . "&page=$i";
+                $link = $url . "?page=$i";
             }
 
             if ($i == $curr) {
@@ -275,11 +285,15 @@ HTML;
 
         // END PART OF PAGINATION
         if ($next) {
-             if (isset($_GET['page'])) {
-                    $link = preg_replace("/(\&page=)(\d+)/","&page=$next",$url);
+            if (!empty($_GET)) {
+                if (isset($_GET['page'])) {
+                    $link = preg_replace('/([?&])(page=)(\d+)/', '${1}page='.$next, $url);
                 } else {
                     $link = $url . "&page=$next";
                 }
+            } else {
+                $link = $url . "?page=$next";
+            }
 
         echo <<<HTML
             <li class="page-item">
