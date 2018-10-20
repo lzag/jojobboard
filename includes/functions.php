@@ -157,8 +157,9 @@ function login() {
 
     }
 
-function showResults($page_size = 5) {
+function showResults() {
     $offers = [];
+    $page_size = isset($_GET['per_page']) ? $_GET['per_page'] : 5;
     $local_offers = JobPost::get_posts();
     $local_hits = $offers['local_hits'] = count($local_offers);
     $foreign_offers = JobPost::get_backfill();
@@ -237,9 +238,19 @@ HTML;
         }
 
         // MIDDLE PART OF THE PAGINATION
-        $limit = ($total_pages > 10) ? 10 : $total_pages;
-        $start = (($curr - 5) > 0) ? $curr - 5 : 1;
-        $end = (($curr + 4) > $total_pages) ? $total_pages : $curr + 4;
+        if ($total_pages <= 10) {
+            $start = 1;
+            $end = $total_pages;
+        } else {
+            if ($curr > $total_pages - 4) {
+                $start = $total_pages - 9;
+                $end = $total_pages;
+            } else {
+                $start = (($curr - 5) > 0) ? $curr - 5 : 1;
+                $end = $start + 9;
+            }
+        }
+
         for($i = $start; $i <= $end; $i++) {
 
             if (isset($_GET['page'])) {
