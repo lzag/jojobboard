@@ -2,15 +2,15 @@
 
 <?php
 if (isset($_FILES['photo'])) {
-    if ($_FILES['photo']['error'] == 0 ) {
+    if ($_FILES['photo']['error'] == 0) {
         if (getimagesize($_FILES['photo']['tmp_name'])) {
             $final_path = "users/images/photo_" . $user->getProperty('user_id');
-            move_uploaded_file($_FILES['photo']['tmp_name'], $final_path );
+            move_uploaded_file($_FILES['photo']['tmp_name'], $final_path);
             show_alert("Photo uploaded successfully", "success");
-    } else {
-        show_alert("The uploaded file is not an image, please upload a jpg/gif/png file.");
-    }
-    } elseif ($_FILES['photo']['error'] != 4 ) {
+        } else {
+            show_alert("The uploaded file is not an image, please upload a jpg/gif/png file.", "danger");
+        }
+    } elseif ($_FILES['photo']['error'] != 4) {
         show_alert("There has been an error uploading the file", "danger");
     }
 }
@@ -20,7 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST)) {
     $query = "UPDATE users SET first_name= ?, second_name= ?, title= ?, bio= ?, email= ?";
     $query .= " WHERE user_id = ?";
     $stmt = $db->con->prepare($query);
-    $stmt->execute(array($_POST['first_name'], $_POST['last_name'], $_POST['title'], $_POST['bio'], $_POST['email'], $_POST['user_id']));
+    $stmt->execute(array(
+        $_POST['first_name'],
+        $_POST['last_name'],
+        $_POST['title'],
+        $_POST['bio'],
+        $_POST['email'],
+        $_POST['user_id']
+        ));
     if ($stmt->rowCount()) {
         show_alert("Details updated", "success");
     }
@@ -36,13 +43,19 @@ $user = new User;
                     <label for="userEmail">Email address</label>
                     <input name="email" type="email" class="form-control" id="userEmail" aria-describedby="emailHelp" value="<?= $user->getProperty('email') ?>">
                 </div>
-                <div class="form-group">
-                    <label for="firstName">First Name</label>
-                    <input name="first_name" type="text" class="form-control" id="firstName" value="<?= $user->getProperty('first_name') ?>">
-                </div>
-                <div class="form-group">
-                    <label for="lastName">Last Name</label>
-                    <input name="last_name" type="text" class="form-control" id="lastName" value="<?= $user->getProperty('second_name') ?>">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input name="first_name" type="text" class="form-control" id="firstName" value="<?= $user->getProperty('first_name') ?>">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input name="last_name" type="text" class="form-control" id="lastName" value="<?= $user->getProperty('second_name') ?>">
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="title">Title</label>
@@ -54,13 +67,25 @@ $user = new User;
                 </div>
                 <div class="form-group">
                     <label for="CV">CV</label>
-                    <input type="text" class="form-control" id="CV" placeholder="<?= $user->getProperty('cv_file') ?>">
+                    <div class="row">
+                        <div class="col"><a class="btn btn-primary" href="<?= $user->getProperty('cv_file') ?>">See current CV</a></div>
+                        <div class="col"><a class="btn btn-primary" href="uploadcv.php">Upload new CV</a></div>
+                    </div>
                 </div>
-                Current photo: <br>
-                <img class="img-fluid" width="140px" src="users/images/photo_<?= $user->getProperty('user_id') ?>">
-                <div class="form-group">
-                    <label for="photo">Upload new photo:</label>
-                    <input name="photo" type="file" class="form-control" id="photo">
+                <div class="form-row">
+                    Photo
+                </div>
+                <div class="form-row mb-3">
+                    <div class="col">
+                        Current photo: <br>
+                        <img class="img-fluid" width="140px" src="users/images/photo_<?= $user->getProperty('user_id') ?>">
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="photo">Upload new photo:</label>
+                            <input name="photo" type="file" class="form-control" id="photo">
+                        </div>
+                    </div>
                 </div>
                 <input name="user_id" type="hidden" value="<?= $user->getProperty('user_id') ?>">
                 <button type="submit" class="btn btn-primary">Update</button>
