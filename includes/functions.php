@@ -159,7 +159,7 @@ function login() {
 
 function showResults() {
     $offers = [];
-    $page_size = isset($_GET['per_page']) ? $_GET['per_page'] : 5;
+    $page_size = isset($_GET['per_page']) ? (int) $_GET['per_page'] : 5;
     $local_offers = JobPost::get_posts();
     $local_hits = $offers['local_hits'] = count($local_offers);
     $foreign_offers = JobPost::get_backfill();
@@ -168,13 +168,12 @@ function showResults() {
 
     $total_pages = ceil(($local_hits + $foreign_hits) / $page_size);
     $local_pages = ceil($local_hits / $page_size);
-    $current_page = (isset($_GET['page']) && !empty($_GET['page'])) ? $_GET['page'] : 1;
+    $current_page = (isset($_GET['page']) && !empty($_GET['page'])) ? (int) $_GET['page'] : 1;
 
     if ($rest = $local_hits % $page_size) {
         $first_foreign = $page_size - $rest;
-        $start_num = $first_foreign + 1;
     } else {
-        $start_num = 1;
+        $first_foreign = 0;
     }
 
     echo "We found $local_hits local and $foreign_hits foreign offers";
@@ -188,12 +187,15 @@ function showResults() {
     } elseif ($current_page == $local_pages) {
 
         $offers['local'] = JobPost::get_posts($page_size, $offset);
-        $offers['foreign'] = JobPost::get_backfill($first_foreign)->jobs;
+        if ($first_foreign) {
+            $offers['foreign'] = JobPost::get_backfill($first_foreign)->jobs;
+        }
         return $offers;
 
     } elseif ($current_page > $local_pages) {
 
-        $offers['foreign'] = JobPost::get_backfill()->jobs;
+        $start_num = ++$first_foreign + (($current_page - $local_pages - 1) * $page_size);
+        $offers['foreign'] = JobPost::get_backfill($page_size, $start_num)->jobs;
         return $offers;
     }
 }

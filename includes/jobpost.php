@@ -149,7 +149,6 @@ class JobPost
         $query .= "LIMIT $limit";
     }
 
-    echo $query;
     $stmt = $db->con->query($query);
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -159,7 +158,7 @@ class JobPost
 
     } else {
 
-        show_alert("We didn't find any offers that match your criteria","warning");
+        show_alert("We didn't find any local offers that match your criteria","warning");
         return $result = [];
 
         }
@@ -167,7 +166,7 @@ class JobPost
     }
 
 
-private static function get_backfill_filters($pagesize = 5, $page = 1, $start_num = 1) {
+private static function get_backfill_filters($pagesize = 5, $start_num = 1) {
 
     $keywords = isset($_GET['keyword']) ? $_GET['keyword'] : "";
     $location = isset($_GET['location']) ? $_GET['location'] : "";
@@ -177,7 +176,6 @@ private static function get_backfill_filters($pagesize = 5, $page = 1, $start_nu
         'keywords' => $keywords,
         'location' => $location,
         'pagesize' => $pagesize,
-        '$page'    => $page,
         'start_num' => $start_num,
         'affid'      => '0afaf0173305e4b9'
     );
@@ -185,10 +183,10 @@ private static function get_backfill_filters($pagesize = 5, $page = 1, $start_nu
     return $filters;
 }
 
-public static function get_backfill($pagesize = 5, $page = 1, $start_num = 1) {
+public static function get_backfill($pagesize = 5, $start_num = 1) {
 
     $backfill = new Careerjet_API('en_US');
-    $filters = self::get_backfill_filters($pagesize, $page, $start_num);
+    $filters = self::get_backfill_filters($pagesize, $start_num);
     $result = $backfill->search($filters);
 
     return $result->hits ? $result : false;
