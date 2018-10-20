@@ -157,6 +157,46 @@ function login() {
 
     }
 
+function showResults($page_size = 5) {
+    $local_offers = JobPost::get_posts();
+    $local_hits = count($local_offers);
+    $foreign_offers = JobPost::get_backfill();
+    $foreign_hits = $foreign_offers->hits;
+
+    $total_pages = ceil(($local_hits + $foreign_hits) / $page_size);
+    $local_pages = ceil($local_hits / $page_size);
+    $current_page = (isset($_GET['page']) && !empty($_GET['page'])) ? $_GET['page'] : 1;
+
+    if ($rest = $local_hits % $page_size) {
+        $first_foreign = $page_size - $rest;
+        $start_num = $first_foreign + 1;
+    } else {
+        $start_num = 1;
+    }
+
+    echo "We found $local_hits local and $foreign_hits foreign offers";
+
+    $offers = [];
+    $offset = ($current_page == 1) ? 0 : (($current_page - 1 ) * $page_size) - 1;
+    if ($current_page < $local_pages) {
+
+        $offers['local'] = JobPost::get_posts($page_size, $offset);
+        return $offers;
+
+    } elseif ($current_page == $local_pages) {
+
+        $offers['local'] = JobPost::get_posts($page_size, $offset);
+        $offers['foreign'] = JobPost::get_backfill($first_foreign)->jobs;
+        return $offers;
+
+    } elseif ($current_page > $local_pages) {
+
+        $offers['foreign'] = JobPost::get_backfill()->jobs;
+        return $offers;
+    }
+}
+
+
 function pagination($total_results = 100, $per_page = 10) {
 
         $total_pages = ceil($total_results / $per_page);

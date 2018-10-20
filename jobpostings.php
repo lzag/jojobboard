@@ -1,6 +1,7 @@
 <?php require_once 'header.php'; ?>
 
 
+
 <div class="container">
 
     <div class="row">
@@ -41,14 +42,14 @@
     <?php
 
 // GET THE RESULTS
-$results_local = JobPost::get_posts();
 
-if(!isset($_GET['id'])) {
-    $local_hits = $results_local ? count($results_local) : 0;
-    $results_backfill = JobPost::get_backfill(100 - $local_hits);
-    $backfill_hits = $results_backfill ? $results_backfill->hits: 0;
-}
+//if(!isset($_GET['id'])) {
+//    $local_hits = $results_local ? count($results_local) : 0;
+//    $results_backfill = JobPost::get_backfill(100 - $local_hits);
+//    $backfill_hits = $results_backfill ? $results_backfill->hits: 0;
+//}
     ?>
+<!--
     <div class="row">
         <div class="col-8 m-auto">
             We've found
@@ -56,11 +57,18 @@ if(!isset($_GET['id'])) {
             <?= $backfill_hits ?> external results for your query
         </div>
     </div>
+-->
+  <div class="row">
+        <div class="col-8 m-auto">
+ <?php $results = showResults() ?>
+    </div>
+    </div>
+
     <div class="row">
         <div class="col-8 m-auto">
             <?php
-if($results_local) :
-        foreach($results_local as $row) :
+if(array_key_exists('local',$results)) :
+        foreach($results['local'] as $row) :
         $status = $user->getAppStatus($row['posting_id']);
 ?>
 
@@ -102,8 +110,8 @@ endif;
 
             <!--    GET THE BACKFILL OFFERS -->
             <?php
-if(isset($results_backfill->hits)) :
-    foreach($results_backfill->jobs as $value) :
+if(array_key_exists('foreign',$results)) :
+    foreach($results['foreign'] as $value) :
 ?>
 
             <div class="card mx-auto my-2">
