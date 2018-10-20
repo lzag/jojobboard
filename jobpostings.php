@@ -33,7 +33,7 @@
                     </div>
                     <div class="form-group col-md-2">
                         <label for="order">Per page</label>
-                        <input name="per_page" type="text" class="form-control" id="order" name="order" value="5">
+                        <input name="per_page" type="text" class="form-control" id="order" name="order" value="<?= echoGet("per_page") ?>">
                     </div>
                 </div>
                 <div class="form-row">
