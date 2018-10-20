@@ -72,7 +72,7 @@
 
             <?php
          //echo isset($_GET["id"]) ? '<a href="jobpostings.php">Go back to all</a><br>' : ""; ?>
-         <?php pagination($results['total_hits'],$_GET['per_page']);?>
+         <?php pagination($results['total_hits']);?>
         </div>
     </div>
 
