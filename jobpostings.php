@@ -6,30 +6,34 @@
 
     <div class="row">
         <div class="col-8 m-auto">
-           <h3 class="text-center mb-5 mt-3">Search for the job you want!</h3>
+            <h3 class="text-center mb-5 mt-3">Search for the job you want!</h3>
             <form action="jobpostings.php" method="get">
                 <div class="form-row">
                     <div class="form-group col">
                         <label for="keyword">Keywords: </label>
-                        <input type="text" class="form-control" id="keyword" name="keyword">
+                        <input type="text" class="form-control" id="keyword" name="keyword" value="<?= echoGet('keyword') ?>">
                     </div>
                     <div class="form-group col">
                         <label for="location">Location: </label>
-                        <input type="text" class="form-control" id="location" name="location">
+                        <input type="text" class="form-control" id="location" name="location" value="<?= echoGet('location') ?>">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-2">
                         <label for="salary_min">Salary min:</label>
-                        <input type="text" class="form-control" id="salary_min" name="salary_min">
+                        <input type="text" class="form-control" id="salary_min" name="salary_min" value="<?= echoGet('salary_min') ?>">
                     </div>
                     <div class="form-group col-md-2">
                         <label for="salary_max">Salary max:</label>
-                        <input type="text" class="form-control" id="salary_max" name="salary_max">
+                        <input type="text" class="form-control" id="salary_max" name="salary_max" value="<?= echoGet('salary_max') ?>">
                     </div>
                     <div class="form-group col-md-3">
                         <label for="order">Order by</label>
-                        <input type="text" class="form-control" id="order" name="order">
+                        <input type="text" class="form-control" id="order" name="order" value="<?= echoGet('order') ?>">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="order">Per page</label>
+                        <input name="per_page" type="text" class="form-control" id="order" name="order" value="5">
                     </div>
                 </div>
                 <div class="form-row">
@@ -49,7 +53,7 @@
 //    $backfill_hits = $results_backfill ? $results_backfill->hits: 0;
 //}
     ?>
-<!--
+    <!--
     <div class="row">
         <div class="col-8 m-auto">
             We've found
@@ -58,10 +62,18 @@
         </div>
     </div>
 -->
-  <div class="row">
+    <div class="row">
         <div class="col-8 m-auto">
- <?php $results = showResults() ?>
+            <?php $results = showResults() ?>
+        </div>
     </div>
+    <div class="row">
+        <div class="col-8 m-auto">
+
+            <?php
+         //echo isset($_GET["id"]) ? '<a href="jobpostings.php">Go back to all</a><br>' : ""; ?>
+         <?php pagination($results['total_hits'],$_GET['per_page']);?>
+        </div>
     </div>
 
     <div class="row">
@@ -144,23 +156,17 @@ endif;
 ?>
         </div>
     </div>
-    <div class="col-8 m-auto">
 
-        <?php
-//echo isset($_GET["id"]) ? '<a href="jobpostings.php">Go back to all</a><br>' : "";
-pagination(100,10);
-?>
-    </div>
     <div class="container">
-    <div class="col w-75 m-auto">
-        <p>Order by:
+        <div class="col w-75 m-auto">
+            <p>Order by:
 
-            <a href='<?php /*JobPost::add_url_filter("time_posted");*/ ?>'>Date</a>
-            <a href='<?php /*JobPost::add_url_filter("salary");*/ ?>'>Salary</a>
+                <a href='<?php /*JobPost::add_url_filter("time_posted");*/ ?>'>Date</a>
+                <a href='<?php /*JobPost::add_url_filter("salary");*/ ?>'>Salary</a>
 
-        </p>
+            </p>
+        </div>
     </div>
-</div>
 
 </div>
 
