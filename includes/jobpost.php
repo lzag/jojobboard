@@ -58,13 +58,12 @@ class JobPost
     // GET THE FILTER VALUES AND UNASSIGN THE UNNECESSARY ONES
         foreach($filters as $key => &$value) {
 
-            if (array_key_exists($key, $_GET) && !empty($_GET[$key] && $key != 'keyword')) {
-
+            if (array_key_exists($key, $_GET) && !empty($_GET[$key])) {
+                if ($key == 'keyword') {
+                    continue;
+                } else {
                     $value = $db->sanitize($_GET[$key]);
-
-            } elseif ($key == 'keyword' && !empty($key)){
-
-                continue;
+                }
 
             } else {
 
@@ -84,8 +83,11 @@ class JobPost
 
     }
 
+    $query = "SELECT a.posting_id, a.title, b.company_name, a.description, a.time_posted, a.location, a.salary, a.local";
+    $query .= " FROM postings a INNER JOIN employers b ON a.employer_id=b.employer_id  ";
+
     // BUILD THE KEYWORD QUERY PART
-    if(isset($filters['keyword'])) {
+    if(isset($filters['keyword']) && !empty($filters['keyword'])) {
 
         $keyword = "";
         $last_keyword = end($filters['keyword']);
@@ -108,8 +110,6 @@ class JobPost
 
     }
 
-    $query = "SELECT a.posting_id, a.title, b.company_name, a.description, a.time_posted, a.location, a.salary, a.local";
-    $query .= " FROM postings a INNER JOIN employers b ON a.employer_id=b.employer_id  ";
 
     // check if it's the single post page
     if(!empty($filter_rules) || isset($keyword)) {
@@ -140,9 +140,6 @@ class JobPost
                 $query .= $order ;
 
             }
-
-
-
         }
 
     }
@@ -152,7 +149,7 @@ class JobPost
     } elseif (isset($limit)) {
         $query .= "LIMIT $limit";
     }
-
+        echo $query;
     $stmt = $db->con->query($query);
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
