@@ -54,10 +54,10 @@ class JobPost
 
                 $filters['keyword'] = explode(" ", $_GET['keyword']);
             }
+        }
 
     // GET THE FILTER VALUES AND UNASSIGN THE UNNECESSARY ONES
         foreach($filters as $key => &$value) {
-
             if (array_key_exists($key, $_GET) && !empty($_GET[$key])) {
                 if ($key == 'keyword') {
                     continue;
@@ -66,13 +66,12 @@ class JobPost
                 }
 
             } else {
-
                     unset($filters[$key]);
                     unset($filter_rules[$key]);
 
                 }
             }
-        }
+
 
     // CHECK IF THE ORDER IS THERE AND GIVE IT A VALUE
     if(isset($filters['order'])) {
@@ -150,6 +149,7 @@ class JobPost
         $query .= "LIMIT $limit";
     }
 
+    echo $query;
     $stmt = $db->con->query($query);
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
