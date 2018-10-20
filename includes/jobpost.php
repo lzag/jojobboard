@@ -149,7 +149,7 @@ class JobPost
     } elseif (isset($limit)) {
         $query .= "LIMIT $limit";
     }
-        echo $query;
+
     $stmt = $db->con->query($query);
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
