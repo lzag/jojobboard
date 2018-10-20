@@ -22,7 +22,7 @@ class JobPost
 
     }
 
-    public static function get_posts()
+    public static function get_posts($limit = null, $offset = null)
     {
 
         global $db;
@@ -52,15 +52,19 @@ class JobPost
 
             if(isset($_GET['keyword'])) {
 
-                $_GET['keyword'] = explode(" ",$_GET['keyword']);
+                $filters['keyword'] = explode(" ", $_GET['keyword']);
             }
 
     // GET THE FILTER VALUES AND UNASSIGN THE UNNECESSARY ONES
         foreach($filters as $key => &$value) {
 
-            if (array_key_exists($key, $_GET) && !empty($_GET[$key])) {
+            if (array_key_exists($key, $_GET) && !empty($_GET[$key] && $key != 'keyword')) {
 
                     $value = $db->sanitize($_GET[$key]);
+
+            } elseif ($key == 'keyword' && !empty($key)){
+
+                continue;
 
             } else {
 
@@ -125,22 +129,30 @@ class JobPost
                 $query .= ($filter_rules[$key] == $last_filter) ? "" : " AND ";
             }
 
-            if($keyword) {
+            if ($keyword) {
 
                 $query .= $keyword ;
 
             }
 
-            if(isset($order)) {
+            if (isset($order)) {
 
                 $query .= $order ;
 
             }
 
+
+
         }
 
     }
-    echo $query;
+
+    if (isset($limit, $offset)) {
+        $query .= " LIMIT $offset, $limit";
+    } elseif (isset($limit)) {
+        $query .= "LIMIT $limit";
+    }
+
     $stmt = $db->con->query($query);
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -151,32 +163,35 @@ class JobPost
     } else {
 
         show_alert("We didn't find any offers that match your criteria","warning");
+        return $result = [];
 
         }
 
     }
 
 
-private static function get_backfill_filters($num = 10) {
+private static function get_backfill_filters($pagesize = 5, $page = 1, $start_num = 1) {
 
-    $keywords = isset($_GET['keyword']) ? implode(" ",$_GET['keyword']) : "";
+    $keywords = isset($_GET['keyword']) ? $_GET['keyword'] : "";
     $location = isset($_GET['location']) ? $_GET['location'] : "";
     $sort = isset($_GET['order']) ? $_GET['order'] : null;
 
     $filters = array(
         'keywords' => $keywords,
         'location' => $location,
-        'pagesize' => $num,
+        'pagesize' => $pagesize,
+        '$page'    => $page,
+        'start_num' => $start_num,
         'affid'      => '0afaf0173305e4b9'
     );
 
     return $filters;
 }
 
-public static function get_backfill($num) {
+public static function get_backfill($pagesize = 5, $page = 1, $start_num = 1) {
 
     $backfill = new Careerjet_API('en_US');
-    $filters = self::get_backfill_filters($num);
+    $filters = self::get_backfill_filters($pagesize, $page, $start_num);
     $result = $backfill->search($filters);
 
     return $result->hits ? $result : false;
