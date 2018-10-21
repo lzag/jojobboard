@@ -159,7 +159,7 @@ function login() {
 
 function showResults() {
     $offers = [];
-    $page_size = isset($_GET['per_page']) ? (int) $_GET['per_page'] : 5;
+    $page_size = (isset($_GET['per_page']) && !empty($_GET['per_page'])) ? (int) $_GET['per_page'] : 5;
     $local_offers = JobPost::get_posts();
     $local_hits = $offers['local_hits'] = count($local_offers);
     $foreign_offers = JobPost::get_backfill();
@@ -203,7 +203,7 @@ function showResults() {
 
 function pagination($total_results = 100) {
 
-    $per_page = isset($_GET['per_page']) ? $_GET['per_page'] : 5;
+    $per_page = (isset($_GET['per_page']) && !empty($_GET['per_page'])) ? (int) $_GET['per_page'] : 5;
     $total_pages = ceil($total_results / $per_page);
     $page = isset($_GET['page']) ? $_GET['page'] : 1;
     $url = $_SERVER['REQUEST_URI'];
