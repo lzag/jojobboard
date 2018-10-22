@@ -101,13 +101,28 @@ private static function get_backfill_filters($pagesize = 5, $start_num = 1) {
 
     $keywords = isset($_GET['keyword']) ? $_GET['keyword'] : "";
     $location = isset($_GET['location']) ? $_GET['location'] : "";
-    $sort = isset($_GET['order']) ? $_GET['order'] : null;
+    if (isset($_GET['order'])) {
+        switch ($_GET['order']) {
+            case "title" :
+                $sort = "relevance";
+                break;
+            case "time_posted" :
+                $sort = "date";
+                break;
+            case "salary" :
+                $sort = "salary";
+                break;
+            default :
+                $sort = "relevance";
+        }
+    }
 
     $filters = array(
         'keywords' => $keywords,
         'location' => $location,
         'pagesize' => $pagesize,
         'start_num' => $start_num,
+        'sort' => $sort,
         'affid'      => '0afaf0173305e4b9'
     );
 
