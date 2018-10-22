@@ -68,6 +68,9 @@ class JobPost
 
                 if(!empty($_GET['order'])) {
                     $query .= " ORDER BY " . $_GET['order'];
+                    if (!empty($_GET['order_type'])) {
+                        $query .= " " . $_GET['order_type'];
+                    }
                 }
 
                 if (isset($limit, $offset)) {
