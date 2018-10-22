@@ -29,11 +29,27 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="order">Order by</label>
-                        <input type="text" class="form-control" id="order" name="order" value="<?= echoGet('order') ?>">
+                        <select name="order" class="form-control" id="order">
+                            <option value="time_posted" <?= selected("order", "time_posted") ?>>Date</option>
+                            <option value="salary" <?= selected("order", "salary") ?>>Salary</option>
+                            <option value="title" <?= selected("order", "title") ?>>Relevance</option>
+                        </select>
                     </div>
                     <div class="form-group col-md-2">
-                        <label for="order">Per page</label>
-                        <input name="per_page" type="text" class="form-control" id="order" name="order" value="<?= echoGet("per_page") ?>">
+                        <label for="order_type">ASC/DESC </label>
+                        <select class="form-control" id="order_type" name="order_type">
+                        <option value="ASC" <?= selected("order_type", "ASC") ?>>ASC</option>
+                        <option value="DESC" <?= selected("order_type", "DESC") ?>>DESC</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="per_page">Per page</label>
+                        <select class="form-control" id="per_page" name="per_page">
+                        <option value="5" <?= selected("per_page", "5") ?>>5</option>
+                        <option value="10" <?= selected("per_page", "10") ?>>10</option>
+                        <option value="25" <?= selected("per_page", "25") ?>>25</option>
+                        <option value="50" <?= selected("per_page", "50") ?>>50</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-row">
@@ -72,7 +88,7 @@
 
             <?php
          //echo isset($_GET["id"]) ? '<a href="jobpostings.php">Go back to all</a><br>' : ""; ?>
-         <?php pagination($results['total_hits']);?>
+            <?php pagination($results['total_hits']);?>
         </div>
     </div>
 

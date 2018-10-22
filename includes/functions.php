@@ -327,4 +327,13 @@ function echoGet($value) {
         return "";
     }
 }
+
+function selected($name, $option) {
+    if (isset($_GET[$name])) {
+        if ($_GET[$name] == $option) {
+            return "selected";
+        }
+    }
+}
+
 ?>
