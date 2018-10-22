@@ -81,7 +81,6 @@ class JobPost
             }
         }
 
-    echo $query;
     $stmt = $db->con->query($query);
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
