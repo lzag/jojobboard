@@ -13,14 +13,6 @@ class JobPost
     private $time_posted;
     private $external;
 
-    public function __construct()
-    {
-
-    }
-
-    public static function showPostings() {
-
-    }
 
     public static function get_posts($limit = null, $offset = null)
     {
@@ -135,12 +127,6 @@ public static function get_backfill($pagesize = 5, $start_num = 1) {
     $result = $backfill->search($filters);
 
     return $result->hits ? $result : false;
-
-}
-
-public static function paginateResults() {
-
-
 
 }
 
