@@ -75,87 +75,64 @@ function generate_token() {
 
 }
 
-function login() {
+function login()
+{
 
     global $db;
     if (isset($_POST['email']) && isset($_POST['pass'])) {
 
-    // Sanitize the user input //
-    $email = $db->sanitize($_POST['email']);
-    $pass = $db->sanitize($_POST['pass']);
+        // Sanitize the user input //
+        $email = $db->sanitize($_POST['email']);
+        $pass = $db->sanitize($_POST['pass']);
 
-    $sql = "SELECT email, password, active FROM users WHERE email= ?";
-    $stmt = $db->con->prepare($sql);
-
-    if ($stmt->execute(array($email))) {
-
-        $row = $stmt->fetch();
-
-        print_r($row);
-
-        if($row['active'] == 1) {
-
-        $passdb = $row['password'];
-
-        if (password_verify($pass, $passdb)){
-
-        $_SESSION['user'] = $email;
-
-        $_SESSION['msg'] = array("You have been logged in", "success");
-
-        header('Location: index.php');
-
+        $sql = "SELECT email, password, active FROM users WHERE email= ?";
+        $stmt = $db->con->prepare($sql);
+        $stmt->execute(array($email));
+        if ($row = $stmt->fetch()) {
+            print_r($row);
+            if($row['active'] == 1) {
+                $passdb = $row['password'];
+                if (password_verify($pass, $passdb)){
+                    $_SESSION['user'] = $email;
+                    $_SESSION['last_login_time'] = time();
+                    $_SESSION['msg'] = array("You have been logged in", "success");
+                    header('Location: index.php');
+                } else {
+                    $msg = "Password invalid. Please try again:";
+                    show_alert($msg,"danger");
+                }
+            } else {
+                $msg = "Your account has not been activated yet. Please check your email for the activation link.";
+                show_alert($msg,"danger");
+            }
         } else {
-
-            $msg = "Password invalid. Please try again:";
-            show_alert($msg,"danger");
-
+            $sql = "SELECT contact_email, password, active FROM employers WHERE contact_email= ?";
+            $stmt = $db->con->prepare($sql);
+            $stmt->execute(array($email));
+            if ($row = $stmt->fetch()) {
+                print_r($row);
+                if($row['active'] == 1) {
+                    $passdb = $row['password'];
+                    if (password_verify($pass, $passdb)){
+                        $_SESSION['employer'] = $email;
+                        $_SESSION['last_login_time'] = time();
+                        show_alert("You have been logged in","success");
+                        header('Location: index.php');
+                    } else {
+                    $msg = "Password invalid. Please try again:";
+                    show_alert($msg,"danger");
+                    }
+                } else {
+                $msg = "Your account has not been activated yet. Please check your email for the activation link.";
+                show_alert($msg,"danger");
+                }
+            } else {
+                $msg = "We haven't found an account with these credential in our system, please register";
+                show_alert($msg,"danger");
+            }
         }
-
-        } else {
-
-            $msg = "Your account has not been activated yet. Please check your email for the activation link.";
-            show_alert($msg,"danger");
-
-        }
-
-
-    } else {
-
-        $query_login = "SELECT contact_email, password, active FROM employers WHERE contact_email='$user'";
-        $result = $db->execute_query($query_login);
-        $row = $result->fetch_assoc();
-
-        if ($result->num_rows == 1) {
-
-        if($row['active'] == 1) {
-
-        $passdb = $row['password'];
-
-        if (password_verify($pass, $passdb)){
-
-        $_SESSION['employer'] = $user;
-        show_alert("You have been logged in","success");
-        header('Location: index.php');
-
-        } else {
-
-            $msg = "Password invalid. Please try again:";
-            show_alert($msg,"danger");
-
-        }
-
-        } else {
-
-            $msg = "Your account has not been activated yet. Please check your email for the activation link.";
-            show_alert($msg,"danger");
-
-        }
-}
-}
-}
-
     }
+}
 
 function showResults() {
     $offers = [];
