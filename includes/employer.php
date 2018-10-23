@@ -12,8 +12,8 @@ class Employer {
     private $db;
 
     function __construct() {
-        $this->db = new Database();
-         $this->contact_email = $_SESSION['employer'];
+        $this->db = new App\Database();
+        $this->contact_email = $_SESSION['employer'];
         $this->employer_id = $this->getEmployerID($this->contact_email);
     }
 
@@ -22,8 +22,8 @@ class Employer {
 
     public function getEmployerID($contact_email) {
         $query = "SELECT employer_id FROM employers WHERE contact_email='$contact_email'";
-        $result = $this->db->execute_query($query);
-        $row = $result->fetch_array();
+        $result = $this->db->con->query($query);
+        $row = $result->fetch(PDO::FETCH_ASSOC);
         return $row['employer_id'];
     }
 
