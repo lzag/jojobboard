@@ -7,6 +7,10 @@ require_once 'header.php';
 
 <?php include 'userprofile.php'; ?>
 
+<?php elseif (isset($_SESSION['employer'])) : ?>
+
+<?php include 'employerprofile.php'; ?>
+
 <?php else : ?>
 
 <div class="row p-3 justify-content-center">
