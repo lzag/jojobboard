@@ -10,11 +10,11 @@ require_once 'includes/blogpost.php';
 require_once 'includes/jobpost.php';
 require_once 'includes/Careerjet_API.php';
 
-$db = new App\Database;
+//spl_autoload_register( function ($class) {
+//    include 'includes/' . strtolower($class) . '.php';
+//});
 
-spl_autoload_register( function ($class) {
-    include 'includes/' . strtolower($class) . '.php';
-});
+$db = new App\Database;
 
 if (isset($_SESSION['user'])) {
 
