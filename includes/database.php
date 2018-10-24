@@ -18,22 +18,7 @@ class Database
         }
 
     }
-//
-//    private function open_con() {
-//
-//        $this->conn = new mysqli(DB_HOST,DB_USER,DB_PASS,DB_DATABASE);
-//        if ($this->conn->connect_error) {
-//        throw new Exception("Can't connect to the database");
-//        }
-//
-//    }
-//
-//    public function execute_query($sql) {
-//
-//    return $result = $this->conn->query($sql);
-//
-//    }
-//
+
     public function sanitize($string) {
 
         if (is_array($string)) {
@@ -50,14 +35,5 @@ class Database
 
         }
     }
-//
-//   public function close() {
-//        $this->conn->close();
-//    }
-//
-//    public function errno() {
-//
-//        return $this->conn->errno;
-//
-//    }
+
 }
