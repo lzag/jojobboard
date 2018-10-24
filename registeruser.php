@@ -20,7 +20,7 @@
                 </div>
                 <div class="form-group">
                     <label for="password">Password:</label>
-                    <input type="password" name="pass" class="form-control">
+                    <input type="password" name="pass" class="form-control" maxlength="40">
                 </div>
                 <input type="hidden" name="IP" value="<?php echo $_SERVER['REMOTE_ADDR']; ?>" class="form-control">
                 <input type='submit' value="Create User" class="btn btn-primary form-control">
