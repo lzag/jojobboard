@@ -106,6 +106,8 @@ private static function get_backfill_filters($pagesize = 5, $start_num = 1) {
             default :
                 $sort = "relevance";
         }
+    } else {
+        $sort = 'relevance';
     }
 
     $filters = array(
