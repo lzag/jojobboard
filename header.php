@@ -15,114 +15,115 @@ require_once 'includes/Careerjet_API.php';
 //});
 
 $db = new App\Database;
-
-if (isset($_SESSION['user'])) {
-
-    $loggedinasuser = TRUE;
-    $loggedinasemployer = FALSE;
-    $user = new User;
-
-} elseif (isset($_SESSION['employer'])) {
-
-    $loggedinasuser = FALSE;
-    $loggedinasemployer = TRUE;
-    $employer = new Employer();
-    $contact_email = $_SESSION['employer'];
-
-    } else {
-
-    $loggedinasuser = FALSE;
-    $loggedinasemployer = FALSE;
-
-    }
-
-if (isset($_COOKIE['visit']))
-        {
-        $welcome = "Welcome back to JoJobBoard";
-        $last_visit = $_COOKIE['visit_time'];
-
-        setcookie('visit_time',time(),time()+1000000,"/");
+$file = basename($_SERVER['REQUEST_URI'], ".php");
+if (!in_array($file, ['login', 'registeruser', 'registeremployer'])) {
+    if (isset($_COOKIE['rememberMe'])) {
+        rememberUser();
+        $user = new User;
+    } elseif (isset($_SESSION['user'])) {
+        $user = new User;
+        if(time() - $_SESSION['last_login'] < 20 * 60) {
+            $_SESSION['last_login'] = time();
+        } else {
+            session_destroy();
+            header("Location: login.php");
+            session_start();
+            $_SESSION['msg'] = "Your session expired, please log in again";
+            exit();
         }
-     else {
-        setcookie('visit','ok',time()+1000000,"/");
-        setcookie('visit_time',time(),time()+1000000,"/");
-        $welcome = "Welcome to JoJobBoard";
+    } elseif (isset($_SESSION['employer'])) {
+        $employer = new Employer();
+        if(time() - $_SESSION['last_login'] < 20 * 60) {
+                $_SESSION['last_login'] = time();
+            } else {
+                session_destroy();
+                header("Location: login.php");
+                session_start();
+                $_SESSION['msg'] = "Your session expired, please log in again";
+                exit();
+            }
+    } else {
+        header("Location: login.php");
+        exit();
+    }
+}
+
+if (isset($_COOKIE['visit'])) {
+    $welcome = "Welcome back to JoJobBoard";
+    setcookie('visit',time(),time()+1000000,"/");
+} else {
+    $welcome = "Welcome to JoJobBoard";
+    setcookie('visit',time(),time()+1000000,"/");
     }
 ?>
 
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>JoJobboard</title>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>JoJobboard</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 
 
 
 <body>
-  <nav class="navbar navbar-expand-sm navbar-dark bg-dark ">
-    <a class="navbar-brand" href="#">JoJobBoard</a>
-    <ul class="navbar-nav">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark ">
+        <a class="navbar-brand" href="#">JoJobBoard</a>
+        <ul class="navbar-nav">
 
-       <?php if ($loggedinasuser) : ?>
+            <?php if (isset($_SESSION['user'])) : ?>
 
-        <li class="nav-item">
-            <a class="nav-link" href="index.php">Main Page</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="uploadcv.php">Upload CV</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="jobpostings.php">Job postings</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="userprofile.php">Your profile</a>
-        </li>
-           <li class="nav-item">
-            <a class="nav-link" href="logout.php">Log out</a>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link" href="index.php">Main Page</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="uploadcv.php">Upload CV</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="jobpostings.php">Job postings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="userprofile.php">Your profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="logout.php">Log out</a>
+            </li>
 
-        <?php elseif ($loggedinasemployer) : ?>
+            <?php elseif (isset($_SESSION['employer'])) : ?>
 
-        <li class="nav-item">
-            <a class="nav-link" href="index.php">Main Page</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="postjob.php">Post a job</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="employerprofile.php">See your profile</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="logout.php">Log out</a>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link" href="index.php">Main Page</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="postjob.php">Post a job</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="employerprofile.php">See your profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="logout.php">Log out</a>
+            </li>
 
-         <?php else : ?>
+            <?php else : ?>
 
-          <li class="nav-item">
-            <a class="nav-link" href="index.php">Main Page</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="registeruser.php">Register User</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="registeremployer.php">Register Employer</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="login.php">Log In</a>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link" href="index.php">Main Page</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="registeruser.php">Register User</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="registeremployer.php">Register Employer</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="login.php">Log In</a>
+            </li>
 
-        <?php  endif; ?>
+            <?php  endif; ?>
 
-    </ul>
-</nav>
-
-<!--
-<div class="container">
-    <h2 class="m-5 text-center">You are not logged in</h2>
-</div>
--->
-
+        </ul>
+    </nav>

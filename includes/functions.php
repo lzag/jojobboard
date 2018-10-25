@@ -11,15 +11,28 @@ function show_alert($msg, $type) {
 
 // types = primary, success, danger
 
-if ($msg) {
-echo <<<_END
-<div class="alert alert-$type alert-dismissible" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <strong>$msg</strong>
-</div>
+    if ($msg) {
+        echo <<<_END
+        <div class="alert alert-$type alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>$msg</strong>
+        </div>
 _END;
-
+    }
 }
+
+function show_session_alert() {
+    if (!empty($_SESSION['msg'])) {
+    $msg = $_SESSION['msg'];
+    $type = "success";
+    echo <<<_END
+    <div class="alert alert-$type alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>$msg</strong>
+    </div>
+_END;
+    unset($_SESSION['msg']);
+    }
 }
 
 function send_email($email,$subject,$msg,$headers) {
@@ -75,6 +88,30 @@ function generate_token() {
 
 }
 
+function rememberUser() {
+    if (!empty($_COOKIE['rememberMe'])) {
+        $cookie = explode(".",$_COOKIE['rememberMe']);
+        $rememberID = $cookie[0];
+        $cookie_token = hash('sha256', $cookie[1]);
+        $db = new App\Database;
+        $query = "SELECT sessionToken FROM users WHERE rememberID= ?";
+        $stmt = $db->con->prepare($query);
+        $stmt->execute(array($rememberID));
+        if ($db_token = $stmt->fetch(PDO::FETCH_ASSOC)['sessionToken']) {
+            if (hash_equals($cookie_token, $db_token)) {
+                $query = "SELECT email, active FROM users WHERE rememberID= ?";
+                $stmt = $db->con->prepare($query);
+                $stmt->execute(array($rememberID));
+                if ($row = $stmt->fetch()) {
+                    if($row['active'] == 1) {
+                        $_SESSION['user'] = $email;
+                    }
+                }
+            }
+        }
+    }
+}
+
 function login()
 {
 
@@ -89,14 +126,29 @@ function login()
         $stmt = $db->con->prepare($sql);
         $stmt->execute(array($email));
         if ($row = $stmt->fetch()) {
-            print_r($row);
             if($row['active'] == 1) {
                 $passdb = $row['password'];
                 if (password_verify($pass, $passdb)){
                     $_SESSION['user'] = $email;
-                    $_SESSION['last_login_time'] = time();
-                    $_SESSION['msg'] = array("You have been logged in", "success");
+                    $_SESSION['last_login'] = time();
+                    $_SESSION['msg'] = "You have been logged in";
+                    if (!empty($_POST['rememberMe'])) {
+                        $rememberID = random_int(10000,99999);
+                        $token = sha1(random_int(10000,99999).time().$email);
+                        $expires = time() + 30 * 24 * 60 * 60;
+                        $query  = "UPDATE users";
+                        $query .= " SET rememberID = ?, sessionToken= ?, tokenExpire= ?";
+                        $query .= " WHERE email= ?";
+                        $stmt = $db->con->prepare($query);
+                        $result = $stmt->execute(array($rememberID, hash("sha256", $token), $expires, $_POST['email']));
+                        if ($stmt->rowCount()) {
+                            setcookie('rememberMe', $rememberID . '.' . $token, $expires);
+                        }
+                    } else {
+                        setcookie('rememberMe','',time() - 100 * 30 * 24 * 60 * 60);
+                    }
                     header('Location: index.php');
+                    exit();
                 } else {
                     $msg = "Password invalid. Please try again:";
                     show_alert($msg,"danger");
@@ -115,9 +167,10 @@ function login()
                     $passdb = $row['password'];
                     if (password_verify($pass, $passdb)){
                         $_SESSION['employer'] = $email;
-                        $_SESSION['last_login_time'] = time();
-                        show_alert("You have been logged in","success");
+                        $_SESSION['last_login'] = time();
+                        $_SESSION['msg'] = "You have been logged in";
                         header('Location: index.php');
+                        exit();
                     } else {
                     $msg = "Password invalid. Please try again:";
                     show_alert($msg,"danger");

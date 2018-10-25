@@ -3,12 +3,13 @@
 require_once 'header.php';
 
 ?>
-<?php if (isset($_SESSION['user'])) : ?>
 
+<?php if (isset($_SESSION['user'])) : ?>
+<?php echo show_session_alert(); ?>
 <?php include 'userprofile.php'; ?>
 
 <?php elseif (isset($_SESSION['employer'])) : ?>
-
+<?php echo show_session_alert() ?>
 <?php include 'employerprofile.php'; ?>
 
 <?php else : ?>

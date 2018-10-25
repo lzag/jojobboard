@@ -1,21 +1,11 @@
 <?php
 session_start();
 if (isset($_SESSION['user']) || isset($_SESSION['employer'])) {
-    (session_destroy());
-
-require_once 'header.php';
-
-echo "Logged out";
-
-
-require_once 'footer.php';
-    } else {
-
-require_once 'header.php';
-
-echo "You are not logged in";
-
-
-require_once 'footer.php';
+    session_destroy();
+    setcookie('rememberMe','',time() - 100 * 30 * 24 * 60 * 60);
+    session_start();
+    $_SESSION['msg'] = "You have been logged out";
 }
+header("Location: login.php");
+exit();
 ?>
