@@ -1,7 +1,5 @@
 <?php require_once 'header.php'; ?>
 
-
-
 <div class="container">
     <div class="row justify-content-center mt-3">
 

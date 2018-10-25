@@ -10,6 +10,7 @@ login();
 <div class="container">
     <div class="row mt-3">
         <div class="col-sm-6 m-auto">
+           <p><?= show_session_alert() ?></p>
             <h3>Please log in</h3>
             <form method="POST" action='login.php'>
                 <form-group>
