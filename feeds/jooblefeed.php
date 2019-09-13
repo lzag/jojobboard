@@ -33,20 +33,29 @@ function getListings(Database $db) {
     return $stmt;
 }
 
-function initializeXML($root, $version = '<?xml version="1.0" encoding="utf-8"?>'){
+function initializeXML($root, $version = '<?xml version="1.0" encoding="utf-8"?>', $main_section = []){
     $xml_header = $version . "<" . $root . "/>";
-    return new SimpleXMLElement($xml_header);
+    $xml = new SimpleXMLElement($xml_header);
+    foreach ($main_section as $key => $value) {
+        $xml->addChild($key, $value);
+    }
+    return $xml;
 }
 
 function buildFeed($listings, $xml) {
-    $listings->bindColumn('posting_id', $id);
-    $listings->bindColumn('company_name', $company);
-    $listings->bindColumn('title', $title);
-    $listings->bindColumn('location', $city);
-    $listings->bindColumn('salary', $salary);
-    $listings->bindColumn('description', $description);
-    $listings->bindColumn('time_posted', $time_posted);
+    $bindings = array(
+        'posting_id' => 'id',
+        'company_name' => 'company',
+        'title' => 'title',
+        'location' => 'city',
+        'salary' => 'salary',
+        'description' => 'description',
+        'time_posted' => 'time_posted'
+    );
     
+    foreach ($bindings as $key => $value) {
+        $listings->bindColumn($key, ${$value});
+    }
     while ($row = $listings->fetch (PDO::FETCH_BOUND)) {
         $job = $xml->addChild('job');
         $job->addAttribute('id', $id);
