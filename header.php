@@ -1,7 +1,12 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+require_once 'header.php';
 session_start();
 
-require_once 'includes/dbconfig.php';
+set_include_path('C:\Users\Lukasz\Desktop\JJB');
+require_once 'includes\db_config.php';
 require_once 'includes/database.php';
 require_once 'includes/functions.php';
 require_once 'includes/employer.php';

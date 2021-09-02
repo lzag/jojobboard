@@ -25,6 +25,7 @@ Please provide the details of the job posting.<br><br><br>
             $employer = new Employer();
             $employerid = $employer->employer_id;
             $query = "INSERT INTO postings (title,description,employer_id) VALUES ('$title','$description','$employerid')";
+            var_dump($query);
             $result = $conn->con->query($query);
             if($result->rowCount()) {
                 $msg = "Job offer added";

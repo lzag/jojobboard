@@ -73,8 +73,8 @@ class JobPost
             }
         }
 
-    $stmt = $db->con->query($query);
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = $db->con->query($query);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if(count($result) > 0) {
 

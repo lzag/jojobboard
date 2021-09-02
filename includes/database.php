@@ -1,6 +1,8 @@
 <?php
 namespace App;
 
+use PDOException;
+
 class Database extends \PDO
 {
 
@@ -8,14 +10,16 @@ class Database extends \PDO
 
     public function __construct()
     {
-        require('db_config.php');
+        require_once('db_config.php');
         // Enable the connection to the database. Throw and exception in case of an error
         try {
             $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME;
-            return parent::__construct($dsn, DB_USER, DB_PASS);
+            // $this->con = ;
+            // var_dump(parent::__construct());
             // $this->con = new $this;
-            // $this->con = new \PDO();
-        } catch (Exception $e) {
+            $this->con = new \PDO($dsn, DB_USER, DB_PASS);
+            // $this->con = new \PDO($dsn, DB_USER, DB_PASS);
+        } catch (PDOException $e) {
             echo '<div>There has been problems with connecting with the database. Please try again later</div>';
         }
 

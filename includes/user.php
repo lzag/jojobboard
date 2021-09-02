@@ -38,6 +38,7 @@ class User {
         $stmt = $db->con->prepare($sql);
         $stmt->execute(array($this->email));
 
+
         if ($user_details = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
             foreach ($user_details as $k => $p) {
@@ -98,6 +99,10 @@ class User {
         $stmt = $db->con->prepare($sql);
         $stmt->execute(array($this->user_id, $posting_id));
         $status = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$status) {
+            return 'Not applied yet';
+
+        }
         return $status['status'];
 
     }
@@ -178,7 +183,8 @@ class User {
             $query = "INSERT INTO users(first_name, second_name, email, password, ip_address, valid_code)";
             $query .= " VALUES(?, ?, ?, ?, ?, ?)";
             $stmt = $db->con->prepare($query);
-            $stmt->execute(array($fn, $sn, $email, $pass, $ip, $code));
+            $result = $stmt->execute(array($fn, $sn, $email, $pass, $ip, $code));
+            var_dump($stmt->errorInfo());
 
             if($stmt->errorInfo()[1] == 1062) {
 
@@ -187,7 +193,8 @@ class User {
 
             } elseif ($stmt->errorCode() != 0) {
 
-                $msg = "There has been an error in the registration, pleae try again";
+                $msg = var_export($stmt->errorInfo(), true);
+                // $msg = "There has been an error in the registration, pleae try again";
                 show_alert($msg,"danger");
 
             } else {

@@ -1,4 +1,5 @@
 <?php
+use App\Database;
 require_once 'header.php';
 
 if (isset($_POST['tax_id']) &&
@@ -27,9 +28,11 @@ echo "<div align='center'>Data OK <br>";
     $city = $_POST['city'];
     $connect = new Database;
     $query_add_user = "INSERT INTO employers(tax_id,company_name,contact_first_name,contact_second_name,contact_email,password, city) VALUES('$tid','$cn','$cfn','$csn','$email','$pass','$city')";
-    $result_add = $connect->execute_query($query_add_user);
+    var_dump($query_add_user);
+    $result_add = $connect->con->query($query_add_user);
+    var_dump($result_add);
     if ($result_add) echo "Employer account created, please <a href='login.php'>log in</a><br></div>";
-    $connect->close();
+    // $connect->close();
 } else {
     echo<<<_END
 <div class="container">
