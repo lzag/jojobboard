@@ -116,6 +116,7 @@ function login()
 {
 
     global $db;
+    var_dump($db);
     if (isset($_POST['email']) && isset($_POST['pass'])) {
 
         // Sanitize the user input //

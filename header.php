@@ -5,8 +5,8 @@ error_reporting(E_ALL);
 require_once 'header.php';
 session_start();
 
-set_include_path('C:\Users\Lukasz\Desktop\JJB');
-require_once 'includes\db_config.php';
+// set_include_path('C:\Users\Lukasz\Desktop\JJB');
+require_once 'includes/db_config.php';
 require_once 'includes/database.php';
 require_once 'includes/functions.php';
 require_once 'includes/employer.php';

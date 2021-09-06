@@ -5,7 +5,7 @@
 /node_modules/
 /notincludes/
 /includes/video.html
-/includes/dbconfig.php
+/includes/db_config.php
 /testing.php
 /uploads
 includes/js/main.js
@@ -16,3 +16,10 @@ js/main.js
 vendor/
 users/
 
+tags
+
+.*
+!.gitignore
+!.gitattributes
+!.htaccess
+!.env-example
