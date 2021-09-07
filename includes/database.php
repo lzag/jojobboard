@@ -10,7 +10,6 @@ class Database extends \PDO
 
     public function __construct()
     {
-        require_once('db_config.php');
         // Enable the connection to the database. Throw and exception in case of an error
         try {
             $dsn = 'mysql:host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME;

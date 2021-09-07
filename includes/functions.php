@@ -5,7 +5,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 //Load Composer's autoloader
-require 'vendor/autoload.php';
+require '../vendor/autoload.php';
 
 function show_alert($msg, $type) {
 
@@ -114,9 +114,7 @@ function rememberUser() {
 
 function login()
 {
-
     global $db;
-    var_dump($db);
     if (isset($_POST['email']) && isset($_POST['pass'])) {
 
         // Sanitize the user input //

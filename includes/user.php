@@ -140,7 +140,7 @@ class User {
                     if (key_exists($mime, $allowed)) {
                         $ext = $allowed[$mime];
                         $filename = $user->getProperty('first_name') . "_" . $user->getProperty('second_name') . "_CV." . $ext;
-                        $filepath = "./uploads/" . "$filename";
+                        $filepath = UPLOADS_DIR . '/' . "$filename";
                         if (!move_uploaded_file($_FILES['CV']['tmp_name'], $filepath)) {
 
                             show_alert("Couldn't upload the file", "danger");

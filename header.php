@@ -2,11 +2,8 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-require_once 'header.php';
 session_start();
 
-// set_include_path('C:\Users\Lukasz\Desktop\JJB');
-require_once 'includes/db_config.php';
 require_once 'includes/database.php';
 require_once 'includes/functions.php';
 require_once 'includes/employer.php';
@@ -19,6 +16,7 @@ require_once 'includes/Careerjet_API.php';
 //    include 'includes/' . strtolower($class) . '.php';
 //});
 
+global $db;
 $db = new App\Database;
 $file = basename($_SERVER['REQUEST_URI'], ".php");
 if (!in_array($file, ['login', 'registeruser', 'registeremployer'])) {
