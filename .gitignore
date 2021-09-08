@@ -23,3 +23,5 @@ tags
 !.gitattributes
 !.htaccess
 !.env-example
+
+views_c/

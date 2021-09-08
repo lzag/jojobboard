@@ -5,6 +5,7 @@ use App\Middleware\Login;
 return [
     Route::get('/login'),
     Route::post('/login'),
+    Route::get('/index.php'),
 ];
 
 // $router->wrap(
