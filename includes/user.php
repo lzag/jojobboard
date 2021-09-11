@@ -17,6 +17,8 @@ class User {
 
 
     function __construct() {
+        if (!isset($_SESSION['user']))
+           throw new Exception('User email not available');
 
         global $db;
         $this->email = $db->sanitize($_SESSION['user']);

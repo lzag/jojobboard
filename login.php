@@ -1,7 +1,6 @@
 <?php
 
 require_once 'header.php';
-
 $msg = "Please input your login data:";
 User::activate_user();
 login();

@@ -2,6 +2,7 @@
 namespace App;
 
 use App\Route as Route;
+use Exception;
 
 class Router {
     /**
@@ -9,11 +10,24 @@ class Router {
      */
     private $endpoints = [];
 
-    private $routes_path = __DIR__ . '/../includes/routes.php';
+    private $routes_flle_path = __DIR__ . '/../includes/routes.php';
+
+    public $uri;
+    public $controller;
+    public $method;
+    public $params;
+    public $request_file;
 
     public function __construct() 
     {
-        $this->registerRoutes($this->getRoutes());
+        $this->registerRoutes($this->getRoutesFile());
+        $this->uri = $this->getRequestUri();
+        $this->controller = $this->getRequestController();
+        $this->method = $this->getRequestMethod();
+        $this->params = $this->getRequestParams();
+        if ($this->isRequestForLegacyFile()) {
+            $this->request_file = filter_var($_GET['request_file'], FILTER_SANITIZE_STRING); 
+        }
     }
 
     /**
@@ -33,6 +47,22 @@ class Router {
         }
     }
 
+    public function isRequestForLegacyFile() 
+    {
+        // temporary measure to keep the app working, require necessary files
+        return !empty($_GET['request_file']) && file_exists(__DIR__ . '/../' . filter_var($_GET['request_file'], FILTER_SANITIZE_STRING));
+    }
+
+    public function isRouteAllowed() 
+    {
+        return isset($this->endpoints[$this->uri]);
+    }
+
+    public function isMethodAllowed() 
+    {
+        return in_array($this->method, $this->endpoints[$this->uri]) || $this->method === 'index';
+    }
+
     /**
      * Fetches the route based on request parameters
      *
@@ -40,54 +70,45 @@ class Router {
      */
     public function getRoute()
     {
-        $uri = $this->getRequestUri();
-        $method = $this->getRequestMethod();
-        $params = $this->getRequestParams();
-
-        // temporary measure to keep the app working, require necessary files
-        if (file_exists(__DIR__ . '/../' . $uri)) {
-            return new Route($method, $uri, $params);
-        } else if (! isset($this->endpoints[$uri])) {
-            // if endpoint not available return 404
-            die('404 not found');
-            return false;
-        }
-
-        if (! in_array($method, $this->endpoints[$uri])) {
-            die('Method not allowed');
-            // if method not allowed return 405 method not allowed
-            return false;
-        }
-
-        $route = new Route($method, $uri, $params);
-
-        if(! ($route)->validateParams()) {
-            // if necessary params missing return return 400 bad request
-            // validating only number of params required
-            return false;
-        };
-
-        return $route;
+        return new Route($this->controller, $this->method, $this->params);
     }
 
-    public function getRequestUri()
+    public function getRequestUri() {
+        preg_match('%^/\w*%', $_SERVER['REQUEST_URI'], $uri);
+        return $uri[0];
+    }
+
+    public function getRequestController()
     {
-        return $_SERVER['REQUEST_URI'];
+        if (!empty($_GET['controller'])) {
+            return filter_var($_GET['controller'], FILTER_SANITIZE_STRING);
+        } else {
+            return 'main';
+        }
     }
 
     public function getRequestMethod() 
     {
-        return $_SERVER['REQUEST_METHOD'];
+        if (!empty($_GET['method'])) {
+            return filter_var($_GET['method'], FILTER_SANITIZE_STRING);
+        } else {
+            return 'index';
+        }
     }
 
     public function getRequestParams()
     {
-        return $_SERVER['REDIRECT_QUERY_STRING'] ?? false;
+        if (!empty($_GET['params'])) {
+            return filter_var($_GET['params'], FILTER_SANITIZE_STRING);
+        } else {
+            return false;
+        }
+        // return $_SERVER['REDIRECT_QUERY_STRING'] ?? false;
     }
 
-    public function getRoutes()
+    public function getRoutesFile()
     {
-        return require_once $this->routes_path;
+        return require_once $this->routes_flle_path;
     }
 
     public function addRoute(Route $route): void

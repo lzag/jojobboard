@@ -1,16 +1,16 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-session_start();
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+// session_start();
 
-require_once 'includes/database.php';
-require_once 'includes/functions.php';
-require_once 'includes/employer.php';
-require_once 'includes/user.php';
-require_once 'includes/blogpost.php';
-require_once 'includes/jobpost.php';
-require_once 'includes/Careerjet_API.php';
+// require_once 'includes/database.php';
+// require_once 'includes/functions.php';
+// require_once 'includes/employer.php';
+// require_once 'includes/user.php';
+// require_once 'includes/blogpost.php';
+// require_once 'includes/jobpost.php';
+// require_once 'includes/Careerjet_API.php';
 
 //spl_autoload_register( function ($class) {
 //    include 'includes/' . strtolower($class) . '.php';
@@ -59,7 +59,6 @@ if (isset($_COOKIE['visit'])) {
     setcookie('visit',time(),time()+1000000,"/");
     }
 ?>
-
 <!DOCTYPE html>
 <html>
 

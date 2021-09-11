@@ -1,14 +1,16 @@
 <?php
 namespace App;
 
-use SmartyBC;
+use Smarty;
+require_once( APP_DIR . '/includes/user.php' );
+use User;
 
 class SmartyTemplateEngine implements ITemplateEngine {
 
     private $smarty;
 
     public function __construct() {
-        $this->smarty = new SmartyBC;
+        $this->smarty = new Smarty;
     }
     public function configure() {
         $this->smarty->setTemplateDir(APP_DIR . '/views/');
@@ -21,6 +23,7 @@ class SmartyTemplateEngine implements ITemplateEngine {
         if (file_exists($this->smarty->getTemplateDir()[0] . $template . '.tpl')) {
             $this->smarty->assign($vars);
             $this->smarty->display($template . '.tpl');
+            // $this->smarty->display('userprofile.tpl', ['user' => new User]);
         } else {
             require_once APP_DIR . '/' . $template . '.php';        }
     }

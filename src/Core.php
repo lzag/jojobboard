@@ -3,22 +3,59 @@ namespace App;
 
 use App\Router;
 use App\Route;
+use App\Helpers\AppUser;
+use User;
 
 class Core {
 
     private $router;
-    private $template_engine;
 
-    public function __construct(ITemplateEngine $template_engine) {
+    public function __construct() {
+        $file = basename($_SERVER['REQUEST_URI'], ".php");
+        if (!in_array($file, ['login', 'registeruser', 'registeremployer'])) {
+            if (AppUser::hasRememberMeCookieSet()) {
+                AppUser::logInRememberedUser();
+            } else if (AppUser::isLoginStillValid()){
+                $_SESSION['last_login'] = time();
+            } else {
+                session_destroy();
+                header("Location: login.php");
+                $_SESSION['msg'] = "Your session expired, please log in again";
+                exit();
+            }
+
+            if (isset($_COOKIE['visit'])) {
+                $welcome = "Welcome back to JoJobBoard";
+                setcookie('visit',time(),time()+1000000,"/");
+            } else {
+                $welcome = "Welcome to JoJobBoard";
+                setcookie('visit',time(),time()+1000000,"/");
+            }
+        }
+
         $this->router = new Router;
-        $this->template_engine = $template_engine;
-        $this->template_engine->configure();
     }
 
     public function respond()
     {
         // send the appropriate response
-        $this->sendResponse($this->router->getRoute());
+        if ($this->router->isRequestForLegacyFile()) {
+            require_once APP_DIR . '/' . $this->router->request_file;
+        } else if (!$this->router->isRouteAllowed()) {
+            http_response_code(404);
+            echo "Route not allowed";
+            // if(! ($route)->validateParams()) {
+            //     // if necessary params missing return return 400 bad request
+            //     // validating only number of params required
+            //     exit('wrong params');
+            // };
+        } else if (!$this->router->isMethodAllowed()){
+            http_response_code(405);
+            echo "Method not allowed";
+        } else {
+            $this->sendResponse();
+        }
+
     }
     public function shutdown()
     {
@@ -26,11 +63,12 @@ class Core {
         return;
     }
 
-    public function sendResponse($route)
+    public function sendResponse()
     {
-        if (preg_match('/\/?(.*)\.php$/', $route->getUri(), $match))  {
-            $this->template_engine->displayView($match[1]);
-        }
-        http_response_code(200);
+        // find controller and then send the response
+        $controller = '\\App\\Controllers\\' . ucfirst($this->router->controller);
+        $method = $this->router->method;
+        parse_str($this->router->params, $params);
+        (new $controller)->$method(...$params);
     }
 }

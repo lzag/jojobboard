@@ -88,6 +88,9 @@ function generate_token() {
 
 }
 
+/**
+ * Logs user automatically if cookie set
+ */
 function rememberUser() {
     if (!empty($_COOKIE['rememberMe'])) {
         $cookie = explode(".",$_COOKIE['rememberMe']);
