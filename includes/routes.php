@@ -8,6 +8,7 @@ return [
 
     Route::get('/login', 'index@LoginController'),
     Route::post('/login', 'login_user@LoginController'),
+    Route::get('/logout', 'destroy@LoginController'),
 
     Route::get('/users'),
 

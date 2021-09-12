@@ -48,15 +48,15 @@ class Route {
         return new self('DELETE', $uri, $action, $params, $middleware);
     }
 
-    public function getUri(): string {
+    public function getUri() {
         return $this->uri;
     }
 
-    public function getMethod(): string {
+    public function getMethod() {
         return $this->method;
     }
 
-    public function getAction(): string {
+    public function getAction() {
         return $this->action;
     }
 

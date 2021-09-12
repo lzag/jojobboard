@@ -19,7 +19,7 @@ class Core {
                 $_SESSION['last_login'] = time();
             } else {
                 session_destroy();
-                header("Location: login.php");
+                header("Location: /login");
                 $_SESSION['msg'] = "Your session expired, please log in again";
                 exit();
             }

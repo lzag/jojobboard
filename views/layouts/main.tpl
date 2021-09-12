@@ -17,7 +17,7 @@
             {if isset($smarty.session.user)}
 
             <li class="nav-item">
-                <a class="nav-link" href="index.php">Main Page</a>
+                <a class="nav-link" href="/">Main Page</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="uploadcv.php">Upload CV</a>
@@ -29,13 +29,13 @@
                 <a class="nav-link" href="userprofile.php">Your profile</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="logout.php">Log out</a>
+                <a class="nav-link" href="/logout">Log out</a>
             </li>
 
             {elseif isset($smarty.session.employer)}
 
             <li class="nav-item">
-                <a class="nav-link" href="index.php">Main Page</a>
+                <a class="nav-link" href="/">Main Page</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="postjob.php">Post a job</a>
@@ -44,7 +44,7 @@
                 <a class="nav-link" href="employerprofile.php">See your profile</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="logout.php">Log out</a>
+                <a class="nav-link" href="/logout">Log out</a>
             </li>
 
             {else}
@@ -59,7 +59,7 @@
                 <a class="nav-link" href="registeremployer.php">Register Employer</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="login.php">Log In</a>
+                <a class="nav-link" href="/login">Log In</a>
             </li>
 
             {/if}

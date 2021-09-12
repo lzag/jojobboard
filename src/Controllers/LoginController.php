@@ -47,7 +47,7 @@ class LoginController extends Controller {
                             } else {
                                 setcookie('rememberMe','',time() - 100 * 30 * 24 * 60 * 60);
                             }
-                            header('Location: index.php');
+                            header('Location: /');
                             exit();
                         } else {
                             throw new Exception('Password invalid. Please try again');
@@ -86,5 +86,18 @@ class LoginController extends Controller {
             $alert->message = $e->getMessage();
             $this->view('login.index', ['alert' => $alert]);
         }
+    }
+
+    public function destroy() {
+        if (isset($_SESSION['user']) || isset($_SESSION['employer'])) {
+            session_destroy();
+            setcookie('rememberMe','',time() - 100 * 30 * 24 * 60 * 60);
+            session_start();
+        }
+        $alert = new stdClass;
+        $alert->type = 'success';
+        $alert->message = "You have been logged out";
+        $this->view('login.index', ['alert' => $alert]);
+        // header("Location: /login");
     }
 }
