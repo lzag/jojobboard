@@ -44,6 +44,10 @@ class Route {
         return new self('POST', $uri, $action, $params, $middleware);
     }
 
+    public static function delete($uri, $action = null, $params = null, $middleware = null) {
+        return new self('DELETE', $uri, $action, $params, $middleware);
+    }
+
     public function getUri(): string {
         return $this->uri;
     }
@@ -63,4 +67,3 @@ class Route {
         return true;
     }
 }
-?>

@@ -19,7 +19,7 @@
 
     </div>
     <div class="col-md-3">
-        <form action="login.php" method="POST">
+        <form action="/login" method="POST">
             <div class="form-group">
                 <label for="userEmail">Email address</label>
                 <input type="email" name="email" class="form-control" id="userEmail" aria-describedby="emailHelp" placeholder="Enter your email">

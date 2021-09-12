@@ -5,28 +5,43 @@ use App\Route as Route;
 use Exception;
 
 class Router {
-    /**
-     * Holds an array of Routes available in the app
-     */
-    private $endpoints = [];
+    // /**
+    //  * Holds an array of Routes available in the app
+    //  */
+    // private $endpoints = [];
 
     private $routes_flle_path = __DIR__ . '/../includes/routes.php';
 
-    public $uri;
+    public $request_uri;
+    public $request_method;
     public $controller;
-    public $method;
+    public $controller_method;
     public $params;
     public $request_file;
+    public $routes;
 
     public function __construct() 
     {
-        $this->registerRoutes($this->getRoutesFile());
-        $this->uri = $this->getRequestUri();
-        $this->controller = $this->getRequestController();
-        $this->method = $this->getRequestMethod();
-        $this->params = $this->getRequestParams();
+        $routes = require_once $this->routes_flle_path;
         if ($this->isRequestForLegacyFile()) {
             $this->request_file = filter_var($_GET['request_file'], FILTER_SANITIZE_STRING); 
+        } else {
+            $this->setRoutes($routes);
+            $this->setRequestMethod();
+            $this->setRequestUri();
+            $this->setController();
+            $this->setControllerMethod();
+            $this->setRequestParams();
+        }
+        $this->registerRoutes($routes);
+    }
+
+    public function setRoutes($routes) {
+        if (!$routes)
+            throw new Exception('No routes available, you must register at least one route');
+        
+        foreach ($routes as $route) {
+            $this->routes[$route->getUri()][$route->getMethod()] = $route;
         }
     }
 
@@ -40,11 +55,15 @@ class Router {
     public function registerRoutes(array $routes): void
     {
         if (!$routes)
-            throw new Exception('Routes empty');
-
+            throw new Exception('No routes available, you must register at least one route');
+        
         foreach ($routes as $route) {
             $this->addRoute($route);
         }
+    }
+
+    public function getRouteAction() {
+         
     }
 
     public function isRequestForLegacyFile() 
@@ -55,55 +74,88 @@ class Router {
 
     public function isRouteAllowed() 
     {
-        return isset($this->endpoints[$this->uri]);
+        return isset($this->endpoints[$this->request_uri]);
     }
 
-    public function isMethodAllowed() 
+    public function isRequestMethodAllowed() 
     {
-        return in_array($this->method, $this->endpoints[$this->uri]) || $this->method === 'index';
+        return in_array($this->request_method, $this->endpoints[$this->request_uri]);
     }
 
-    /**
-     * Fetches the route based on request parameters
-     *
-     * @return App/Route;
-     */
-    public function getRoute()
-    {
-        return new Route($this->controller, $this->method, $this->params);
-    }
+    // /**
+    //  * Fetches the route based on request parameters
+    //  *
+    //  * @return App/Route;
+    //  */
+    // public function getRoute()
+    // {
+    //     return new Route($this->controller, $this->request_method, $this->params);
+    // }
 
-    public function getRequestUri() {
-        preg_match('%^/\w*%', $_SERVER['REQUEST_URI'], $uri);
-        return $uri[0];
-    }
-
-    public function getRequestController()
-    {
-        if (!empty($_GET['controller'])) {
-            return filter_var($_GET['controller'], FILTER_SANITIZE_STRING);
+    public function setRequestMethod() {
+        $allowed_methods = ['GET', 'POST', 'PUT', 'DELETE'];
+        if (in_array(strtoupper($_SERVER['REQUEST_METHOD']), $allowed_methods)) {
+            $this->request_method = strtoupper($_SERVER['REQUEST_METHOD']);
         } else {
-            return 'main';
+            throw new Exception('Unknown request method');
         }
     }
 
-    public function getRequestMethod() 
-    {
-        if (!empty($_GET['method'])) {
-            return filter_var($_GET['method'], FILTER_SANITIZE_STRING);
+    public function getRequestMethod() {
+        return $this->request_method;
+    }
+
+    public function setRequestUri() {
+        preg_match('%^/\w*%', $_SERVER['REQUEST_URI'], $uri);
+        $this->request_uri = $uri[0];
+    }
+
+    public function getRequestUri() {
+        return $this->request_uri;
+    }
+
+    public function setController() {
+        if (!empty($this->routes[$this->request_uri][$this->request_method]->getAction())) {
+            $this->controller = explode('@', $this->routes[$this->request_uri][$this->request_method]->getAction())[1];
+            $this->controller = preg_replace('/Controller$/', '', $this->controller);
+        } else if (!empty($_GET['controller'])) {
+            $this->controller = filter_var($_GET['controller'], FILTER_SANITIZE_STRING);
         } else {
-            return 'index';
+            $this->controller = 'main';
+        }
+    }
+
+    public function getController()
+    {
+        return $this->controller;
+    }
+
+    public function setControllerMethod() {
+        if (!empty($this->routes[$this->request_uri][$this->request_method]->getAction())) {
+            $this->controller_method = explode('@', $this->routes[$this->request_uri][$this->request_method]->getAction())[0];
+        } else if (!empty($_GET['method'])) {
+            $this->controller_method = filter_var($_GET['method'], FILTER_SANITIZE_STRING);
+        } else {
+            $this->controller_method = 'index';
+        }
+    }
+
+    public function getControllerMethod() 
+    {
+        return $this->controller_method;
+    }
+
+    public function setRequestParams() {
+        if (!empty($_GET['params'])) {
+            $this->params = filter_var($_GET['params'], FILTER_SANITIZE_STRING);
+        } else {
+            $this->params = '';
         }
     }
 
     public function getRequestParams()
     {
-        if (!empty($_GET['params'])) {
-            return filter_var($_GET['params'], FILTER_SANITIZE_STRING);
-        } else {
-            return false;
-        }
-        // return $_SERVER['REDIRECT_QUERY_STRING'] ?? false;
+        return $this->params;
     }
 
     public function getRoutesFile()

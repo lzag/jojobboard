@@ -6,7 +6,7 @@ use Employer;
 use App\Helpers\AppUser;
 use App\Controllers\Controller;
 
-class Home extends Controller {
+class HomeController extends Controller {
     
     public function index() {
         if (AppUser::isUser()) {

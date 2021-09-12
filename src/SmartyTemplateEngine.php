@@ -20,12 +20,12 @@ class SmartyTemplateEngine implements ITemplateEngine {
     }
 
     public function displayView(string $template, array $vars = null) {
-        if (file_exists($this->smarty->getTemplateDir()[0] . $template . '.tpl')) {
+        $template_path = implode('/', explode('.', $template));
+        if (file_exists($this->smarty->getTemplateDir()[0] . $template_path . '.tpl')) {
             $this->smarty->assign($vars);
-            $this->smarty->display($template . '.tpl');
+            $this->smarty->display($template_path . '.tpl');
             // $this->smarty->display('userprofile.tpl', ['user' => new User]);
         } else {
             require_once APP_DIR . '/' . $template . '.php';        }
     }
 }
-?>

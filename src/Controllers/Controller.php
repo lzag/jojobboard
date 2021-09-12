@@ -11,7 +11,7 @@ abstract class Controller {
         $this->template_engine->configure();
     }
 
-    public function view($template, $params) {
+    public function view($template, $params = null) {
         $this->template_engine->displayView($template, $params);
     }
     

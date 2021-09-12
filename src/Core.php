@@ -49,7 +49,7 @@ class Core {
             //     // validating only number of params required
             //     exit('wrong params');
             // };
-        } else if (!$this->router->isMethodAllowed()){
+        } else if (!$this->router->isRequestMethodAllowed()){
             http_response_code(405);
             echo "Method not allowed";
         } else {
@@ -66,9 +66,14 @@ class Core {
     public function sendResponse()
     {
         // find controller and then send the response
-        $controller = '\\App\\Controllers\\' . ucfirst($this->router->controller);
-        $method = $this->router->method;
-        parse_str($this->router->params, $params);
-        (new $controller)->$method(...$params);
+        $controller = '\\App\\Controllers\\' . ucfirst($this->router->controller) . 'Controller';
+        $method = $this->router->controller_method;
+        if (!method_exists($controller, $method)) {
+            echo "404, sorry";
+            die;
+        } else {
+            parse_str($this->router->params, $params);
+            (new $controller)->$method(...$params);
+        }
     }
 }
