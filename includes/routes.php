@@ -12,10 +12,15 @@ return [
 
     Route::get('/users'),
 
+    Route::get('/jobad', 'create@JobadsController'),
+    Route::post('/jobad', 'store@JobadsController'),
+
+    Route::get('/jobads', 'index@JobadsController'),
+
     Route::get('/blog'),
 
-    Route::get('/resume'),
-    Route::post('/resume'),
+    Route::get('/resume', 'index@ResumesController'),
+    Route::post('/resume', 'upload@ResumesController'),
 
     Route::get('/applications'),
     Route::post('/applications'),

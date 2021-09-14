@@ -1,12 +1,4 @@
 {extends file='layouts/main.tpl'}
-{if $alert}
-{block name=alert}
-<div class="alert alert-{$alert->type} alert-dismissible" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <strong>{$alert->message}</strong>
-</div>
-{/block}
-{/if}
 {block name=content}
 
 <div class="container">

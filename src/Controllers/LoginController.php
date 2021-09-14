@@ -67,7 +67,7 @@ class LoginController extends Controller {
                                 $_SESSION['employer'] = $email;
                                 $_SESSION['last_login'] = time();
                                 $_SESSION['msg'] = "You have been logged in";
-                                header('Location: index.php');
+                                header('Location: /');
                                 exit();
                             } else {
                                 throw new Exception('Password invalid. Please try again');

@@ -20,10 +20,10 @@
                 <a class="nav-link" href="/">Main Page</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="uploadcv.php">Upload CV</a>
+                <a class="nav-link" href="/resume">Upload CV</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="jobpostings.php">Job postings</a>
+                <a class="nav-link" href="/jobads">Job postings</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="userprofile.php">Your profile</a>
@@ -38,7 +38,7 @@
                 <a class="nav-link" href="/">Main Page</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="postjob.php">Post a job</a>
+                <a class="nav-link" href="/jobad">Post a job</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="employerprofile.php">See your profile</a>
@@ -67,8 +67,15 @@
         </ul>
     </nav>
 
-{block name=alert}{/block}
 
+{block name=alert}
+{if isset($alert)}
+<div class="alert alert-{$alert->type} alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>{$alert->message}</strong>
+</div>
+{/if}
+{/block}
 {block name=content}{/block}
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
