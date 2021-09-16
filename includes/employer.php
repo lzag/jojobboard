@@ -81,9 +81,6 @@ class Employer
     public function removeEmployer()
     {
         $query = "DELETE FROM employers WHERE contact_email='$this->contact_email'";
-        $result = $this->db->con->query($query);
-        if ($result) {
-            echo "Employer account removed";
-        }
+        return $result = $this->db->con->query($query);
     }
 }

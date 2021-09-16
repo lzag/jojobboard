@@ -26,7 +26,7 @@
                 <a class="nav-link" href="/jobads">Job postings</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="userprofile.php">Your profile</a>
+                <a class="nav-link" href="/profile">Your profile</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/logout">Log out</a>
@@ -41,7 +41,7 @@
                 <a class="nav-link" href="/jobad">Post a job</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="employerprofile.php">See your profile</a>
+                <a class="nav-link" href="/profile">See your profile</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/logout">Log out</a>
@@ -50,13 +50,13 @@
             {else}
 
             <li class="nav-item">
-                <a class="nav-link" href="index.php">Main Page</a>
+                <a class="nav-link" href="/">Main Page</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="registeruser.php">Register User</a>
+                <a class="nav-link" href="/register/user">Register User</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="registeremployer.php">Register Employer</a>
+                <a class="nav-link" href="/register/employer">Register Employer</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/login">Log In</a>

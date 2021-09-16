@@ -74,8 +74,7 @@ class User {
 
         $this->deleteCV();
         $query = "DELETE FROM users WHERE email='$this->email'";
-        $result = $this->do_query($query);
-        if ($result) echo "User removed";
+        return $this->do_query($query);
 
     }
 

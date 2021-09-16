@@ -15,7 +15,7 @@
                 <form-group>
                     <label for="password">Password</label>
                     <input type="password" name="pass" placeholder="Your password" class="form-control">
-                    <small><span class="text-info"><a href="recover.php">Forgot your password? </a></span></small>
+                    <small><span class="text-info"><a href="/password/reset">Forgot your password? </a></span></small>
                 </form-group>
                 <div class="form-group form-check">
                     <input name="rememberMe" type="checkbox" class="form-check-input" id="rememberMe">

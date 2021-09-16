@@ -2,11 +2,11 @@
 {block name=content}
 {if $user }
 {show_session_alert() }
-{include file='userprofile.tpl' }
+{include file='includes/userprofile.tpl' }
 
 {elseif $employer }
 {show_session_alert() }
-{include file='employerprofile.tpl' }
+{include file='includes/employerprofile.tpl' }
 {else}
 
 <div class="row p-3 justify-content-center">

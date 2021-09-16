@@ -12,7 +12,11 @@ class Core {
 
     public function __construct() {
         $file = basename($_SERVER['REQUEST_URI'], ".php");
-        if (!in_array($file, ['login', 'registeruser', 'registeremployer'])) {
+        $request_uri = ($_SERVER['REQUEST_URI']);
+        if (
+            !in_array($file, ['login', 'registeruser', 'registeremployer']) && 
+            !in_array($request_uri, ['/login', '/register/user', '/register/employer', '/password/reset'])
+            ) {
             if (AppUser::hasRememberMeCookieSet()) {
                 AppUser::logInRememberedUser();
             } else if (AppUser::isLoginStillValid()){
