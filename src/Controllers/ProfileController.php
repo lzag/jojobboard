@@ -38,4 +38,46 @@ class ProfileController extends Controller {
         session_destroy();
         $this->view('login.index', ['alert' => $alert]);
     }
+
+    public function edit() {
+        $this->view('profile.edit', ['user' => new User]);
+    }
+
+    public function update() {
+        global $db;
+
+        if (isset($_FILES['photo'])) {
+            if ($_FILES['photo']['error'] == 0) {
+                if (getimagesize($_FILES['photo']['tmp_name'])) {
+                    $final_path = "users/images/photo_" . $user->getProperty('user_id');
+                    move_uploaded_file($_FILES['photo']['tmp_name'], $final_path);
+                    show_alert("Photo uploaded successfully", "success");
+                } else {
+                    show_alert("The uploaded file is not an image, please upload a jpg/gif/png file.", "danger");
+                }
+            } elseif ($_FILES['photo']['error'] != 4) {
+                show_alert("There has been an error uploading the file", "danger");
+            }
+        }
+
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST)) {
+            $query = "UPDATE users SET first_name= ?, second_name= ?, title= ?, bio= ?, email= ?";
+            $query .= " WHERE user_id = ?";
+            $stmt = $db->con->prepare($query);
+            $stmt->execute(array(
+                $_POST['first_name'],
+                $_POST['last_name'],
+                $_POST['title'],
+                $_POST['bio'],
+                $_POST['email'],
+                $_POST['user_id']
+                ));
+            if ($stmt->rowCount()) {
+                show_alert("Details updated", "success");
+            }
+        }
+
+        $this->view('profile.edit', ['user' => new User]);
+    }
 }

@@ -36,6 +36,8 @@ class RegistrationController extends Controller {
                 $this->view('register.employer');
             }
 
+        } else {
+            $this->view('register.employer');
         }
     }
 
@@ -86,7 +88,9 @@ class RegistrationController extends Controller {
                 $this->view('login.index');
 
             }
-       }
+        } else {
+            $this->view('register.user');
+        }
        User::activate_user();
     }
 
