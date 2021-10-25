@@ -45,10 +45,10 @@ class ResumesController extends Controller {
                             $query = "UPDATE users SET cv_file= ? WHERE email= ?";
                             $stmt = $db->con->prepare($query);
 
-                            if ($stmt->execute(array($filepath, $_SESSION['user']))) {
+                            if ($stmt->execute(array($filename, $_SESSION['user']))) {
                                 $alert = new stdClass;
                                 $alert->type = 'success';
-                                $alert->message = "File <a href='$filepath'>" . $filename . "</a> uploaded successfully";
+                                $alert->message = "File <a href='/resume/load'>" . $filename . "</a> uploaded successfully";
                                 $this->view('resume.index', ['alert' => $alert]);
                             }
                         }
@@ -61,5 +61,9 @@ class ResumesController extends Controller {
             show_alert("You are not logged in.", "danger");
             die();
         }
+    }
+
+    function show() {
+        echo "Showing resume";
     }
 }

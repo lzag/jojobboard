@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-8 m-auto">
             <h3 class="text-center mb-5 mt-3">Search for the job you want!</h3>
-            <form action="jobpostings.php" method="get">
+            <form action="/jobads" method="get">
                 <div class="form-row">
                     <div class="form-group col">
                         <label for="keyword">Keywords: </label>

@@ -106,9 +106,9 @@ class Router {
     }
 
     public function setRequestUri() {
-        preg_match('%^/\w*%', $_SERVER['REQUEST_URI'], $uri);
-        $this->request_uri = $_SERVER['REQUEST_URI'];
-        // $this->request_uri = $uri[0];
+        preg_match('%^/[^\?]*%', $_SERVER['REQUEST_URI'], $uri);
+        // $this->request_uri = $_SERVER['REQUEST_URI'];
+        $this->request_uri = $uri[0];
     }
 
     public function getRequestUri() {

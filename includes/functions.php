@@ -107,7 +107,7 @@ function rememberUser() {
                 $stmt->execute(array($rememberID));
                 if ($row = $stmt->fetch()) {
                     if($row['active'] == 1) {
-                        $_SESSION['user'] = $email;
+                        $_SESSION['user'] = $row['email'];
                     }
                 }
             }

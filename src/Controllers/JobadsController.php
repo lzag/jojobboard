@@ -9,7 +9,6 @@ use User;
 class JobadsController extends Controller {
     public function index() {
         $this->view('jobads.index', ['user' => new User]);
-
     }
 
     public function store() {

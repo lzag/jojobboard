@@ -46,6 +46,7 @@ class ProfileController extends Controller {
     public function update() {
         global $db;
 
+        $user = new User;
         if (isset($_FILES['photo'])) {
             if ($_FILES['photo']['error'] == 0) {
                 if (getimagesize($_FILES['photo']['tmp_name'])) {

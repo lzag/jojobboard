@@ -47,14 +47,14 @@ class JobPost
                     foreach ($filters as $key => $value) {
                         if ($key == "keyword") {
                             $keywords = explode(" ", $_GET['keyword']);
-                            foreach($keywords as $value) {
-                                $query .= sprintf($filter_rules['keyword'],$value);
-                                $query .= ($value == end($keywords)) ? " " : " AND ";
+                            foreach($keywords as $keyword) {
+                                $query .= sprintf($filter_rules['keyword'],$keyword);
+                                $query .= ($keyword == end($keywords)) ? " " : " AND ";
                             }
                         } else {
                             $query .= sprintf($filter_rules[$key],$_GET[$key]);
                         }
-                        $query .= ($value == end($filters)) ? " " : " AND ";
+                        $query .= ($value === end($filters)) ? " " : " AND ";
                     }
                 }
 

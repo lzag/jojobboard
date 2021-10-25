@@ -21,6 +21,7 @@ return [
 
     Route::get('/resume', 'index@ResumesController'),
     Route::post('/resume', 'upload@ResumesController'),
+    Route::get('/resume/load', 'show@ResumesController'),
 
     Route::get('/profile', 'show@ProfileController'),
     Route::post('/profile', 'update@ProfileController'),
