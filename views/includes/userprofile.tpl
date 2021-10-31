@@ -20,7 +20,7 @@
 
                {if $user->getProperty('cv_file') neq "Empty" }
 
-                <a href="{$user->getProperty('cv_file') }">Link</a>
+                <a href="/resume/load">Link</a>
 
                {else}
 

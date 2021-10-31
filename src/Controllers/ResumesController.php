@@ -64,6 +64,19 @@ class ResumesController extends Controller {
     }
 
     function show() {
-        echo "Showing resume";
+        global $db;
+        $user = new User;
+        $file = UPLOADS_DIR . '/' . $user->getProperty('cv_file');
+        if (file_exists($file)) {
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: inline; filename="'.basename($file).'"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            readfile($file);
+            exit;
+        }
+
     }
 }

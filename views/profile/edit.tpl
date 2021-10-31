@@ -34,7 +34,7 @@
                 <div class="form-group">
                     <label for="CV">CV</label>
                     <div class="row">
-                        <div class="col"><a class="btn btn-primary" href="{$user->getProperty('cv_file')}">See current CV</a></div>
+                        <div class="col"><a class="btn btn-primary" href="/resume/load">See current CV</a></div>
                         <div class="col"><a class="btn btn-primary" href="/resume">Upload new CV</a></div>
                     </div>
                 </div>
