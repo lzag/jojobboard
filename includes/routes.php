@@ -40,6 +40,10 @@ return [
     Route::post('/applications'),
     Route::delete('/applications'),
 
+    Route::get('/reviewapplications', 'review@ApplicationsController'),
+
+    Route::post('/applied', 'applied@ApplicationsController'),
+
     Route::delete('/account'),
 ];
 

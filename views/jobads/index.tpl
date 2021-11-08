@@ -82,12 +82,12 @@
                     <p class="card-text">
                         {$row.description}
                     </p>
-                    {if isset($user) and isset($smarty.session.user) and $user->getAppStatus($row.posting_id)}
+                    {if isset($user) and isset($smarty.session.user) and $user->hasApplied($row.posting_id)}
                         <h5 class='text-info'>Status: <span class='badge badge-info'>{$user->getAppStatus($row.posting_id)}</span></h5>
                     {else}
-                    <form action="{if isset($smarty.get.id)}application.php{else}jobpostings.php{/if}" method="get">
+                    <form action="{if isset($smarty.get.id)}applications{else}jobads{/if}" method="get">
                         <input type="hidden" name="id" value="{$row.posting_id}">
-                    <input type="submit" value="{if isset($smarty.get.id)}Apply{else}See Details{/if}" class="btn btn-primary">
+                        <input type="submit" value="{if isset($smarty.get.id)}Apply{else}See Details{/if}" class="btn btn-primary">
                     </form>
                     {/if}
                 </div>

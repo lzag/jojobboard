@@ -1,4 +1,5 @@
 <?php
+use PDO;
 
 class User {
 
@@ -81,11 +82,12 @@ class User {
     function fetchApplications() {
 
     global $db;
-    $sql = "SELECT p.posting_id, p.title, e.company_name, a.application_time, a.status, a.application_id FROM applications a
- 				INNER JOIN postings p ON p.posting_id  = a.posting_id
-                INNER JOIN users u ON u.user_id = a.user_id
-                INNER JOIN employers e on e.employer_id = p.employer_id
-                WHERE u.email= ?";
+    $sql = "SELECT p.posting_id, p.title, e.company_name, a.application_time, a.status, a.application_id 
+            FROM applications a
+            INNER JOIN postings p ON p.posting_id  = a.posting_id
+            INNER JOIN users u ON u.user_id = a.user_id
+            INNER JOIN employers e ON e.employer_id = p.employer_id
+            WHERE u.email= ?";
     $stmt = $db->con->prepare($sql);
     $stmt->execute(array($this->email));
 
@@ -106,6 +108,15 @@ class User {
         }
         return $status['status'];
 
+    }
+
+    public function hasApplied(int $posting_id): bool {
+        global $db;
+        $sql = "SELECT status FROM applications WHERE user_id='$this->user_id' and posting_id='$posting_id'";
+        $stmt = $db->con->prepare($sql);
+        $stmt->execute(array($this->user_id, $posting_id));
+        $status = $stmt->fetch(PDO::FETCH_ASSOC);
+        return !$status ? false : true;
     }
 
     function deleteCV() {

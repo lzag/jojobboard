@@ -15,7 +15,7 @@
                 {foreach $row as $key => $value }
                 <h6 class="text-dark">{$key} : {$value}</h6>
                 {/foreach}
-                <a href='reviewapplications.php?posting={$row.ID}'>Review applications</a>
+                <a href='/reviewapplications?posting={$row.ID}'>Review applications</a>
                 <br><br>
             {/while}
           {/if}
