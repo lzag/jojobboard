@@ -3,6 +3,7 @@ namespace App\Controllers;
 
 use App\Controllers\Controller;
 use PDO;
+use Employer;
 use Exception;
 
 class ApplicationsController extends Controller {
@@ -58,6 +59,50 @@ class ApplicationsController extends Controller {
         // delete the application from database
 
         // echo ajax response
+    }
+    
+    public function review() {
+        $employer = new Employer();
+        $pid=$_GET['posting'];
+        if (isset($_GET['review']) && isset($_GET['appid']) ) {
+            $status = $_GET['review'];
+            $appid= $_GET['appid'];
+            $employer->reviewApp($pid,$status,$appid);
+            echo "Application reviewed. Status: {$_GET['review']}<br>";
+            echo "<a href='/reviewapplications?posting=$pid'> Go back</a>";
+        } else {
+            $result = $employer->getApplications($pid);
+            for ($i = 0 ; $i < $result->rowCount(); $i++) {
+                $items = $result->fetchAll();
+                foreach ($items as $arr) {
+                    foreach ($arr as $key => $v) {
+                        if ($key == 'Download CV') echo "$key : <a href='$v'> Link</a> <br>";
+                        else echo "$key : $v <br>";
+                    }
+                    $appid=$arr['Application ID'];
+                    echo "Review: <a href='/reviewapplications?posting=$pid&appid=$appid&review=IN%20PROCESS' style='color:green'>APPROVE</a> | <a href='/reviewapplications?posting=$pid&appid=$appid&review=DENIED' style='color:red'>DENY</a>";
+                    echo "<br><br>";
+                }
+
+            }
+        }
+    }
+
+    public function withdraw(): void {
+        global $db;
+        $email = $_SESSION['user'];
+        $query = "SELECT user_id FROM users WHERE email= ?";
+        $stmt = $db->con->prepare($query);
+        $stmt->execute(array($email));
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $user_id = $result['user_id'];
+
+        $query = "DELETE FROM applications WHERE user_id= ? AND application_id= ?";
+        $stmt = $db->con->prepare($query);
+        $stmt->execute(array($user_id, $_GET['id']));
+
+        if (!$stmt->rowCount()) echo "Was not possible to delete";
+        else echo "Application withdrawn";
     }
 
     public function applied() {

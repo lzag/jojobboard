@@ -66,8 +66,8 @@
                 <strong>
                     {$application['status'] }</strong> <br>
 
-                <a class="btn btn-outline-primary my-1 py-1" href='jobpostings.php?posting_id=<?= $application[' application_id']; ?>'>See details</a>
-                <a class="text-danger btn btn-outline-danger my-1 py-1" href='withdraw.php?posting_id=<?= $application[' application_id']; ?>'>Withdraw</a><br>
+                <a class="btn btn-outline-primary my-1 py-1" href='/jobads?id={$application.application_id}'>See details</a>
+                <a class="text-danger btn btn-outline-danger my-1 py-1" href='/applications/withdraw?id={$application.application_id}'>Withdraw</a><br>
             </div>
 
             {/foreach}

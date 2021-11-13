@@ -66,7 +66,7 @@ class Employer
         $query .= " LEFT OUTER JOIN applications a ON p.posting_id=a.posting_id ";
         $query .= " INNER JOIN employers e on e.employer_id=p.employer_id";
         $query .= " WHERE e.contact_email='$this->contact_email'";
-        $query .= " GROUP_BY ID";
+        $query .= " GROUP BY ID";
         $result = $this->db->con->query($query);
         return $result;
     }
