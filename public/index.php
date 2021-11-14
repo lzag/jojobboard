@@ -1,8 +1,6 @@
 <?php
 use App\Core;
 use App\Database;
-use App\Helpers\AppUser;
-use App\SmartyTemplateEngine;
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -14,13 +12,11 @@ require_once __DIR__ . '/../includes/bootstrap.php';
 
 session_start();
 
-require_once '../includes/database.php';
 require_once '../includes/functions.php';
 require_once '../includes/employer.php';
 require_once '../includes/user.php';
 require_once '../includes/blogpost.php';
 require_once '../includes/jobpost.php';
-require_once '../includes/Careerjet_API.php';
 require_once '../includes/Alert.php';
 
 //spl_autoload_register( function ($class) {

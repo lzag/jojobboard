@@ -69,34 +69,36 @@
     </div>
     <div class="row">
         <div class="col-8 m-auto">
-            {if (array_key_exists('local', $results))}
-                {foreach $results.local as $row}
+            {if $jobads}
+                {foreach $jobads as $ad}
             <div class="card mx-auto my-2">
                 <div class="card-body">
                     <h3 class="card-title">
-                        {$row.title}
+                        {$ad->title}
                     </h3>
-                    <h6 class="card-subtitle mb-2 text-muted">Posted by:
-                        {$row.company_name}
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        Posted by: {$ad->company_name}
                     </h6>
                     <p class="card-text">
-                        {$row.description}
+                        {$ad->description}
                     </p>
-                    {if isset($user) and isset($smarty.session.user) and $user->hasApplied($row.posting_id)}
-                        <h5 class='text-info'>Status: <span class='badge badge-info'>{$user->getAppStatus($row.posting_id)}</span></h5>
+                    {if isset($user) and isset($smarty.session.user) and $user->hasApplied($ad->id)}
+                        <h5 class='text-info'>
+                            Status: <span class='badge badge-info'>{$user->getAppStatus($ad->id)}</span>
+                        </h5>
                     {else}
                     <form action="{if isset($smarty.get.id)}applications{else}jobads{/if}" method="get">
-                        <input type="hidden" name="id" value="{$row.posting_id}">
+                        <input type="hidden" name="id" value="{$ad->id}">
                         <input type="submit" value="{if isset($smarty.get.id)}Apply{else}See Details{/if}" class="btn btn-primary">
                     </form>
                     {/if}
                 </div>
                 <div class="card-footer">
-                    <h6 class="text-secondary">Posting ID:
-                        {$row.posting_id}
+                    <h6 class="text-secondary">
+                        Posting ID: {$ad->id}
                     </h6>
-                    <h6 class="text-secondary">Posted on:
-                        {date("D d F Y", strtotime($row.time_posted))}
+                    <h6 class="text-secondary">
+                        Posted on: {$ad->created_at}
                     </h6>
                 </div>
             </div>

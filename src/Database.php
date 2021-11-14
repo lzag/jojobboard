@@ -7,6 +7,7 @@ class Database extends \PDO
 {
 
     public $con;
+    public static $instance;
 
     public function __construct()
     {
@@ -21,8 +22,8 @@ class Database extends \PDO
 
     }
 
-    public function sanitize($string) {
-
+    public function sanitize($string) 
+    {
         if (is_array($string)) {
 
 //            if (get_magic_quotes_gpc()) $string = array_map("stripslashes",$string);
@@ -35,6 +36,15 @@ class Database extends \PDO
 //        $string = $this->con->real_escape_string($string);
         return $string;
 
+        }
+    }
+
+    public static function getInstance(): self 
+    {
+        if (self::$instance === null) {
+            return self::$instance = new self;
+        } else {
+            return self::$instance;
         }
     }
 

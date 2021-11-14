@@ -4,11 +4,32 @@ namespace App\Controllers;
 use stdClass;
 use Employer;
 use App\Database;
+use App\Models\JobAd;
+use App\Helpers\Pagination;
+use App\Careerjet_API;
 use User;
 
 class JobadsController extends Controller {
     public function index() {
-        $this->view('jobads.index', ['user' => new User]);
+        echo "<pre>";
+        $jobads = JobAd::fetchList(null, null);
+        // TODO get back fill
+        // $careerjet = new Careerjet_API('en_US');
+        // $backfill = $careerjet->search(
+        //     [
+        //     'keyword' => '',
+        //     'affid'      => '0afaf0173305e4b9',
+        //     ]
+        // );
+
+        $this->view(
+            'jobads.index', 
+            [
+            'user' => new User, 
+            'jobads' => $jobads->items,
+            // 'backfill' => $backfill,
+            ]
+        );
     }
 
     public function store() {

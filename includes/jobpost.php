@@ -1,4 +1,5 @@
 <?php
+use App\Careerjet_API;
 
 class JobPost
 {

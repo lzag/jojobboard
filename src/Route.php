@@ -1,7 +1,8 @@
 <?php
 namespace App;
 
-class Route {
+class Route
+{
 
     /**
      * @param string
