@@ -3,6 +3,7 @@ FROM ubuntu:21.04
 SHELL ["/bin/bash", "-c"]
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV DOCKER_IMAGE=true
 
 RUN apt-get update && \
     apt-get install -y software-properties-common
@@ -22,6 +23,7 @@ RUN apt-get update && \
 
 RUN mkdir /jjb
 COPY 000-default.conf /etc/apache2/sites-enabled/
+COPY 20-xdebug.ini /etc/php/7.4/apache2/conf.d/
 RUN a2enmod rewrite && service apache2 restart
 
 ENTRYPOINT ["/bin/bash"]
