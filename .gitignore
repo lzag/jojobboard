@@ -16,6 +16,9 @@ js/main.js
 vendor/
 users/
 
+# docker sql dumps
+docker/db/
+
 tags
 
 .*
