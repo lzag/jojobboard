@@ -6,13 +6,20 @@ use Employer;
 use App\Database;
 use App\Models\JobAd;
 use App\Helpers\Pagination;
+use App\Services\JobAdListing;
 use App\Careerjet_API;
 use User;
 
 class JobadsController extends Controller {
-    public function index() {
-        echo "<pre>";
-        $jobads = JobAd::fetchList(null, null);
+    public function index() 
+    {
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $perPage = isset($_GET['per_page']) ? intval($_GET['per_page']) : 5;
+        $pagination = new Pagination($page, $perPage);
+        $jobadslistings = JobAdListing::where([JobAd::class => ['id', '=1']])
+            ->paginate($pagination)
+            ->get();
+
         // TODO get back fill
         // $careerjet = new Careerjet_API('en_US');
         // $backfill = $careerjet->search(
@@ -26,7 +33,8 @@ class JobadsController extends Controller {
             'jobads.index', 
             [
             'user' => new User, 
-            'jobads' => $jobads->items,
+            'jobads' => $jobadslistings->items,
+            'pagination' => $pagination,
             // 'backfill' => $backfill,
             ]
         );
@@ -59,7 +67,8 @@ class JobadsController extends Controller {
     }
 
     public function show() {
-
+        $jobads = JobAd::fetchList(null, null);
+        $this->view('jobads.show', ['ad' => $jobads->items[1]]);
     }
 
     public function create() {

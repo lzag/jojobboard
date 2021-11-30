@@ -15,6 +15,9 @@ class ResultsArray
     {
         $this->items = $items;
         $this->query = $query;
+        if ($offset < 0) {
+            throw new Exception("Offset cannot be below 0");
+        }
         $this->offset = $offset;
         $this->limit = $limit;
     }

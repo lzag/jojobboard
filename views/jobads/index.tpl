@@ -59,12 +59,16 @@
     </div>
     <div class="row">
         <div class="col-8 m-auto">
-            {$results = showResults()}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-8 m-auto">
-            {pagination($results['total_hits'])}
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <li class="page-item {if !$pagination->prevPage}disabled{/if}">
+                        <a class="page-link" href="/jobads?page={$pagination->prevPage}&per_page={$pagination->perPage}" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="/jobads?page={$pagination->nextPage}&per_page={$pagination->perPage}">Next</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
     <div class="row">
@@ -77,7 +81,7 @@
                         {$ad->title}
                     </h3>
                     <h6 class="card-subtitle mb-2 text-muted">
-                        Posted by: {$ad->company_name}
+                        Posted by: {$ad->name}
                     </h6>
                     <p class="card-text">
                         {$ad->description}
@@ -87,6 +91,7 @@
                             Status: <span class='badge badge-info'>{$user->getAppStatus($ad->id)}</span>
                         </h5>
                     {else}
+                    <a class="btn btn-primary" href="/jobad/details?id={$ad->id}">Details</a>
                     <form action="{if isset($smarty.get.id)}applications{else}jobads{/if}" method="get">
                         <input type="hidden" name="id" value="{$ad->id}">
                         <input type="submit" value="{if isset($smarty.get.id)}Apply{else}See Details{/if}" class="btn btn-primary">
@@ -98,7 +103,7 @@
                         Posting ID: {$ad->id}
                     </h6>
                     <h6 class="text-secondary">
-                        Posted on: {$ad->created_at}
+                        Posted on: {$ad->time_posted}
                     </h6>
                 </div>
             </div>
@@ -107,7 +112,7 @@
             {/if}
 
             <!--    GET THE BACKFILL OFFERS -->
-            {if array_key_exists('foreign', $results)}
+            {if array_key_exists('foreign', $jobads)}
                 {foreach $results.foreign as $value}
             <div class="card mx-auto my-2">
                 <div class="card-body">

@@ -12,6 +12,7 @@ return [
 
     Route::get('/users'),
 
+    Route::get('/jobad/details', 'show@JobadsController'),
     Route::get('/jobad', 'create@JobadsController'),
     Route::post('/jobad', 'store@JobadsController'),
 

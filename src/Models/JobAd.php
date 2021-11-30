@@ -15,7 +15,7 @@ class JobAd extends Model {
         'id',
         'title', 
         'description', 
-        'employer_id', 
+        '_id', 
         'salary_min', 
         'salary_max',
         'location',
@@ -42,7 +42,7 @@ class JobAd extends Model {
         }
 
         if (!is_null($pagination)) {
-            $offset = $pagination->page - 1 * $pagination->perPage;
+            $offset = ($pagination->page - 1) * $pagination->perPage;
             $limit = $pagination->perPage;
             $query = $base_query . " LIMIT " . $limit . " OFFSET " . $offset;
         } else {
