@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers;
 
 use User;
@@ -6,22 +7,24 @@ use finfo;
 use PDO;
 use stdClass;
 
-class ResumesController extends Controller {
-    public function index() {
+class ResumesController extends Controller
+{
+    public function index()
+    {
         $this->view('resume.index');
     }
 
-    public function upload() {
+    public function upload()
+    {
         global $db;
         if (isset($_SESSION['user'])) {
-            $user = new User;
+            $user = new User();
             if (isset($_FILES['CV'])) {
                 $query = "SELECT user_id FROM users WHERE email= ?" ;
                 $stmt = $db->con->prepare($query);
                 $stmt->execute(array($_SESSION['user']));
 
                 if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-
                     $user_id = $row['user_id'];
 
                     $allowed = [
@@ -37,16 +40,13 @@ class ResumesController extends Controller {
                         $filename = $user->getProperty('first_name') . "_" . $user->getProperty('second_name') . "_CV." . $ext;
                         $filepath = UPLOADS_DIR . '/' . "$filename";
                         if (!move_uploaded_file($_FILES['CV']['tmp_name'], $filepath)) {
-
                             show_alert("Couldn't upload the file", "danger");
-
                         } else {
-
                             $query = "UPDATE users SET cv_file= ? WHERE email= ?";
                             $stmt = $db->con->prepare($query);
 
                             if ($stmt->execute(array($filename, $_SESSION['user']))) {
-                                $alert = new stdClass;
+                                $alert = new stdClass();
                                 $alert->type = 'success';
                                 $alert->message = "File <a href='/resume/load'>" . $filename . "</a> uploaded successfully";
                                 $this->view('resume.index', ['alert' => $alert]);
@@ -63,9 +63,10 @@ class ResumesController extends Controller {
         }
     }
 
-    function show() {
+    public function show()
+    {
         global $db;
-        $user = new User;
+        $user = new User();
         $file = UPLOADS_DIR . '/' . $user->getProperty('cv_file');
         if (file_exists($file)) {
             header('Content-Type: application/pdf');
@@ -77,6 +78,5 @@ class ResumesController extends Controller {
             readfile($file);
             exit;
         }
-
     }
 }

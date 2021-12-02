@@ -1,33 +1,38 @@
 <?php
+
 namespace App\Controllers;
 
 use User;
 use Employer;
 use Alert;
 
-class ProfileController extends Controller {
-    public function show() {
-        if(isset($_SESSION['employer'])) {
-            $employer = new Employer;
+class ProfileController extends Controller
+{
+    public function show()
+    {
+        if (isset($_SESSION['employer'])) {
+            $employer = new Employer();
             $this->view('employerprofile', ['employer' => $employer]);
-        } else if (isset($_SESSION['user'])) {
-            $user = new User;
+        } elseif (isset($_SESSION['user'])) {
+            $user = new User();
             $this->view('userprofile', ['user' => $user]);
         }
     }
 
-    public function store() {
-
+    public function store()
+    {
     }
 
-    public function destroy() {
+    public function destroy()
+    {
         if (isset($_SESSION['user'])) {
-            $user = new User;
+            $user = new User();
             $result = $user->removeUser();
-            if ($result)
+            if ($result) {
                 $alert = new Alert("User removed", "success");
+            }
         } elseif ($_SESSION['employer']) {
-            $employer = new Employer;
+            $employer = new Employer();
             $result = $employer->removeEmployer();
             if ($result) {
                 $alert = new Alert("Employer account removed", "success");
@@ -39,14 +44,16 @@ class ProfileController extends Controller {
         $this->view('login.index', ['alert' => $alert]);
     }
 
-    public function edit() {
-        $this->view('profile.edit', ['user' => new User]);
+    public function edit()
+    {
+        $this->view('profile.edit', ['user' => new User()]);
     }
 
-    public function update() {
+    public function update()
+    {
         global $db;
 
-        $user = new User;
+        $user = new User();
         if (isset($_FILES['photo'])) {
             if ($_FILES['photo']['error'] == 0) {
                 if (getimagesize($_FILES['photo']['tmp_name'])) {
@@ -79,6 +86,6 @@ class ProfileController extends Controller {
             }
         }
 
-        $this->view('profile.edit', ['user' => new User]);
+        $this->view('profile.edit', ['user' => new User()]);
     }
 }

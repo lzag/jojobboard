@@ -15,8 +15,9 @@ class Employer
     public function __construct()
     {
         $this->db = new App\Database();
-        if (!isset($_SESSION['employer']))
-           throw new Exception('Employer email not available');
+        if (!isset($_SESSION['employer'])) {
+            throw new Exception('Employer email not available');
+        }
         $this->contact_email = $_SESSION['employer'];
         $this->getEmployerDetails();
     }

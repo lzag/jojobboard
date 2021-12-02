@@ -1,11 +1,11 @@
 <?php
+
 namespace App;
 
 use PDOException;
 
 class Database extends \PDO
 {
-
     public $con;
     public static $instance;
 
@@ -19,33 +19,29 @@ class Database extends \PDO
             echo '<div>There has been problems with connecting with the database. Please try again later</div>';
             echo $e->getMessage();
         }
-
     }
 
-    public function sanitize($string) 
+    public function sanitize($string)
     {
         if (is_array($string)) {
 
 //            if (get_magic_quotes_gpc()) $string = array_map("stripslashes",$string);
 //            $string = array_map(array($this->con,"real_escape_string"), $string);
             return $string;
-
         } else {
 
 //        if (get_magic_quotes_gpc()) $string = stripslashes($string);
 //        $string = $this->con->real_escape_string($string);
-        return $string;
-
+            return $string;
         }
     }
 
-    public static function getInstance(): self 
+    public static function getInstance(): self
     {
         if (self::$instance === null) {
-            return self::$instance = new self;
+            return self::$instance = new self();
         } else {
             return self::$instance;
         }
     }
-
 }

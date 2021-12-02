@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers;
 
 use User;
@@ -6,15 +7,16 @@ use Employer;
 use App\Helpers\AppUser;
 use App\Controllers\Controller;
 
-class HomeController extends Controller {
-    
-    public function index() {
+class HomeController extends Controller
+{
+    public function index()
+    {
         if (AppUser::isUser()) {
-            $user = new User;
+            $user = new User();
             $employer = false;
-        } else if (AppUser::isEmployer()) {
+        } elseif (AppUser::isEmployer()) {
             $user = false;
-            $employer = new Employer;
+            $employer = new Employer();
         } else {
             $user = $employer = false;
         }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers;
 
 use stdClass;
@@ -10,8 +11,9 @@ use App\Services\JobAdListing;
 use App\Careerjet_API;
 use User;
 
-class JobadsController extends Controller {
-    public function index() 
+class JobadsController extends Controller
+{
+    public function index()
     {
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
         $perPage = isset($_GET['per_page']) ? intval($_GET['per_page']) : 5;
@@ -30,9 +32,9 @@ class JobadsController extends Controller {
         // );
 
         $this->view(
-            'jobads.index', 
+            'jobads.index',
             [
-            'user' => new User, 
+            'user' => new User(),
             'jobads' => $jobadslistings->items,
             'pagination' => $pagination,
             // 'backfill' => $backfill,
@@ -40,7 +42,8 @@ class JobadsController extends Controller {
         );
     }
 
-    public function store() {
+    public function store()
+    {
         if (!empty($_POST['title']) && !empty($_POST['description'])) {
             $conn = new Database();
             $title = $_POST['title'];
@@ -49,9 +52,9 @@ class JobadsController extends Controller {
             $employerid = $employer->employer_id;
             $query = "INSERT INTO postings (title,description,employer_id) VALUES ('$title','$description','$employerid')";
             $result = $conn->con->query($query);
-            if($result->rowCount()) {
+            if ($result->rowCount()) {
                 $msg = "Job offer added";
-                $alert = new stdClass;
+                $alert = new stdClass();
                 $alert->message = 'Job offer added';
                 $alert->type = 'success';
                 $this->view('jobads.add', ['alert' => $alert]);
@@ -59,19 +62,21 @@ class JobadsController extends Controller {
                 die("<br>Database update failed :".$conn->error);
             }
         } else {
-            $alert = new stdClass;
+            $alert = new stdClass();
             $alert->message = 'Information missing in the post';
             $alert->type = 'danger';
             $this->view('jobads.add', ['alert' => $alert]);
         }
     }
 
-    public function show() {
-        $jobads = JobAd::fetchList(null, null);
+    public function show()
+    {
+        $jobads = JobAd::fetchById(null, null);
         $this->view('jobads.show', ['ad' => $jobads->items[1]]);
     }
 
-    public function create() {
+    public function create()
+    {
         $this->view('jobads.add');
     }
 }

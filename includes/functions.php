@@ -1,4 +1,5 @@
 <?php
+
 const DEV_URL = "http://jobboard.test";
 const PROD_URL = "http://jobboard.lukaszzagroba.com";
 use PHPMailer\PHPMailer\PHPMailer;
@@ -7,7 +8,8 @@ use PHPMailer\PHPMailer\Exception;
 //Load Composer's autoloader
 require '../vendor/autoload.php';
 
-function show_alert($msg, $type) {
+function show_alert($msg, $type)
+{
 
 // types = primary, success, danger
 
@@ -21,25 +23,26 @@ _END;
     }
 }
 
-function show_session_alert() {
+function show_session_alert()
+{
     if (!empty($_SESSION['msg'])) {
-    $msg = $_SESSION['msg'];
-    $type = "success";
-    echo <<<_END
+        $msg = $_SESSION['msg'];
+        $type = "success";
+        echo <<<_END
     <div class="alert alert-$type alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <strong>$msg</strong>
     </div>
 _END;
-    unset($_SESSION['msg']);
+        unset($_SESSION['msg']);
     }
 }
 
-function send_email($email,$subject,$msg,$headers) {
-
+function send_email($email, $subject, $msg, $headers)
+{
     $mail = new PHPMailer(true);     // Passing `true` enables exceptions
-try {
-    //Server settings
+    try {
+        //Server settings
 //    $mail->SMTPDebug = 2;                                 // Enable verbose debug output
     $mail->isSMTP();                                      // Set mailer to use SMTP
     $mail->Host = 'smtp.mailtrap.io';                      // Specify main and backup SMTP servers
@@ -50,53 +53,51 @@ try {
     $mail->Port = 2525;                                    // TCP port to connect to
 
     //Recipients
-    $mail->setFrom('noreply@jojobboad.ga', 'JoJobBoard');
-    $mail->addAddress($email);     // Add a recipient
+        $mail->setFrom('noreply@jojobboad.ga', 'JoJobBoard');
+        $mail->addAddress($email);     // Add a recipient
 //    $mail->addAddress('ellen@example.com');               // Name is optional
-    $mail->addReplyTo('contact@jojobboard.ga');
+        $mail->addReplyTo('contact@jojobboard.ga');
 //    $mail->addCC('cc@example.com');
 //    $mail->addBCC('bcc@example.com');
 
-    //Attachments
+        //Attachments
 //    $mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
 //    $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
 
-    //Content
+        //Content
     $mail->isHTML(true);                                  // Set email format to HTML
     $mail->Subject = $subject;
-    $mail->Body    = $msg;
-    $mail->AltBody = $msg;
+        $mail->Body    = $msg;
+        $mail->AltBody = $msg;
 
-    $mail->send();
+        $mail->send();
 
 //    echo 'Message has been sent';
-
-} catch (Exception $e) {
-    echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
-}
-}
-
-function randKey($email) {
-
-     return sha1(mt_rand(10000,99999).time().$email);
-
+    } catch (Exception $e) {
+        echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
+    }
 }
 
-function generate_token() {
+function randKey($email)
+{
+    return sha1(mt_rand(10000, 99999).time().$email);
+}
 
-    return sha1(mt_rand(10000,99999).time());
-
+function generate_token()
+{
+    return sha1(mt_rand(10000, 99999).time());
 }
 
 /**
  * Logs user automatically if cookie set
  */
-function rememberUser() {
+function rememberUser()
+{
     if (!empty($_COOKIE['rememberMe'])) {
-        $cookie = explode(".",$_COOKIE['rememberMe']);
+        $cookie = explode(".", $_COOKIE['rememberMe']);
         $rememberID = $cookie[0];
         $cookie_token = hash('sha256', $cookie[1]);
-        $db = new App\Database;
+        $db = new App\Database();
         $query = "SELECT sessionToken FROM users WHERE rememberID= ?";
         $stmt = $db->con->prepare($query);
         $stmt->execute(array($rememberID));
@@ -106,7 +107,7 @@ function rememberUser() {
                 $stmt = $db->con->prepare($query);
                 $stmt->execute(array($rememberID));
                 if ($row = $stmt->fetch()) {
-                    if($row['active'] == 1) {
+                    if ($row['active'] == 1) {
                         $_SESSION['user'] = $row['email'];
                     }
                 }
@@ -128,15 +129,15 @@ function login()
         $stmt = $db->con->prepare($sql);
         $stmt->execute(array($email));
         if ($row = $stmt->fetch()) {
-            if($row['active'] == 1) {
+            if ($row['active'] == 1) {
                 $passdb = $row['password'];
-                if (password_verify($pass, $passdb)){
+                if (password_verify($pass, $passdb)) {
                     $_SESSION['user'] = $email;
                     $_SESSION['last_login'] = time();
                     $_SESSION['msg'] = "You have been logged in";
                     if (!empty($_POST['rememberMe'])) {
-                        $rememberID = random_int(10000,99999);
-                        $token = sha1(random_int(10000,99999).time().$email);
+                        $rememberID = random_int(10000, 99999);
+                        $token = sha1(random_int(10000, 99999).time().$email);
                         $expires = time() + 30 * 24 * 60 * 60;
                         $query  = "UPDATE users";
                         $query .= " SET rememberID = ?, sessionToken= ?, tokenExpire= ?";
@@ -147,17 +148,17 @@ function login()
                             setcookie('rememberMe', $rememberID . '.' . $token, $expires);
                         }
                     } else {
-                        setcookie('rememberMe','',time() - 100 * 30 * 24 * 60 * 60);
+                        setcookie('rememberMe', '', time() - 100 * 30 * 24 * 60 * 60);
                     }
                     header('Location: index.php');
                     exit();
                 } else {
                     $msg = "Password invalid. Please try again:";
-                    show_alert($msg,"danger");
+                    show_alert($msg, "danger");
                 }
             } else {
                 $msg = "Your account has not been activated yet. Please check your email for the activation link.";
-                show_alert($msg,"danger");
+                show_alert($msg, "danger");
             }
         } else {
             $sql = "SELECT contact_email, password, active FROM employers WHERE contact_email= ?";
@@ -165,31 +166,32 @@ function login()
             $stmt->execute(array($email));
             if ($row = $stmt->fetch()) {
                 print_r($row);
-                if($row['active'] == 1) {
+                if ($row['active'] == 1) {
                     $passdb = $row['password'];
-                    if (password_verify($pass, $passdb)){
+                    if (password_verify($pass, $passdb)) {
                         $_SESSION['employer'] = $email;
                         $_SESSION['last_login'] = time();
                         $_SESSION['msg'] = "You have been logged in";
                         header('Location: index.php');
                         exit();
                     } else {
-                    $msg = "Password invalid. Please try again:";
-                    show_alert($msg,"danger");
+                        $msg = "Password invalid. Please try again:";
+                        show_alert($msg, "danger");
                     }
                 } else {
-                $msg = "Your account has not been activated yet. Please check your email for the activation link.";
-                show_alert($msg,"danger");
+                    $msg = "Your account has not been activated yet. Please check your email for the activation link.";
+                    show_alert($msg, "danger");
                 }
             } else {
                 $msg = "We haven't found an account with these credential in our system, please register";
-                show_alert($msg,"danger");
+                show_alert($msg, "danger");
             }
         }
     }
 }
 
-function showResults() {
+function showResults()
+{
     $offers = [];
     $page_size = (isset($_GET['per_page']) && !empty($_GET['per_page'])) ? (int) $_GET['per_page'] : 5;
     $local_offers = JobPost::get_posts();
@@ -210,22 +212,17 @@ function showResults() {
 
     echo "We found $local_hits local and $foreign_hits foreign offers";
 
-    $offset = ($current_page == 1) ? 0 : (($current_page - 1 ) * $page_size) - 1;
+    $offset = ($current_page == 1) ? 0 : (($current_page - 1) * $page_size) - 1;
     if ($current_page < $local_pages) {
-
         $offers['local'] = JobPost::get_posts($page_size, $offset);
         return $offers;
-
     } elseif ($current_page == $local_pages) {
-
         $offers['local'] = JobPost::get_posts($page_size, $offset);
         if ($first_foreign) {
             $offers['foreign'] = JobPost::get_backfill($first_foreign)->jobs;
         }
         return $offers;
-
     } elseif ($current_page > $local_pages) {
-
         $start_num = ++$first_foreign + (($current_page - $local_pages - 1) * $page_size);
         $offers['foreign'] = JobPost::get_backfill($page_size, $start_num)->jobs;
         return $offers;
@@ -233,8 +230,8 @@ function showResults() {
 }
 
 
-function pagination($total_results = 100) {
-
+function pagination($total_results = 100)
+{
     $per_page = (isset($_GET['per_page']) && !empty($_GET['per_page'])) ? (int) $_GET['per_page'] : 5;
     $total_pages = ceil($total_results / $per_page);
     $page = isset($_GET['page']) ? $_GET['page'] : 1;
@@ -246,7 +243,6 @@ function pagination($total_results = 100) {
     if ($total_pages > 1) {
         // PREVIOUS PART OF PAGINATION
         if ($prev) {
-
             if (!empty($_GET)) {
                 if (isset($_GET['page'])) {
                     $link = preg_replace('/([?&])(page=)(\d+)/', '${1}page='.$prev, $url);
@@ -264,9 +260,7 @@ function pagination($total_results = 100) {
                   <a class="page-link" href="$link" tabindex="-1">Previous</a>
                 </li>
 HTML;
-
         } else {
-
             echo <<<HTML
             <nav aria-label="...">
               <ul class="pagination">
@@ -274,7 +268,6 @@ HTML;
                   <a class="page-link" href="#" tabindex="-1">Previous</a>
                 </li>
 HTML;
-
         }
 
         // MIDDLE PART OF THE PAGINATION
@@ -291,8 +284,7 @@ HTML;
             }
         }
 
-        for($i = $start; $i <= $end; $i++) {
-
+        for ($i = $start; $i <= $end; $i++) {
             if (!empty($_GET)) {
                 if (isset($_GET['page'])) {
                     $link = preg_replace('/([?&])(page=)(\d+)/', '${1}page='.$i, $url);
@@ -304,18 +296,15 @@ HTML;
             }
 
             if ($i == $curr) {
-
                 echo <<<HTML
                 <li class="page-item active"><a class="page-link" href="$link">{$i}<span class="sr-only">(current)</span></a></li>
 HTML;
-
             } else {
-
                 echo <<<HTML
                     <li class="page-item"><a class="page-link" href="$link">{$i}</a></li>
 HTML;
-                }
             }
+        }
 
         // END PART OF PAGINATION
         if ($next) {
@@ -329,7 +318,7 @@ HTML;
                 $link = $url . "?page=$next";
             }
 
-        echo <<<HTML
+            echo <<<HTML
             <li class="page-item">
               <a class="page-link" href="$link">Next</a>
             </li>
@@ -337,22 +326,19 @@ HTML;
         </nav>
 HTML;
         } else {
-
-        echo <<<HTML
+            echo <<<HTML
             <li class="page-item disabled">
               <a class="page-link" href="#">Next</a>
             </li>
           </ul>
         </nav>
 HTML;
-
         }
     }
+}
 
-
-    }
-
-function echoGet($value) {
+function echoGet($value)
+{
     if (isset($_GET[$value])) {
         return $_GET[$value];
     } else {
@@ -360,12 +346,11 @@ function echoGet($value) {
     }
 }
 
-function selected($name, $option) {
+function selected($name, $option)
+{
     if (isset($_GET[$name])) {
         if ($_GET[$name] == $option) {
             return "selected";
         }
     }
 }
-
-?>

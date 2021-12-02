@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use App\Database;
@@ -7,7 +8,7 @@ use PDO;
 use PDOException;
 use stdClass;
 
-class Model 
+class Model
 {
     protected static $db;
     public const FIELDS = [];
@@ -15,7 +16,7 @@ class Model
     public const TRACKED = true;
     public const LINKS = [];
 
-    public function __construct() 
+    public function __construct()
     {
     }
 
@@ -30,14 +31,14 @@ class Model
             throw new Exception('Fields error');
         }
 
-        $query = "SELECT " . implode(', ', static::FIELDS); 
+        $query = "SELECT " . implode(', ', static::FIELDS);
         $query .= " FROM " . static::TABLE;
         $stmt = self::$db->con->query($query);
         $items = $stmt->fetchAll(PDO::FETCH_CLASS, static::class);
-        return $items; 
+        return $items;
     }
 
-    public static function getAllJoined(): array 
+    public static function getAllJoined(): array
     {
         self::$db = Database::getInstance();
         if (!static::TABLE) {
@@ -51,26 +52,25 @@ class Model
         if ($linked_tables >= 1) {
             $table_indexes = 'abcdefg';
             $basic_fields = array_map(
-                function ($el) use ($table_indexes) { 
-                    return $table_indexes[0] . $el; 
-                }, 
+                function ($el) use ($table_indexes) {
+                    return $table_indexes[0] . $el;
+                },
                 static::FIELDS
             );
-            $query = "SELECT " . implode(', ', $basic_fields); 
+            $query = "SELECT " . implode(', ', $basic_fields);
             $query .= " FROM " . static::TABLE . ' ' . $table_indexes[0];
             $i = 1;
             foreach (self::LINKS as $class => $field) {
-                "LEFT JOIN " . $class::TABLE . " ON " . $table_indexes[0]  . $field . '='; 
-            } 
+                "LEFT JOIN " . $class::TABLE . " ON " . $table_indexes[0]  . $field . '=';
+            }
             $stmt = self::$db->con->query($query);
         } else {
-            $query = "SELECT " . implode(', ', static::FIELDS); 
+            $query = "SELECT " . implode(', ', static::FIELDS);
             $query .= " FROM " . static::TABLE;
             $stmt = self::$db->con->query($query);
         }
         $items = $stmt->fetchAll(PDO::FETCH_CLASS, 'stdClass');
-        return $items; 
-        
+        return $items;
     }
 
     public static function fetchPrepQuery($query_string, $args): array

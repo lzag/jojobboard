@@ -1,18 +1,19 @@
 <?php
+
 namespace App\Models;
 
 use App\Models\Model;
 
-class Company extends Model {
-    
+class Company extends Model
+{
     public const TABLE = 'companies';
-    public const FIELDS = [  
+    public const FIELDS = [
         'id',
-        'name', 
+        'name',
     ];
 
     public function __construct()
     {
         parent::__construct();
-    } 
+    }
 }

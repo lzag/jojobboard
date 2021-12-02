@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Helpers;
 
 class SqlQuery
@@ -8,7 +9,7 @@ class SqlQuery
     public $joins;
     public $where;
     public $limit;
-    public $orderBy; 
+    public $orderBy;
 
     public function getQuery(): string
     {

@@ -1,7 +1,9 @@
 <?php
+
 namespace App;
 
-interface ITemplateEngine {
+interface ITemplateEngine
+{
     // loads necessary configuration for the template engine
     public function configure();
 

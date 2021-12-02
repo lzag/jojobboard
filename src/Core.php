@@ -1,4 +1,5 @@
 <?php
+
 namespace App;
 
 use App\Router;
@@ -6,20 +7,21 @@ use App\Route;
 use App\Helpers\AppUser;
 use User;
 
-class Core {
-
+class Core
+{
     private $router;
 
-    public function __construct() {
+    public function __construct()
+    {
         $file = basename($_SERVER['REQUEST_URI'], ".php");
         $request_uri = ($_SERVER['REQUEST_URI']);
         if (
-            !in_array($file, ['login', 'registeruser', 'registeremployer']) && 
+            !in_array($file, ['login', 'registeruser', 'registeremployer']) &&
             !in_array($request_uri, ['/login', '/register/user', '/register/employer', '/password/reset'])
             ) {
             if (AppUser::hasRememberMeCookieSet()) {
                 AppUser::logInRememberedUser();
-            } else if (AppUser::isLoginStillValid()){
+            } elseif (AppUser::isLoginStillValid()) {
                 $_SESSION['last_login'] = time();
             } else {
                 session_destroy();
@@ -30,14 +32,14 @@ class Core {
 
             if (isset($_COOKIE['visit'])) {
                 $welcome = "Welcome back to JoJobBoard";
-                setcookie('visit',time(),time()+1000000,"/");
+                setcookie('visit', time(), time()+1000000, "/");
             } else {
                 $welcome = "Welcome to JoJobBoard";
-                setcookie('visit',time(),time()+1000000,"/");
+                setcookie('visit', time(), time()+1000000, "/");
             }
         }
 
-        $this->router = new Router;
+        $this->router = new Router();
     }
 
     public function respond()
@@ -45,21 +47,20 @@ class Core {
         // send the appropriate response
         if ($this->router->isRequestForLegacyFile()) {
             require_once APP_DIR . '/' . $this->router->request_file;
-        } else if (!$this->router->isRouteAllowed()) {
+        } elseif (!$this->router->isRouteAllowed()) {
             http_response_code(404);
             echo "Route not allowed";
-            // if(! ($route)->validateParams()) {
+        // if(! ($route)->validateParams()) {
             //     // if necessary params missing return return 400 bad request
             //     // validating only number of params required
             //     exit('wrong params');
             // };
-        } else if (!$this->router->isRequestMethodAllowed()){
+        } elseif (!$this->router->isRequestMethodAllowed()) {
             http_response_code(405);
             echo "Method not allowed";
         } else {
             $this->sendResponse();
         }
-
     }
     public function shutdown()
     {
@@ -77,7 +78,7 @@ class Core {
             die;
         } else {
             parse_str($this->router->params, $params);
-            (new $controller)->$method(...$params);
+            (new $controller())->$method(...$params);
         }
     }
 }

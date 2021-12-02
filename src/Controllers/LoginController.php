@@ -1,19 +1,22 @@
 <?php
+
 namespace App\Controllers;
 
 use User;
 use Exception;
 use stdClass;
 
-class LoginController extends Controller {
-
-    public function index() {
+class LoginController extends Controller
+{
+    public function index()
+    {
         $msg = "Please input your login data:";
         // User::activate_user();
         $this->view('login.index', ['msg' => $msg]);
     }
 
-    public function login_user() {
+    public function login_user()
+    {
         try {
             global $db;
             if (isset($_POST['email']) && isset($_POST['pass'])) {
@@ -26,15 +29,15 @@ class LoginController extends Controller {
                 $stmt = $db->con->prepare($sql);
                 $stmt->execute(array($email));
                 if ($row = $stmt->fetch()) {
-                    if($row['active'] == 1) {
+                    if ($row['active'] == 1) {
                         $passdb = $row['password'];
-                        if (password_verify($pass, $passdb)){
+                        if (password_verify($pass, $passdb)) {
                             $_SESSION['user'] = $email;
                             $_SESSION['last_login'] = time();
                             $_SESSION['msg'] = "You have been logged in";
                             if (!empty($_POST['rememberMe'])) {
-                                $rememberID = random_int(10000,99999);
-                                $token = sha1(random_int(10000,99999).time().$email);
+                                $rememberID = random_int(10000, 99999);
+                                $token = sha1(random_int(10000, 99999).time().$email);
                                 $expires = time() + 30 * 24 * 60 * 60;
                                 $query  = "UPDATE users";
                                 $query .= " SET rememberID = ?, sessionToken= ?, tokenExpire= ?";
@@ -45,7 +48,7 @@ class LoginController extends Controller {
                                     setcookie('rememberMe', $rememberID . '.' . $token, $expires);
                                 }
                             } else {
-                                setcookie('rememberMe','',time() - 100 * 30 * 24 * 60 * 60);
+                                setcookie('rememberMe', '', time() - 100 * 30 * 24 * 60 * 60);
                             }
                             header('Location: /');
                             exit();
@@ -61,9 +64,9 @@ class LoginController extends Controller {
                     $stmt->execute(array($email));
                     if ($row = $stmt->fetch()) {
                         print_r($row);
-                        if($row['active'] == 1) {
+                        if ($row['active'] == 1) {
                             $passdb = $row['password'];
-                            if (password_verify($pass, $passdb)){
+                            if (password_verify($pass, $passdb)) {
                                 $_SESSION['employer'] = $email;
                                 $_SESSION['last_login'] = time();
                                 $_SESSION['msg'] = "You have been logged in";
@@ -81,20 +84,21 @@ class LoginController extends Controller {
                 }
             }
         } catch (Exception $e) {
-            $alert = new stdClass;
+            $alert = new stdClass();
             $alert->type = 'danger';
             $alert->message = $e->getMessage();
             $this->view('login.index', ['alert' => $alert]);
         }
     }
 
-    public function destroy() {
+    public function destroy()
+    {
         if (isset($_SESSION['user']) || isset($_SESSION['employer'])) {
             session_destroy();
-            setcookie('rememberMe','',time() - 100 * 30 * 24 * 60 * 60);
+            setcookie('rememberMe', '', time() - 100 * 30 * 24 * 60 * 60);
             session_start();
         }
-        $alert = new stdClass;
+        $alert = new stdClass();
         $alert->type = 'success';
         $alert->message = "You have been logged out";
         $this->view('login.index', ['alert' => $alert]);

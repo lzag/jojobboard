@@ -1,18 +1,21 @@
 <?php
+
 namespace App\Controllers;
 
 use App\SmartyTemplateEngine;
 
-abstract class Controller {
+abstract class Controller
+{
     private $template_engine;
 
-    public function __construct() {
-        $this->template_engine = new SmartyTemplateEngine;
+    public function __construct()
+    {
+        $this->template_engine = new SmartyTemplateEngine();
         $this->template_engine->configure();
     }
 
-    public function view($template, $params = null) {
+    public function view($template, $params = null)
+    {
         $this->template_engine->displayView($template, $params);
     }
-    
 }

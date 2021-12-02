@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use App\Models\Model;
@@ -8,15 +9,15 @@ use App\Models\Company;
 use App\ResultsArray;
 use Exception;
 
-class JobAd extends Model {
-    
+class JobAd extends Model
+{
     public const TABLE = 'job_ads';
-    public const FIELDS = [  
+    public const FIELDS = [
         'id',
-        'title', 
-        'description', 
-        '_id', 
-        'salary_min', 
+        'title',
+        'description',
+        '_id',
+        'salary_min',
         'salary_max',
         'location',
     ];
@@ -27,9 +28,10 @@ class JobAd extends Model {
     public function __construct()
     {
         parent::__construct();
-    } 
+    }
 
-    public static function fetchList(?array $filter, ?Pagination $pagination): ResultsArray {
+    public static function fetchList(?array $filter, ?Pagination $pagination): ResultsArray
+    {
         self::$db = Database::getInstance();
         if (!static::TABLE) {
             throw new Exception('No table set on the model');

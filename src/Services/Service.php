@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\Helpers\SqlQuery;
@@ -10,7 +11,6 @@ use App\Helpers\Pagination;
 
 abstract class Service
 {
-     
     // private SqlQuery $sql_query;
     private $db;
 
@@ -30,9 +30,9 @@ abstract class Service
         return $this;
     }
 
-    public static function where($where) 
+    public static function where($where)
     {
-        return new static;
+        return new static();
     }
 
     public function get(): ResultsArray
@@ -52,7 +52,7 @@ abstract class Service
             }
             $new_fields = array_map(
                 function ($el) use (&$class) {
-                    return $class::TABLE . '.' . $el; 
+                    return $class::TABLE . '.' . $el;
                 },
                 $class_fields
             );
@@ -82,10 +82,10 @@ abstract class Service
         );
     }
 
-    public function paginate(Pagination $pagination) 
+    public function paginate(Pagination $pagination)
     {
         $offset = ($pagination->page * $pagination->perPage) - $pagination->perPage;
-        $limit = $pagination->perPage; 
+        $limit = $pagination->perPage;
         $this->sql_query .= " LIMIT {$limit} OFFSET {$offset}";
         return $this;
     }

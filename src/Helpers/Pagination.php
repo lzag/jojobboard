@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Helpers;
 
 class Pagination
@@ -8,7 +9,7 @@ class Pagination
     public int $nextPage;
     public int $prevPage;
 
-    public function __construct(int $page, int $perPage) 
+    public function __construct(int $page, int $perPage)
     {
         $this->page = $page;
         $this->perPage = $perPage;

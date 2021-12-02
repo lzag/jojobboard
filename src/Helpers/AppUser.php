@@ -1,16 +1,20 @@
 <?php
+
 namespace App\Helpers;
 
-class AppUser {
+class AppUser
+{
     public static $max_session_time = 20 * 60;
 
-    public static function hasRememberMeCookieSet() {
+    public static function hasRememberMeCookieSet()
+    {
         return isset($_COOKIE['rememberMe']) ? true : false;
     }
 
-    public static function isLoginStillValid() {
+    public static function isLoginStillValid()
+    {
         if (
-            isset($_SESSION['last_login']) && 
+            isset($_SESSION['last_login']) &&
             time() - $_SESSION['last_login'] < self::$max_session_time
         ) {
             return true;
@@ -19,9 +23,10 @@ class AppUser {
         }
     }
 
-    public static function logInRememberedUser() {
+    public static function logInRememberedUser()
+    {
         global $db;
-        $cookie = explode(".",$_COOKIE['rememberMe']);
+        $cookie = explode(".", $_COOKIE['rememberMe']);
         $rememberID = $cookie[0];
         $cookie_token = hash('sha256', $cookie[1]);
 
@@ -40,11 +45,13 @@ class AppUser {
         }
     }
 
-    public static function isUser() {
+    public static function isUser()
+    {
         return isset($_SESSION['user']);
     }
 
-    public static function isEmployer() {
+    public static function isEmployer()
+    {
         return isset($_SESSION['employer']);
     }
 }
