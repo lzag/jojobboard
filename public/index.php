@@ -17,7 +17,6 @@ require_once '../includes/employer.php';
 require_once '../includes/user.php';
 require_once '../includes/blogpost.php';
 require_once '../includes/jobpost.php';
-require_once '../includes/Alert.php';
 
 //spl_autoload_register( function ($class) {
 //    include 'includes/' . strtolower($class) . '.php';
@@ -55,7 +54,7 @@ require_once '../includes/Alert.php';
 
 try {
     global $db;
-    $db = new Database;
+    $db = new Database();
     $core = new Core();
     $core->respond();
 } catch (Throwable $e) {

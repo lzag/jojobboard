@@ -6,71 +6,79 @@ use User;
 use finfo;
 use PDO;
 use stdClass;
+use App\Database;
+use App\Alert;
+use Exception;
 
 class ResumesController extends Controller
 {
-    public function index()
+    public function index(): void
     {
         $this->view('resume.index');
     }
 
-    public function upload()
+    public function upload(): void
     {
-        global $db;
-        if (isset($_SESSION['user'])) {
-            $user = new User();
-            if (isset($_FILES['CV'])) {
-                $query = "SELECT user_id FROM users WHERE email= ?" ;
-                $stmt = $db->con->prepare($query);
-                $stmt->execute(array($_SESSION['user']));
-
-                if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    $user_id = $row['user_id'];
-
-                    $allowed = [
-                        'application/msword' => 'doc',
-                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
-                        'application/pdf' => 'pdf'
-                               ];
-                    $finfo = new finfo();
-                    $mime = $finfo->file($_FILES['CV']['tmp_name'], FILEINFO_MIME_TYPE);
-
-                    if (key_exists($mime, $allowed)) {
-                        $ext = $allowed[$mime];
-                        $filename = $user->getProperty('first_name') . "_" . $user->getProperty('second_name') . "_CV." . $ext;
-                        $filepath = UPLOADS_DIR . '/' . "$filename";
-                        if (!move_uploaded_file($_FILES['CV']['tmp_name'], $filepath)) {
-                            show_alert("Couldn't upload the file", "danger");
-                        } else {
-                            $query = "UPDATE users SET cv_file= ? WHERE email= ?";
-                            $stmt = $db->con->prepare($query);
-
-                            if ($stmt->execute(array($filename, $_SESSION['user']))) {
-                                $alert = new stdClass();
-                                $alert->type = 'success';
-                                $alert->message = "File <a href='/resume/load'>" . $filename . "</a> uploaded successfully";
-                                $this->view('resume.index', ['alert' => $alert]);
-                            }
-                        }
-                    } else {
-                        show_alert("Document type not allowed", "danger");
-                    }
-                }
+        try {
+            if (!isset($_SESSION['user'])) {
+                throw new Exception('You are not logged in');
             }
-        } else {
-            show_alert("You are not logged in.", "danger");
-            die();
+
+            if (!isset($_FILES['CV']) || $_FILES['CV']['error'] !== UPLOAD_ERR_OK) {
+                throw new Exception('File missing');
+            }
+
+            $allowed = [
+                'application/msword' => 'doc',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
+                'application/pdf' => 'pdf'
+            ];
+
+            $finfo = new finfo();
+            $mime = $finfo->file($_FILES['CV']['tmp_name'], FILEINFO_MIME_TYPE);
+
+            if ($mime === false) {
+                throw new Exception('Error analysing the file');
+            }
+
+            if (!key_exists($mime, $allowed)) {
+                throw new Exception('Document type not allowed');
+            }
+
+            $ext = $allowed[$mime];
+
+            $user = new User();
+            $filename = $user->getProperty('first_name') . "_" . $user->getProperty('second_name') . "_CV." . $ext;
+            $filepath = UPLOADS_DIR . '/' . $filename;
+
+            if (!move_uploaded_file($_FILES['CV']['tmp_name'], $filepath)) {
+                throw new Exception("Couldn't upload the file");
+            }
+
+            $db = Database::getInstance();
+
+            $stmt = $db->con->prepare("UPDATE users SET cv_file= ? WHERE email= ?");
+
+            if (!($stmt->execute([$filename, $_SESSION['user']]) === true)) {
+                throw new Exception('Error uploading file, please try again');
+            }
+
+            $this->view(
+                'resume.index',
+                ['alert' => new Alert("File <a href='/resume/load'>" . $filename . "</a> uploaded successfully")]
+            );
+        } catch (Exception $e) {
+            $this->view('resume.index', ['alert' => new Alert($e->getMessage(), 'danger')]);
         }
     }
 
-    public function show()
+    public function show(): void
     {
-        global $db;
         $user = new User();
         $file = UPLOADS_DIR . '/' . $user->getProperty('cv_file');
         if (file_exists($file)) {
             header('Content-Type: application/pdf');
-            header('Content-Disposition: inline; filename="'.basename($file).'"');
+            header('Content-Disposition: inline; filename="' . basename($file) . '"');
             header('Expires: 0');
             header('Cache-Control: must-revalidate');
             header('Pragma: public');

@@ -24,7 +24,7 @@
 
                {else}
 
-                <a class="text-danger" href="uploadcv.php">Upload your CV</a>
+                <a class="text-danger" href="/resume">Upload your CV</a>
 
                 {/if} 
 
