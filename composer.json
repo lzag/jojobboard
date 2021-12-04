@@ -2,5 +2,8 @@
     "require": {
         "phpmailer/phpmailer": "^6.0",
         "smarty/smarty": "^3.1"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.2"
     }
 }
