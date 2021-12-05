@@ -1,6 +1,8 @@
 <?php
 
 use PDO;
+use Exception;
+use App\Database;
 
 class User
 {
@@ -35,34 +37,28 @@ class User
         return "Empty";
     }
 
-    private function getUserDetails()
+    private function getUserDetails(): void
     {
-        global $db;
+        $db = Database::getInstance();
         $sql = "SELECT user_id, first_name, second_name, title, bio, email, password, ip_address, cv_file ";
         $sql .= " FROM users ";
         $sql .= " WHERE email= ?";
 
         $stmt = $db->con->prepare($sql);
-        $stmt->execute(array($this->email));
+        $stmt->execute([$this->email]);
 
+        if (!$user_details = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            throw new Exception('Failed to retrieve user details');
+        }
 
-        if ($user_details = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            foreach ($user_details as $k => $p) {
-                if (property_exists('User', $k)) {
-                    $this->$k = $p;
-                }
+        foreach ($user_details as $k => $p) {
+            if (property_exists('User', $k)) {
+                $this->$k = $p;
             }
         }
     }
 
-    private function do_query($sql)
-    {
-        global $db;
-        $result = $db->execute_query($sql);
-        return $result;
-    }
-
-    public function getProperty($prop)
+    public function getProperty(string $prop)
     {
         if ($prop && $this->$prop) {
             return $this->$prop;
@@ -72,16 +68,18 @@ class User
     }
 
 
-    public function removeUser()
+    public function removeUser(): void
     {
         $this->deleteCV();
-        $query = "DELETE FROM users WHERE email='$this->email'";
-        return $this->do_query($query);
+        $db = Database::getInstance();
+        $sql = "DELETE FROM users WHERE email='$this->email'";
+        $stmt = $db->con->prepare($sql);
+        $stmt->execute([$this->email]);
     }
 
-    public function fetchApplications()
+    public function fetchApplications(): array
     {
-        global $db;
+        $db = Database::getInstance();
         $sql = "SELECT p.posting_id, p.title, e.company_name, a.application_time, a.status, a.application_id 
             FROM applications a
             INNER JOIN postings p ON p.posting_id  = a.posting_id
@@ -89,12 +87,12 @@ class User
             INNER JOIN employers e ON e.employer_id = p.employer_id
             WHERE u.email= ?";
         $stmt = $db->con->prepare($sql);
-        $stmt->execute(array($this->email));
+        $stmt->execute([$this->email]);
 
         return $this->applications = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getAppStatus($posting_id)
+    public function getAppStatus($posting_id): string
     {
         global $db;
         $sql = "SELECT status FROM applications WHERE user_id='$this->user_id' and posting_id='$posting_id'";
@@ -110,20 +108,20 @@ class User
     public function hasApplied(int $posting_id): bool
     {
         global $db;
-        $sql = "SELECT status FROM applications WHERE user_id='$this->user_id' and posting_id='$posting_id'";
+        $sql = "SELECT status FROM applications WHERE user_id= ? and posting_id= ?";
         $stmt = $db->con->prepare($sql);
-        $stmt->execute(array($this->user_id, $posting_id));
+        $stmt->execute([$this->user_id, $posting_id]);
         $status = $stmt->fetch(PDO::FETCH_ASSOC);
         return !$status ? false : true;
     }
 
-    public function deleteCV()
+    public function deleteCV(): void
     {
         $cv = $this->getProperty('cv_file');
         $cv ? unlink($cv) : "" ;
     }
 
-    public function uploadCV()
+    public function uploadCV(): void
     {
         global $db;
         if (isset($_SESSION['user'])) {
