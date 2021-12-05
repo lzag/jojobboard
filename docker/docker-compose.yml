@@ -11,8 +11,9 @@ services:
     - MYSQL_USER=${MYSQL_USER}
     - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     - MYSQL_DATABASE=${MYSQL_DATABASE}
+    - MYSQL_HOST=db
+    - MYSQL_PORT=3306
     volumes:
-    # - .:/jjb
     - ..:/var/www/html
     - /tmp/xdebug-profiles:/tmp/xdebug-profiles
     extra_hosts:
@@ -40,10 +41,8 @@ services:
       PMA_HOST: db
       PMA_PORT: 3306
       PMA_ARBITRARY: 1
-      # PMA_USER: ${MYSQL_USER}
-      # PMA_PASSWORD: ${MYSQL_PASSWORD}
-      PMA_USER: root
-      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      PMA_USER: ${MYSQL_USER}
+      PMA_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - ${HOST_PMA_PORT}:80
 volumes:
