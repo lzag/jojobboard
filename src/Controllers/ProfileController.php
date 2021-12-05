@@ -118,5 +118,17 @@ class ProfileController extends Controller
 
     public function showPhoto(): void
     {
+        $filename = filter_var($_GET['name'], FILTER_SANITIZE_STRING);
+        $filepath = UPLOADS_DIR . '/users/images/' . $filename;
+        if (!is_readable($filepath)) {
+            http_response_code(404);
+        } else {
+            header('Content-Disposition: filename=' . $filename);
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+
+            readfile($filepath);
+        }
     }
 }

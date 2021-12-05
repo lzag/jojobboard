@@ -16,6 +16,7 @@ class User
     private $ip_address;
     private $cv_file;
     private $applications = [];
+    private $profile_image;
     // Not yet ready
     // private $photo;
 
@@ -40,7 +41,7 @@ class User
     private function getUserDetails(): void
     {
         $db = Database::getInstance();
-        $sql = "SELECT user_id, first_name, second_name, title, bio, email, password, ip_address, cv_file ";
+        $sql = "SELECT user_id, first_name, second_name, title, bio, email, password, ip_address, cv_file, profile_image";
         $sql .= " FROM users ";
         $sql .= " WHERE email= ?";
 
@@ -68,13 +69,14 @@ class User
     }
 
 
-    public function removeUser(): void
+    public function removeUser(): int
     {
         $this->deleteCV();
         $db = Database::getInstance();
         $sql = "DELETE FROM users WHERE email='$this->email'";
         $stmt = $db->con->prepare($sql);
         $stmt->execute([$this->email]);
+        return $stmt->rowCount();
     }
 
     public function fetchApplications(): array

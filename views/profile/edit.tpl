@@ -44,7 +44,7 @@
                 <div class="form-row mb-3">
                     <div class="col">
                         Current photo: <br>
-                        <img class="img-fluid" width="140px" src="/upload/users/images/{$user->getProperty('profile_image')}">
+                        <img class="img-fluid" width="140px" src="/profile/photo?name={$user->getProperty('profile_image')}">
                     </div>
                     <div class="col">
                         <div class="form-group">

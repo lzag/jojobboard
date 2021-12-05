@@ -29,6 +29,7 @@ return [
     Route::post('/profile', 'update@ProfileController'),
     Route::get('/profile/delete', 'destroy@ProfileController'),
     Route::get('/profile/edit', 'edit@ProfileController'),
+    Route::get('/profile/photo', 'showPhoto@ProfileController'),
 
     Route::get('/register/employer', 'showemployer@RegistrationController'),
     Route::get('/register/user', 'showuser@RegistrationController'),
